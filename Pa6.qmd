@@ -3,7 +3,11 @@ title: "Practice Activity 6"
 format: html
 self-contained: true
 editor: visual
+<<<<<<< HEAD
 author: "Noel, Patrick, Ningjing, Riley"
+=======
+author:"Noel Lopez, Patrick George, Riley Svensson, Ningjing Hua"
+>>>>>>> f4aded06b6c9ea242b0a9e1dffd8e57c97687fb7
 ---
 
 ## Quarto
