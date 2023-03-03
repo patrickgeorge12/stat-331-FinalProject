@@ -8,11 +8,8 @@ author: "Noel Lopez, Patrick George, Riley Svensson, Ningjing Hua"
 
 ```{r}
 library(tidyverse)
-library(RCurl)
-x <- getURL("https://raw.githubusercontent.com/noelito77/STAT-331-DATA/main/eg_fec_rnew_zs.csv")
-y <- getURL("https://raw.githubusercontent.com/noelito77/STAT-331-DATA/main/yearly_co2_emissions_1000_tonnes.csv")
-energy_data<- read.csv(text = x)
-co2_data <- read.csv(text = y)
+energy_data <- read.csv("https://raw.githubusercontent.com/patrickgeorge12/stat-331-PA6/main/eg_fec_rnew_zs.csv?token=GHSAT0AAAAAAB7QPSEMH2S7T5CZUXWVNB2MZACNTFA")
+co2_data <- read.csv("https://raw.githubusercontent.com/patrickgeorge12/stat-331-PA6/main/yearly_co2_emissions_1000_tonnes.csv?token=GHSAT0AAAAAAB7QPSEMYFU7UWS37WTQM6PKZACNU6A")
 ```
 
 ```{r}
@@ -26,3 +23,4 @@ co2_data_piv <-co2_data |>
                names_to = "year",
                values_to = "1000_metric_tonnes")
 merged_data <- left_join(co2_data_piv, energy_data_piv)
+```
