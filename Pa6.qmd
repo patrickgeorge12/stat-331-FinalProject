@@ -1,9 +1,16 @@
 ---
-title: "Practice Activity 6"
+title: "CLASS PROJECT"
 format: html
 self-contained: true
 editor: visual
 author: "Noel Lopez, Patrick George, Riley Svensson, Ningjing Hua"
 ---
 
-This is my push for the Group Project Contract! - Noel Lopez
+```{r}
+library(tidyverse)
+library(RCurl)
+x <- "https://raw.github.com/patrickgeorge12/stat-331-PA6/blob/main/yearly_co2_emissions_1000_tonnes.csv"
+
+co2 <- read.csv(x)
+
+```
