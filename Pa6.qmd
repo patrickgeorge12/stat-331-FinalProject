@@ -8,17 +8,26 @@ author: "Noel Lopez, Patrick George, Riley Svensson, Ningjing Hua"
 
 ```{r}
 library(tidyverse)
-energy_data <- read.csv("https://raw.githubusercontent.com/patrickgeorge12/stat-331-PA6/main/eg_fec_rnew_zs.csv?token=GHSAT0AAAAAAB7QPSEMH2S7T5CZUXWVNB2MZACNTFA")
-co2_data <- read.csv("https://raw.githubusercontent.com/patrickgeorge12/stat-331-PA6/main/yearly_co2_emissions_1000_tonnes.csv?token=GHSAT0AAAAAAB7QPSEMYFU7UWS37WTQM6PKZACNU6A")
+energy <- read.csv("https://raw.githubusercontent.com/patrickgeorge12/stat-331-PA6/main/eg_fec_rnew_zs.csv", check.names = FALSE)
+co2 <- read.csv("https://raw.githubusercontent.com/patrickgeorge12/stat-331-PA6/main/yearly_co2_emissions_1000_tonnes.csv", check.names = FALSE)
+
+## CLEAN Variable names
+energy_clean <- energy |>
+  rename(country = `ï»¿country`)
+
+co2_clean <- co2 |>
+  rename(country = `ï»¿country`)|>
+  select(country,`1989`:`2017`)
 ```
 
+
+
 ```{r}
-energy_data_piv <- energy_data |>
+energy_data_piv <- energy_clean |>
   pivot_longer(cols = !country,
                names_to = "year",
                values_to = "Percent_Consumption")
-co2_data_piv <-co2_data |>
-  select(country, X1989:X2017) |> 
+co2_data_piv <- co2_clean |> 
     pivot_longer(cols = !country,
                names_to = "year",
                values_to = "1000_metric_tonnes")
