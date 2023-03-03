@@ -6,4 +6,23 @@ editor: visual
 author: "Noel Lopez, Patrick George, Riley Svensson, Ningjing Hua"
 ---
 
-This is my push for the Group Project Contract! - Noel Lopez
+```{r}
+library(tidyverse)
+library(RCurl)
+x <- getURL("https://raw.githubusercontent.com/noelito77/STAT-331-DATA/main/eg_fec_rnew_zs.csv")
+y <- getURL("https://raw.githubusercontent.com/noelito77/STAT-331-DATA/main/yearly_co2_emissions_1000_tonnes.csv")
+energy_data<- read.csv(text = x)
+co2_data <- read.csv(text = y)
+```
+
+```{r}
+energy_data_piv <- energy_data |>
+  pivot_longer(cols = !country,
+               names_to = "year",
+               values_to = "Percent_Consumption")
+co2_data_piv <-co2_data |>
+  select(country, X1989:X2017) |> 
+    pivot_longer(cols = !country,
+               names_to = "year",
+               values_to = "1000_metric_tonnes")
+merged_data <- left_join(co2_data_piv, energy_data_piv)
