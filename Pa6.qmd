@@ -14,11 +14,11 @@ co2 <- read.csv("https://raw.githubusercontent.com/patrickgeorge12/stat-331-PA6/
 ```
 
 ```{r}
-energy_data_piv <- energy |>
+energy_data_piv <- energy_clean |>
   pivot_longer(cols = !country,
                names_to = "year",
                values_to = "Percent_Consumption")
-co2_data_piv <- co2 |> 
+co2_data_piv <- co2_clean |> 
     pivot_longer(cols = !country,
                names_to = "year",
                values_to = "1000_metric_tonnes")
