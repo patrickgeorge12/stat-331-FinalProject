@@ -1,26 +1,33 @@
 ---
-title: "Practice Activity 6"
+title: "Project Data"
 format: html
 self-contained: true
 editor: visual
 author: "Noel Lopez, Patrick George, Riley Svensson, Ningjing Hua"
 ---
 
-## Quarto
-
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-## Running Code
-
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
-
 ```{r}
-11*11
+library(tidyverse)
+energy <- read.csv("https://raw.githubusercontent.com/patrickgeorge12/stat-331-PA6/main/eg_fec_rnew_zs.csv", check.names = FALSE)
+co2 <- read.csv("https://raw.githubusercontent.com/patrickgeorge12/stat-331-PA6/main/yearly_co2_emissions_1000_tonnes.csv", check.names = FALSE)
+
+## CLEAN Variable names
+energy_clean <- energy |>
+  rename(country = `ï»¿country`)
+
+co2_clean <- co2 |>
+  rename(country = `ï»¿country`)|>
+  select(country,`1989`:`2017`)
 ```
 
 ```{r}
-#| echo: false
-2 * 2
+energy_data_piv <- energy_clean |>
+  pivot_longer(cols = !country,
+               names_to = "year",
+               values_to = "Percent_Consumption")
+co2_data_piv <- co2_clean |> 
+    pivot_longer(cols = !country,
+               names_to = "year",
+               values_to = "1000_metric_tonnes")
+merged_data <- left_join(co2_data_piv, energy_data_piv)
 ```
-
-The `echo: false` option disables the printing of code (only output is displayed).
