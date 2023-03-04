@@ -1,5 +1,5 @@
 ---
-title: "Project Data"
+title: "STAT 331 Final Project"
 format: html
 self-contained: true
 editor: visual
