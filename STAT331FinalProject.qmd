@@ -45,7 +45,7 @@ co2_clean <- co2_clean |>
       as.integer(str_replace(`1000_metric_tonnes`, "k", "")) * 1000,
     str_detect(`1000_metric_tonnes` , "M") ~ 
       as.integer(str_replace(`1000_metric_tonnes` , "M", '')) * 1000000,
-    TRUE ~ as.numeric(`1000_metric_tonnes`)))|>
+    TRUE ~ as.numeric(`1000_metric_tonnes`))) |>
   select(country, year, thousand_metric_tons)
 
 master <- left_join(co2_clean, energy_clean) |> 
