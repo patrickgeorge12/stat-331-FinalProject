@@ -1,29 +1,50 @@
 ---
 title: "STAT 331 Final Project"
-format: html
-self-contained: true
-editor: visual
 author: "Noel Lopez, Patrick George, Riley Svensson, Ningjing Hua"
+format: 
+  html:
+    self-contained: true
+    code-tools: true
+    toc: true
+    number-sections: true
+    theme: 
+      dark: superman
+    cold-fold: true
+editor: source
+execute: 
+  error: true
+  echo: true
+  message: false
+  warning: false
 ---
 
-```{r}
+```{r setup}
 library(tidyverse)
 energy <- read.csv("https://raw.githubusercontent.com/patrickgeorge12/stat-331-PA6/main/eg_fec_rnew_zs.csv", check.names = FALSE)
 co2 <- read.csv("https://raw.githubusercontent.com/patrickgeorge12/stat-331-PA6/main/yearly_co2_emissions_1000_tonnes.csv", check.names = FALSE)
 
 ```
 
-```{r}
+```{r clean data}
 energy_clean <- energy |>
-  rename(country = `ï»¿country`)|>
+  rename(country = `ï»¿country`) |>
   pivot_longer(cols = !country,
                names_to = "year",
                values_to = "Percent_Consumption")
+
 co2_clean <- co2 |> 
-    rename(country = `ï»¿country`)|>
-    select(country,`1989`:`2017`)|>
+    rename(country = `ï»¿country`) |>
+    select(country,`1989`:`2017`) |>
     pivot_longer(cols = !country,
                names_to = "year",
                values_to = "1000_metric_tonnes")
-master <- left_join(co2_clean, energy_clean)
+
+master <- left_join(co2_clean, energy_clean) |> 
+  drop_na()
+
+master|>
+  summarise(across(.cols = everything(),
+                   ~ sum(is.na(.x))))
 ```
+
+
