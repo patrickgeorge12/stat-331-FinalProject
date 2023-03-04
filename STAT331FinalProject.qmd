@@ -39,12 +39,19 @@ co2_clean <- co2 |>
                names_to = "year",
                values_to = "1000_metric_tonnes")
 
+co2_clean <- co2_clean |>
+   mutate(thousand_metric_tons = case_when(
+    str_detect(`1000_metric_tonnes`, "k") ~ 
+      as.integer(str_replace(`1000_metric_tonnes`, "k", "")) * 1000,
+    str_detect(`1000_metric_tonnes` , "M") ~ 
+      as.integer(str_replace(`1000_metric_tonnes` , "M", '')) * 1000000,
+    TRUE ~ as.numeric(`1000_metric_tonnes`)))|>
+  select(country, year, thousand_metric_tons)
+
 master <- left_join(co2_clean, energy_clean) |> 
   drop_na()
-
-master|>
-  summarise(across(.cols = everything(),
-                   ~ sum(is.na(.x))))
 ```
+
+
 
 
