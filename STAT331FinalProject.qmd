@@ -9,7 +9,7 @@ format:
     number-sections: true
     theme: 
       dark: superman
-    cold-fold: true
+    code-fold: true
 editor: source
 execute: 
   error: true
@@ -51,7 +51,3 @@ co2_clean <- co2_clean |>
 master <- left_join(co2_clean, energy_clean) |> 
   drop_na()
 ```
-
-
-
-
