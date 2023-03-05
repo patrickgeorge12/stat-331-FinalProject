@@ -2678,7 +2678,7 @@ vertical-align: -.125em;
 <span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(master)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 4
+<pre><code># A tibble: 6 x 4
   country year  Total_CO2_Emissions Percent_Consumption_Renewable
   &lt;chr&gt;   &lt;chr&gt;               &lt;dbl&gt;                         &lt;dbl&gt;
 1 Aruba   1989                  488                         0.269
@@ -2691,7 +2691,7 @@ vertical-align: -.125em;
 </div>
 <section id="detailed-data-and-variable-description" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Detailed Data and Variable Description</h1>
-<p>The master data to be used in this project incorporates data from two datasets, one measuring total carbon dioxide emissions per country of the years and one measuring proportion of energy use which is renewable over the years. Total_CO2_Emission is in 1000 tons of CO2 and Percent_Consumption_Renewables is a percentage of total energy used produced by renewable sources per country over the years.</p>
+<p>The master data to be used in this project incorporates data from two datasets, one measuring total carbon dioxide emissions per country over the years and the other one measuring proportion of energy use which is classified as renewable over the years. Total_CO2_Emission is in 1000 tons of CO2 and Percent_Consumption_Renewables is a percentage of total energy used produced by renewable sources per country.</p>
 </section>
 <section id="hypothesized-relationship" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Hypothesized Relationship</h1>
@@ -2699,7 +2699,7 @@ vertical-align: -.125em;
 </section>
 <section id="data-cleaning-process-and-decisions" class="level1" data-number="3">
 <h1 data-number="3"><span class="header-section-number">3</span> Data Cleaning Process and Decisions</h1>
-<p>The CO2 dataset contained data in the form of 25.3k and 4.9M signalling thousand and millions of units. The first step in the data cleaning process was to replace these letters with proper units to create a numeric variable which could have calculations processed on. A function titled convert_to_numeric() was created for this purpose. Next we could pivot the data to be in tidy form and just select the years we are interested in (1989-2017). Once pivoted, the data sets were joined by</p>
+<p>The CO2 dataset contained data in the form of 25.3k and 4.9M signalling thousand and millions of units. The first step in the data cleaning process was to replace these letters with proper units to create a numeric variable which could have calculations processed on. A function titled convert_to_numeric() was created for this purpose. Next we could pivot the data to be in tidy form and just select the years we are interested in (1989-2017). Once pivoted, the data sets were joined by year and country to produce a master data set which shall be used for model fitting, plotting, and subsequent analysis</p>
 <!-- -->
 
 </section>
@@ -3060,7 +3060,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a><span class="fu"># Detailed Data and Variable Description</span></span>
 <span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>The master data to be used in this project incorporates data from two datasets, one measuring total carbon dioxide emissions per country of the years and one measuring proportion of energy use which is renewable over the years. Total_CO2_Emission is in 1000 tons of CO2 and Percent_Consumption_Renewables is a percentage of total energy used produced by renewable sources per country over the years. </span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>The master data to be used in this project incorporates data from two datasets, one measuring total carbon dioxide emissions per country over the years and the other one measuring proportion of energy use which is classified as renewable over the years. Total_CO2_Emission is in 1000 tons of CO2 and Percent_Consumption_Renewables is a percentage of total energy used produced by renewable sources per country. </span>
 <span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a><span class="fu"># Hypothesized Relationship</span></span>
 <span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a></span>
@@ -3069,7 +3069,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a><span class="fu"># Data Cleaning Process and Decisions</span></span>
 <span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>The CO2 dataset contained data in the form of 25.3k and 4.9M signalling thousand and millions of units. The first step in the data cleaning process was to replace these letters with proper units to create a numeric variable which could have calculations processed on. A function titled convert_to_numeric() was created for this purpose. Next we could pivot the data to be in tidy form and just select the years we are interested in (1989-2017). Once pivoted, the data sets were joined by </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>The CO2 dataset contained data in the form of 25.3k and 4.9M signalling thousand and millions of units. The first step in the data cleaning process was to replace these letters with proper units to create a numeric variable which could have calculations processed on. A function titled convert_to_numeric() was created for this purpose. Next we could pivot the data to be in tidy form and just select the years we are interested in (1989-2017). Once pivoted, the data sets were joined by year and country to produce a master data set which shall be used for model fitting, plotting, and subsequent analysis</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

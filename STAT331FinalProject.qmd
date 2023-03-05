@@ -53,7 +53,7 @@ head(master)
 ```
 # Detailed Data and Variable Description
 
-The master data to be used in this project incorporates data from two datasets, one measuring total carbon dioxide emissions per country of the years and one measuring proportion of energy use which is renewable over the years. Total_CO2_Emission is in 1000 tons of CO2 and Percent_Consumption_Renewables is a percentage of total energy used produced by renewable sources per country over the years. 
+The master data to be used in this project incorporates data from two datasets, one measuring total carbon dioxide emissions per country over the years and the other one measuring proportion of energy use which is classified as renewable over the years. Total_CO2_Emission is in 1000 tons of CO2 and Percent_Consumption_Renewables is a percentage of total energy used produced by renewable sources per country. 
 
 # Hypothesized Relationship
 
@@ -62,4 +62,4 @@ The relationship between Total_CO2_Emission and Percent_Consumption_Renewables i
 
 # Data Cleaning Process and Decisions
 
-The CO2 dataset contained data in the form of 25.3k and 4.9M signalling thousand and millions of units. The first step in the data cleaning process was to replace these letters with proper units to create a numeric variable which could have calculations processed on. A function titled convert_to_numeric() was created for this purpose. Next we could pivot the data to be in tidy form and just select the years we are interested in (1989-2017). Once pivoted, the data sets were joined by 
+The CO2 dataset contained data in the form of 25.3k and 4.9M signalling thousand and millions of units. The first step in the data cleaning process was to replace these letters with proper units to create a numeric variable which could have calculations processed on. A function titled convert_to_numeric() was created for this purpose. Next we could pivot the data to be in tidy form and just select the years we are interested in (1989-2017). Once pivoted, the data sets were joined by year and country to produce a master data set which shall be used for model fitting, plotting, and subsequent analysis
