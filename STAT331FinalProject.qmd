@@ -39,17 +39,19 @@ co2_clean <- co2 |>
   mutate_at(vars(`1989`:`2017`),~convert_to_numeric(.))|>
   pivot_longer(cols = !country,
                names_to = "year",
-               values_to = "1000_metric_tonnes")
+               values_to = "Total_CO2_Emissions")
 
 energy_clean <- energy |>
   pivot_longer(cols = !country,
                names_to = "year",
-               values_to = "Percent_Consumption")
+               values_to = "Percent_Consumption_Renewable")
 
 master <- left_join(co2_clean, energy_clean) |> 
   drop_na()
 ```
 # Detailed Data and Variable Description
+Total_CO2_Emission in 1000 tons units.
+Percent Consumption Renewables is a country's percentage of energy consumption which is from renewable energy
 
 # Hypothesized Relationship
 
