@@ -20,44 +20,31 @@ execute:
 
 ```{r setup}
 library(tidyverse)
+options(scipen = 99999)
 energy <- readxl::read_xlsx(here::here("renewable_energy.xlsx"))
 co2 <- readxl::read_xlsx(here::here("co2.xlsx"))
 
 ```
 
 ```{r clean data}
-
-if(`ï»¿country` %in% colnames(energy))
-{
-  energy <- energy |> rename(country = `ï»¿country`)
+convert_to_numeric <- function(x) {
+  x <- str_replace_all(x, "k", "e3")
+  x <- str_replace_all(x, "M", "e6")
+  return(as.numeric(x))
 }
 
-if(`ï»¿country` %in% colnames(co2))
-{
-  co2 <- co2 |> rename(country = `ï»¿country`)
-}
+
+co2_clean <- co2 |>
+  select(country, `1989`:`2017`) |>
+  mutate_at(vars(`1989`:`2017`),~convert_to_numeric(.))|>
+  pivot_longer(cols = !country,
+               names_to = "year",
+               values_to = "1000_metric_tonnes")
 
 energy_clean <- energy |>
   pivot_longer(cols = !country,
                names_to = "year",
                values_to = "Percent_Consumption")
-
-co2_clean <- co2 |> 
-    select(country,`1989`:`2017`) |>
-    pivot_longer(cols = !country,
-               names_to = "year",
-               values_to = "1000_metric_tonnes")
-
-co2_clean <- co2_clean |>
-   mutate(thousand_metric_tons = case_when(
-    str_detect(`1000_metric_tonnes`, "k") ~ 
-      as.integer(str_replace(`1000_metric_tonnes`, "k", "")) * 1000,
-    str_detect(`1000_metric_tonnes` , "M") ~ 
-      as.integer(str_replace(`1000_metric_tonnes` , "M", '')) * 1000000,
-    TRUE ~ as.numeric(`1000_metric_tonnes`))) |>
-  select(country, year, thousand_metric_tons)
-
-
 
 master <- left_join(co2_clean, energy_clean) |> 
   drop_na()
