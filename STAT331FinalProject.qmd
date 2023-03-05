@@ -57,6 +57,13 @@ co2_clean <- co2_clean |>
     TRUE ~ as.numeric(`1000_metric_tonnes`))) |>
   select(country, year, thousand_metric_tons)
 
+
+
 master <- left_join(co2_clean, energy_clean) |> 
   drop_na()
 ```
+# Detailed Data and Variable Description
+
+# Hypothesized Relationship
+
+# Data Cleaning Process and Decisions
