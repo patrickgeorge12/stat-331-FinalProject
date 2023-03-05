@@ -20,8 +20,8 @@ execute:
 
 ```{r setup}
 library(tidyverse)
-energy <- read.csv("https://raw.githubusercontent.com/patrickgeorge12/stat-331-PA6/main/eg_fec_rnew_zs.csv", check.names = FALSE)
-co2 <- read.csv("https://raw.githubusercontent.com/patrickgeorge12/stat-331-PA6/main/yearly_co2_emissions_1000_tonnes.csv", check.names = FALSE)
+energy <- readxl::read_xlsx(here::here("renewable_energy.xlsx"))
+co2 <- readxl::read_xlsx(here::here("co2.xlsx"))
 
 ```
 
