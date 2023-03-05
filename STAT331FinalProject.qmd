@@ -48,6 +48,8 @@ energy_clean <- energy |>
 
 master <- left_join(co2_clean, energy_clean) |> 
   drop_na()
+
+head(master)
 ```
 # Detailed Data and Variable Description
 
