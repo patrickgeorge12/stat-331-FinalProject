@@ -26,14 +26,23 @@ co2 <- read.csv("https://raw.githubusercontent.com/patrickgeorge12/stat-331-PA6/
 ```
 
 ```{r clean data}
+
+if(`ï»¿country` %in% colnames(energy))
+{
+  energy <- energy |> rename(country = `ï»¿country`)
+}
+
+if(`ï»¿country` %in% colnames(co2))
+{
+  co2 <- co2 |> rename(country = `ï»¿country`)
+}
+
 energy_clean <- energy |>
-  rename(country = `ï»¿country`) |>
   pivot_longer(cols = !country,
                names_to = "year",
                values_to = "Percent_Consumption")
 
 co2_clean <- co2 |> 
-    rename(country = `ï»¿country`) |>
     select(country,`1989`:`2017`) |>
     pivot_longer(cols = !country,
                names_to = "year",
