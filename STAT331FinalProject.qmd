@@ -36,7 +36,7 @@ convert_to_numeric <- function(x) {
 
 co2_clean <- co2 |>
   select(country, `1989`:`2017`) |>
-  mutate_at(vars(`1989`:`2017`),~convert_to_numeric(.))|>
+  mutate_at(vars(`1989`:`2017`), ~ convert_to_numeric(.))|>
   pivot_longer(cols = !country,
                names_to = "year",
                values_to = "Total_CO2_Emissions")
@@ -50,9 +50,14 @@ master <- left_join(co2_clean, energy_clean) |>
   drop_na()
 ```
 # Detailed Data and Variable Description
-Total_CO2_Emission in 1000 tons units.
-Percent Consumption Renewables is a country's percentage of energy consumption which is from renewable energy
+
+The master data to be used in this project incorporates data from two datasets, one measuring total carbon dioxide emissions per country of the years and one measuring proportion of energy use which is renewable over the years. Total_CO2_Emission is in 1000 tons of CO2 and Percent_Consumption_Renewables is a percentage of total energy used produced by renewable sources per country over the years. 
 
 # Hypothesized Relationship
 
+The relationship between Total_CO2_Emission and Percent_Consumption_Renewables is expected to be negative where as a country uses more renewable energy they produce less CO2. The purpose of this project is to investigate this relationship to learn more about climate change and potential solutions to this global problem challenging humanity's future.
+
+
 # Data Cleaning Process and Decisions
+
+The CO2 dataset contained data in the form of 25.3k and 4.9M signalling thousand and millions of units. The first step in the data cleaning process was to replace these letters with proper units to create a numeric variable which could have calculations processed on. A function titled convert_to_numeric() was created for this purpose. Next we could pivot the data to be in tidy form and just select the years we are interested in (1989-2017). Once pivoted, the data sets were joined by 
