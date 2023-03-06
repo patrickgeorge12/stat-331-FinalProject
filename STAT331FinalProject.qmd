@@ -7,9 +7,9 @@ format:
     code-tools: true
     toc: true
     number-sections: true
-    theme: 
-      dark: superman
     code-fold: true
+theme: 
+  dark: darkly
 editor: source
 execute: 
   error: true
@@ -48,16 +48,18 @@ energy_clean <- energy |>
 
 master <- left_join(co2_clean, energy_clean) |> 
   drop_na()
+
+head(master)
 ```
+
 # Detailed Data and Variable Description
 
-The master data to be used in this project incorporates data from two datasets, one measuring total carbon dioxide emissions per country of the years and one measuring proportion of energy use which is renewable over the years. Total_CO2_Emission is in 1000 tons of CO2 and Percent_Consumption_Renewables is a percentage of total energy used produced by renewable sources per country over the years. 
+The master data-set to be used in this project incorporates data from two sets, one measuring the total carbon dioxide emissions, per country over the years (1989-2017) and the other measuring the proportion of energy use, which is classified as renewable energy over the same time. As for the significant variables and their units, **Total_CO2_Emission** is listed in thousand's of tons of CO2 while **Percent_Consumption_Renewables** is the percentage of total energy used produced by renewable sources per country. In terms of the data's source, *Gapminder* has been a reliable provider of data since 2005, in hopes of promoting global sustainability through easily accessible information. We hope to utilize the **Total_CO2_Emission** and **Percent_Consumption_Renewables** variables to determine how their relationship could be useful to combating climate change.
 
 # Hypothesized Relationship
 
-The relationship between Total_CO2_Emission and Percent_Consumption_Renewables is expected to be negative where as a country uses more renewable energy they produce less CO2. The purpose of this project is to investigate this relationship to learn more about climate change and potential solutions to this global problem challenging humanity's future.
-
+The relationship between **Total_CO2_Emission** and **Percent_Consumption_Renewables** is expected to be negative, meaning that if a country uses more renewable energy they are likely to produce less CO2. As previously stated, the purpose of this project is to investigate this relationship to learn more about climate change and any potential solutions to this global problem challenging humanity's future.
 
 # Data Cleaning Process and Decisions
 
-The CO2 dataset contained data in the form of 25.3k and 4.9M signalling thousand and millions of units. The first step in the data cleaning process was to replace these letters with proper units to create a numeric variable which could have calculations processed on. A function titled convert_to_numeric() was created for this purpose. Next we could pivot the data to be in tidy form and just select the years we are interested in (1989-2017). Once pivoted, the data sets were joined by country and year using a left join. 
+Before the data could be analyzed, it had to be properly cleaned and wrangled. The CO2 data-set contained values in the form of 25.3k and 4.9M, signaling the units of thousands and millions. The first step in the data cleaning process was to replace these letters with proper units to create a numeric variable, which enabled the performance of calculations on the data. A function titled convert_to_numeric() was created for this intended purpose. Next we pivotted the data to be in tidy form and selected the years of interest (1989-2017). Once pivoted, the data sets were joined by year and country to produce a master data set which shall be used for model fitting, plotting, and subsequent analysis. A final decision was made to drop all the Na's in the master set, due to the following justification. The missing values typically occurred in the **Percent_Consumption_Renewables** across the following years (1989-1998) for particularly small country's, illustrating a pattern and non-random missing values. Using cell-mean imputation would not be a proper solution here, as a country's initial year of renewable energy cannot be its mean from rest of the years as this introduces bias and would make a time-series graph obsolete.
