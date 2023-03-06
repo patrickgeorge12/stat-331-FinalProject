@@ -60,4 +60,4 @@ The relationship between Total_CO2_Emission and Percent_Consumption_Renewables i
 
 # Data Cleaning Process and Decisions
 
-The CO2 dataset contained data in the form of 25.3k and 4.9M signalling thousand and millions of units. The first step in the data cleaning process was to replace these letters with proper units to create a numeric variable which could have calculations processed on. A function titled convert_to_numeric() was created for this purpose. Next we could pivot the data to be in tidy form and just select the years we are interested in (1989-2017). Once pivoted, the data sets were joined by 
+The CO2 dataset contained data in the form of 25.3k and 4.9M signalling thousand and millions of units. The first step in the data cleaning process was to replace these letters with proper units to create a numeric variable which could have calculations processed on. A function titled convert_to_numeric() was created for this purpose. Next we could pivot the data to be in tidy form and just select the years we are interested in (1989-2017). Once pivoted, the data sets were joined by country and year using a left join. 
