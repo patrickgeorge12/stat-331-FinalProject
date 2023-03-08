@@ -47,7 +47,7 @@ energy_clean <- energy |>
                names_to = "year",
                values_to = "Percent_Consumption_Renewable")
 
-master <- inner_join(co2_clean, energy_clean) |> 
+master <- inner_join(co2_clean, energy_clean) |>
   drop_na()
 
 head(master)|>
