@@ -84,7 +84,7 @@ head(master)|>
 ```{r}
 energy_emissions_model <- lm(`Total_CO2_Emissions` ~ `Percent_Consumption_Renewable`,
                              data = master)
-# summary(energy_emissions_model)
+summary(energy_emissions_model)
 tidy(energy_emissions_model) |>
   knitr::kable(caption = 'Working Model')
 ```
