@@ -50,16 +50,26 @@ energy_clean <- energy |>
 master <- inner_join(co2_clean, energy_clean) |> 
   drop_na()
 
-head(master)
+head(master)|>
+  knitr::kable(caption = 'First rows of Master Data Set')
 ```
+```{r}
+#| output: false
+master |>
+  distinct(year) |>
+  count()
+
+master |>
+  distinct(country) |>
+  count()
+
+```
+
 
 # Detailed Data and Variable Description
 
-The master data to be used in this project incorporates data from two datasets, one measuring total carbon dioxide emissions per country of the years and one measuring proportion of energy use which is renewable over the years. Total_CO2_Emission is in 1000 tons of CO2 and Percent_Consumption_Renewables is a percentage of total energy used produced by renewable sources per country over the years. This Data was obtained through GapMinder. 
+The master data to be used in this project incorporates data from two datasets, one measuring total carbon dioxide emissions per country of the years and one measuring proportion of energy use which is renewable over the years. Total_CO2_Emission is in 1000 tons of CO2 and Percent_Consumption_Renewables is a percentage of total energy used produced by renewable sources per country over the years. There are 207 distinct countries included in the joined data set observed over 29 years. This Data was obtained through GapMinder. 
 
-Number of countries:
-
-Number of years: 
 
 # Hypothesized Relationship
 
