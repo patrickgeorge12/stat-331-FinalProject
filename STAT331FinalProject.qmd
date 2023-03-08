@@ -1,6 +1,6 @@
 ---
 title: "Investigating CO2 Emissions and Renewable Energy Usage"
-authors: "Noel Lopez, Patrick George, Riley Svensson, Ningjing Hua"
+author: "Noel Lopez, Patrick George, Riley Svensson, Ningjing Hua"
 format: 
   html:
     self-contained: true
