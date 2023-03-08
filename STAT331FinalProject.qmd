@@ -1,5 +1,5 @@
 ---
-title: "STAT 331 Final Project"
+title: "Investigating CO2 Emissions and Renewable Energy Usage"
 author: "Noel Lopez, Patrick George, Riley Svensson, Ningjing Hua"
 format: 
   html:
@@ -36,7 +36,8 @@ convert_to_numeric <- function(x) {
 
 co2_clean <- co2 |>
   select(country, `1989`:`2017`) |>
-  mutate_at(vars(`1989`:`2017`), ~ convert_to_numeric(.))|>
+  mutate(across(.cols = `1989`:`2017`, 
+                ~ convert_to_numeric(.)))|>
   pivot_longer(cols = !country,
                names_to = "year",
                values_to = "Total_CO2_Emissions")
@@ -46,7 +47,7 @@ energy_clean <- energy |>
                names_to = "year",
                values_to = "Percent_Consumption_Renewable")
 
-master <- left_join(co2_clean, energy_clean) |> 
+master <- inner_join(co2_clean, energy_clean) |> 
   drop_na()
 
 head(master)
@@ -54,7 +55,7 @@ head(master)
 
 # Detailed Data and Variable Description
 
-The master data to be used in this project incorporates data from two datasets, one measuring total carbon dioxide emissions per country of the years and one measuring proportion of energy use which is renewable over the years. Total_CO2_Emission is in 1000 tons of CO2 and Percent_Consumption_Renewables is a percentage of total energy used produced by renewable sources per country over the years.
+The master data to be used in this project incorporates data from two datasets, one measuring total carbon dioxide emissions per country of the years and one measuring proportion of energy use which is renewable over the years. Total_CO2_Emission is in 1000 tons of CO2 and Percent_Consumption_Renewables is a percentage of total energy used produced by renewable sources per country over the years. This Data was obtained through GapMinder
 
 # Hypothesized Relationship
 
@@ -74,4 +75,4 @@ The relationship between **Total_CO2_Emission** and **Percent_Consumption_Renewa
 
 Before the data could be analyzed, it had to be properly cleaned and wrangled. The CO2 data-set contained values in the form of 25.3k and 4.9M, signaling the units of thousands and millions. The first step in the data cleaning process was to replace these letters with proper units to create a numeric variable, which enabled the performance of calculations on the data. A function titled convert_to_numeric() was created for this intended purpose. Next we pivotted the data to be in tidy form and selected the years of interest (1989-2017). Once pivoted, the data sets were joined by year and country to produce a master data set which shall be used for model fitting, plotting, and subsequent analysis. A final decision was made to drop all the Na's in the master set, due to the following justification. The missing values typically occurred in the **Percent_Consumption_Renewables** across the following years (1989-1998) for particularly small country's, illustrating a pattern and non-random missing values. Using cell-mean imputation would not be a proper solution here, as a country's initial year of renewable energy cannot be its mean from rest of the years as this introduces bias and would make a time-series graph obsolete.
 
-test 1
+# References
