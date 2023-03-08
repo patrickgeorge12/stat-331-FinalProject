@@ -8,7 +8,7 @@
 
 <meta name="author" content="Noel Lopez, Patrick George, Riley Svensson, Ningjing Hua">
 
-<title>STAT 331 Final Project</title>
+<title>Investigating CO2 Emissions and Renewable Energy Usage</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -2610,9 +2610,9 @@ vertical-align: -.125em;
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#detailed-data-and-variable-description" id="toc-detailed-data-and-variable-description" class="nav-link active" data-scroll-target="#detailed-data-and-variable-description"><span class="toc-section-number">1</span>  Detailed Data and Variable Description</a></li>
-  <li><a href="#hypothesized-relationship" id="toc-hypothesized-relationship" class="nav-link" data-scroll-target="#hypothesized-relationship"><span class="toc-section-number">2</span>  Hypothesized Relationship</a></li>
-  <li><a href="#data-cleaning-process-and-decisions" id="toc-data-cleaning-process-and-decisions" class="nav-link" data-scroll-target="#data-cleaning-process-and-decisions"><span class="toc-section-number">3</span>  Data Cleaning Process and Decisions</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="toc-section-number">1</span>  Introduction</a></li>
+  <li><a href="#materials-and-methods" id="toc-materials-and-methods" class="nav-link" data-scroll-target="#materials-and-methods"><span class="toc-section-number">2</span>  Materials and Methods</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="toc-section-number">3</span>  References</a></li>
   </ul>
 </nav>
 </div>
@@ -2620,7 +2620,7 @@ vertical-align: -.125em;
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">STAT 331 Final Project</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+<div class="quarto-title-block"><div><h1 class="title">Investigating CO2 Emissions and Renewable Energy Usage</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
 </div>
 
 
@@ -2662,44 +2662,98 @@ vertical-align: -.125em;
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>co2_clean <span class="ot">&lt;-</span> co2 <span class="sc">|&gt;</span></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(country, <span class="st">`</span><span class="at">1989</span><span class="st">`</span><span class="sc">:</span><span class="st">`</span><span class="at">2017</span><span class="st">`</span>) <span class="sc">|&gt;</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(<span class="st">`</span><span class="at">1989</span><span class="st">`</span><span class="sc">:</span><span class="st">`</span><span class="at">2017</span><span class="st">`</span>), <span class="sc">~</span> <span class="fu">convert_to_numeric</span>(.))<span class="sc">|&gt;</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">!</span>country,</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;year&quot;</span>,</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;Total_CO2_Emissions&quot;</span>)</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>energy_clean <span class="ot">&lt;-</span> energy <span class="sc">|&gt;</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">!</span>country,</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;year&quot;</span>,</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;Percent_Consumption_Renewable&quot;</span>)</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>master <span class="ot">&lt;-</span> <span class="fu">left_join</span>(co2_clean, energy_clean) <span class="sc">|&gt;</span> </span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(master)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="at">.cols =</span> <span class="st">`</span><span class="at">1989</span><span class="st">`</span><span class="sc">:</span><span class="st">`</span><span class="at">2017</span><span class="st">`</span>, </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                <span class="sc">~</span> <span class="fu">convert_to_numeric</span>(.)))<span class="sc">|&gt;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">!</span>country,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;year&quot;</span>,</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;Total_CO2_Emissions&quot;</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>energy_clean <span class="ot">&lt;-</span> energy <span class="sc">|&gt;</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">!</span>country,</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;year&quot;</span>,</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;Percent_Consumption_Renewable&quot;</span>)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>master <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(co2_clean, energy_clean) <span class="sc">|&gt;</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>master <span class="sc">|&gt;</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(year) <span class="sc">|&gt;</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>()</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>master <span class="sc">|&gt;</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(country) <span class="sc">|&gt;</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 4
-  country year  Total_CO2_Emissions Percent_Consumption_Renewable
-  &lt;chr&gt;   &lt;chr&gt;               &lt;dbl&gt;                         &lt;dbl&gt;
-1 Aruba   1989                  488                         0.269
-2 Aruba   1990                  532                         0.235
-3 Aruba   1991                  539                         0.239
-4 Aruba   1992                  649                         0.195
-5 Aruba   1993                  660                         0.183
-6 Aruba   1994                  708                         0.173</code></pre>
 </div>
-</div>
-<section id="detailed-data-and-variable-description" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Detailed Data and Variable Description</h1>
+<section id="introduction" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
+<p>The master data to be used in this project incorporates data from two datasets, one measuring total carbon dioxide emissions per country of the years and one measuring proportion of energy use which is renewable over the years. Total_CO2_Emission is in 1000 tons of CO2 and Percent_Consumption_Renewables is a percentage of total energy used produced by renewable sources per country over the years. There are 207 distinct countries included in the joined data set observed over 29 years. The relationship between Total_CO2_Emission and Percent_Consumption_Renewables is expected to be negative where as a country uses more renewable energy they produce less CO2. The purpose of this project is to investigate this relationship to learn more about climate change and potential solutions to this global problem challenging humanity’s future. The relationship between <strong>Total_CO2_Emission</strong> and <strong>Percent_Consumption_Renewables</strong> is expected to be negative, meaning that if a country uses more renewable energy they are likely to produce less CO2. As previously stated, the purpose of this project is to investigate this relationship to learn more about climate change and any potential solutions to this global problem challenging humanity’s future.</p>
+</section>
+<section id="materials-and-methods" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Materials and Methods</h1>
 <p>The master data-set to be used in this project incorporates data from two sets, one measuring the total carbon dioxide emissions, per country over the years (1989-2017) and the other measuring the proportion of energy use, which is classified as renewable energy over the same time. As for the significant variables and their units, <strong>Total_CO2_Emission</strong> is listed in thousand’s of tons of CO2 while <strong>Percent_Consumption_Renewables</strong> is the percentage of total energy used produced by renewable sources per country. In terms of the data’s source, <em>Gapminder</em> has been a reliable provider of data since 2005, in hopes of promoting global sustainability through easily accessible information. We hope to utilize the <strong>Total_CO2_Emission</strong> and <strong>Percent_Consumption_Renewables</strong> variables to determine how their relationship could be useful to combating climate change.</p>
+<p>Before the data could be analyzed, it had to be properly cleaned and wrangled. The CO2 data-set contained values in the form of 25.3k and 4.9M, signaling the units of thousands and millions. The first step in the data cleaning process was to replace these letters with proper units to create a numeric variable, which enabled the performance of calculations on the data. A function titled convert_to_numeric() was created for this intended purpose. Next we pivotted the data to be in tidy form and selected the years of interest (1989-2017). Once pivoted, the data sets were joined by year and country to produce a master data set which shall be used for model fitting, plotting, and subsequent analysis. A final decision was made to drop all the Na’s in the master set, due to the following justification. The missing values typically occurred in the <strong>Percent_Consumption_Renewables</strong> across the following years (1989-1998) for particularly small country’s, illustrating a pattern and non-random missing values. Using cell-mean imputation would not be a proper solution here, as a country’s initial year of renewable energy cannot be its mean from rest of the years as this introduces bias and would make a time-series graph obsolete. This Data was obtained through GapMinder.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(master)<span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&#39;First rows of Master Data Set&#39;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<caption>First rows of Master Data Set</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">country</th>
+<th style="text-align: left;">year</th>
+<th style="text-align: right;">Total_CO2_Emissions</th>
+<th style="text-align: right;">Percent_Consumption_Renewable</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Aruba</td>
+<td style="text-align: left;">1989</td>
+<td style="text-align: right;">488</td>
+<td style="text-align: right;">0.269</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Aruba</td>
+<td style="text-align: left;">1990</td>
+<td style="text-align: right;">532</td>
+<td style="text-align: right;">0.235</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Aruba</td>
+<td style="text-align: left;">1991</td>
+<td style="text-align: right;">539</td>
+<td style="text-align: right;">0.239</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Aruba</td>
+<td style="text-align: left;">1992</td>
+<td style="text-align: right;">649</td>
+<td style="text-align: right;">0.195</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Aruba</td>
+<td style="text-align: left;">1993</td>
+<td style="text-align: right;">660</td>
+<td style="text-align: right;">0.183</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Aruba</td>
+<td style="text-align: left;">1994</td>
+<td style="text-align: right;">708</td>
+<td style="text-align: right;">0.173</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </section>
-<section id="hypothesized-relationship" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Hypothesized Relationship</h1>
-<p>The relationship between <strong>Total_CO2_Emission</strong> and <strong>Percent_Consumption_Renewables</strong> is expected to be negative, meaning that if a country uses more renewable energy they are likely to produce less CO2. As previously stated, the purpose of this project is to investigate this relationship to learn more about climate change and any potential solutions to this global problem challenging humanity’s future.</p>
-</section>
-<section id="data-cleaning-process-and-decisions" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Data Cleaning Process and Decisions</h1>
-<p>Before the data could be analyzed, it had to be properly cleaned and wrangled. The CO2 data-set contained values in the form of 25.3k and 4.9M, signaling the units of thousands and millions. The first step in the data cleaning process was to replace these letters with proper units to create a numeric variable, which enabled the performance of calculations on the data. A function titled convert_to_numeric() was created for this intended purpose. Next we pivotted the data to be in tidy form and selected the years of interest (1989-2017). Once pivoted, the data sets were joined by year and country to produce a master data set which shall be used for model fitting, plotting, and subsequent analysis. A final decision was made to drop all the Na’s in the master set, due to the following justification. The missing values typically occurred in the <strong>Percent_Consumption_Renewables</strong> across the following years (1989-1998) for particularly small country’s, illustrating a pattern and non-random missing values. Using cell-mean imputation would not be a proper solution here, as a country’s initial year of renewable energy cannot be its mean from rest of the years as this introduces bias and would make a time-series graph obsolete.</p>
+<section id="references" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> References</h1>
 <!-- -->
 
 </section>
@@ -3006,7 +3060,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class>
 <div class="sourceCode" id="cb4" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &quot;STAT 331 Final Project&quot;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &quot;Investigating CO2 Emissions and Renewable Energy Usage&quot;</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> &quot;Noel Lopez, Patrick George, Riley Svensson, Ningjing Hua&quot;</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> </span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
@@ -3034,42 +3088,56 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="in">```{r clean data}</span></span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>convert_to_numeric <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">str_replace_all</span>(x, <span class="st">&quot;k&quot;</span>, <span class="st">&quot;e3&quot;</span>)</span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">str_replace_all</span>(x, <span class="st">&quot;M&quot;</span>, <span class="st">&quot;e6&quot;</span>)</span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">as.numeric</span>(x))</span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="co">#| output: false</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>convert_to_numeric <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">str_replace_all</span>(x, <span class="st">&quot;k&quot;</span>, <span class="st">&quot;e3&quot;</span>)</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">str_replace_all</span>(x, <span class="st">&quot;M&quot;</span>, <span class="st">&quot;e6&quot;</span>)</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">as.numeric</span>(x))</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>co2_clean <span class="ot">&lt;-</span> co2 <span class="sc">|&gt;</span></span>
-<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(country, <span class="st">`</span><span class="at">1989</span><span class="st">`</span><span class="sc">:</span><span class="st">`</span><span class="at">2017</span><span class="st">`</span>) <span class="sc">|&gt;</span></span>
-<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(<span class="st">`</span><span class="at">1989</span><span class="st">`</span><span class="sc">:</span><span class="st">`</span><span class="at">2017</span><span class="st">`</span>), <span class="sc">~</span> <span class="fu">convert_to_numeric</span>(.))<span class="sc">|&gt;</span></span>
-<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">!</span>country,</span>
-<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;year&quot;</span>,</span>
-<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;Total_CO2_Emissions&quot;</span>)</span>
-<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>energy_clean <span class="ot">&lt;-</span> energy <span class="sc">|&gt;</span></span>
-<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">!</span>country,</span>
-<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;year&quot;</span>,</span>
-<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;Percent_Consumption_Renewable&quot;</span>)</span>
-<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>master <span class="ot">&lt;-</span> <span class="fu">left_join</span>(co2_clean, energy_clean) <span class="sc">|&gt;</span> </span>
-<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span>
-<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(master)</span>
-<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a><span class="fu"># Detailed Data and Variable Description</span></span>
-<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>The master data-set to be used in this project incorporates data from two sets, one measuring the total carbon dioxide emissions, per country over the years (1989-2017) and the other measuring the proportion of energy use, which is classified as renewable energy over the same time. As for the significant variables and their units, **Total_CO2_Emission** is listed in thousand&#39;s of tons of CO2 while **Percent_Consumption_Renewables** is the percentage of total energy used produced by renewable sources per country. In terms of the data&#39;s source, *Gapminder* has been a reliable provider of data since 2005, in hopes of promoting global sustainability through easily accessible information. We hope to utilize the **Total_CO2_Emission** and **Percent_Consumption_Renewables** variables to determine how their relationship could be useful to combating climate change.</span>
-<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a><span class="fu"># Hypothesized Relationship</span></span>
-<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>The relationship between **Total_CO2_Emission** and **Percent_Consumption_Renewables** is expected to be negative, meaning that if a country uses more renewable energy they are likely to produce less CO2. As previously stated, the purpose of this project is to investigate this relationship to learn more about climate change and any potential solutions to this global problem challenging humanity&#39;s future.</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>co2_clean <span class="ot">&lt;-</span> co2 <span class="sc">|&gt;</span></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(country, <span class="st">`</span><span class="at">1989</span><span class="st">`</span><span class="sc">:</span><span class="st">`</span><span class="at">2017</span><span class="st">`</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="at">.cols =</span> <span class="st">`</span><span class="at">1989</span><span class="st">`</span><span class="sc">:</span><span class="st">`</span><span class="at">2017</span><span class="st">`</span>, </span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>                <span class="sc">~</span> <span class="fu">convert_to_numeric</span>(.)))<span class="sc">|&gt;</span></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">!</span>country,</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;year&quot;</span>,</span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;Total_CO2_Emissions&quot;</span>)</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>energy_clean <span class="ot">&lt;-</span> energy <span class="sc">|&gt;</span></span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">!</span>country,</span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;year&quot;</span>,</span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;Percent_Consumption_Renewable&quot;</span>)</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>master <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(co2_clean, energy_clean) <span class="sc">|&gt;</span></span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>master <span class="sc">|&gt;</span></span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(year) <span class="sc">|&gt;</span></span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>()</span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>master <span class="sc">|&gt;</span></span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(country) <span class="sc">|&gt;</span></span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>()</span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a><span class="fu"># Data Cleaning Process and Decisions</span></span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a><span class="fu"># Introduction</span></span>
 <span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>Before the data could be analyzed, it had to be properly cleaned and wrangled. The CO2 data-set contained values in the form of 25.3k and 4.9M, signaling the units of thousands and millions. The first step in the data cleaning process was to replace these letters with proper units to create a numeric variable, which enabled the performance of calculations on the data. A function titled convert_to_numeric() was created for this intended purpose. Next we pivotted the data to be in tidy form and selected the years of interest (1989-2017). Once pivoted, the data sets were joined by year and country to produce a master data set which shall be used for model fitting, plotting, and subsequent analysis. A final decision was made to drop all the Na&#39;s in the master set, due to the following justification. The missing values typically occurred in the **Percent_Consumption_Renewables** across the following years (1989-1998) for particularly small country&#39;s, illustrating a pattern and non-random missing values. Using cell-mean imputation would not be a proper solution here, as a country&#39;s initial year of renewable energy cannot be its mean from rest of the years as this introduces bias and would make a time-series graph obsolete.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>The master data to be used in this project incorporates data from two datasets, one measuring total carbon dioxide emissions per country of the years and one measuring proportion of energy use which is renewable over the years. Total_CO2_Emission is in 1000 tons of CO2 and Percent_Consumption_Renewables is a percentage of total energy used produced by renewable sources per country over the years. There are 207 distinct countries included in the joined data set observed over 29 years.  The relationship between Total_CO2_Emission and Percent_Consumption_Renewables is expected to be negative where as a country uses more renewable energy they produce less CO2. The purpose of this project is to investigate this relationship to learn more about climate change and potential solutions to this global problem challenging humanity&#39;s future. The relationship between **Total_CO2_Emission** and **Percent_Consumption_Renewables** is expected to be negative, meaning that if a country uses more renewable energy they are likely to produce less CO2. As previously stated, the purpose of this project is to investigate this relationship to learn more about climate change and any potential solutions to this global problem challenging humanity&#39;s future.</span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a><span class="fu"># Materials and Methods</span></span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>The master data-set to be used in this project incorporates data from two sets, one measuring the total carbon dioxide emissions, per country over the years (1989-2017) and the other measuring the proportion of energy use, which is classified as renewable energy over the same time. As for the significant variables and their units, **Total_CO2_Emission** is listed in thousand&#39;s of tons of CO2 while **Percent_Consumption_Renewables** is the percentage of total energy used produced by renewable sources per country. In terms of the data&#39;s source, *Gapminder* has been a reliable provider of data since 2005, in hopes of promoting global sustainability through easily accessible information. We hope to utilize the **Total_CO2_Emission** and **Percent_Consumption_Renewables** variables to determine how their relationship could be useful to combating climate change.</span>
+<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a>Before the data could be analyzed, it had to be properly cleaned and wrangled. The CO2 data-set contained values in the form of 25.3k and 4.9M, signaling the units of thousands and millions. The first step in the data cleaning process was to replace these letters with proper units to create a numeric variable, which enabled the performance of calculations on the data. A function titled convert_to_numeric() was created for this intended purpose. Next we pivotted the data to be in tidy form and selected the years of interest (1989-2017). Once pivoted, the data sets were joined by year and country to produce a master data set which shall be used for model fitting, plotting, and subsequent analysis. A final decision was made to drop all the Na&#39;s in the master set, due to the following justification. The missing values typically occurred in the **Percent_Consumption_Renewables** across the following years (1989-1998) for particularly small country&#39;s, illustrating a pattern and non-random missing values. Using cell-mean imputation would not be a proper solution here, as a country&#39;s initial year of renewable energy cannot be its mean from rest of the years as this introduces bias and would make a time-series graph obsolete. This Data was obtained through GapMinder.</span>
+<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(master)<span class="sc">|&gt;</span></span>
+<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&#39;First rows of Master Data Set&#39;</span>)</span>
+<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a><span class="fu"># References</span></span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
