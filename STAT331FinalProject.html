@@ -2688,10 +2688,7 @@ vertical-align: -.125em;
 <span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>master <span class="sc">|&gt;</span></span>
 <span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(country) <span class="sc">|&gt;</span></span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>()</span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(master) <span class="sc">|&gt;</span></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">latex_options =</span> <span class="st">&quot;striped&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <section id="introduction" class="level1" data-number="1">
@@ -3211,43 +3208,40 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>master <span class="sc">|&gt;</span></span>
 <span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(country) <span class="sc">|&gt;</span></span>
 <span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>()</span>
-<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(master) <span class="sc">|&gt;</span></span>
-<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">latex_options =</span> <span class="st">&quot;striped&quot;</span>)</span>
-<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a><span class="fu"># Introduction</span></span>
-<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>Climate change is a global challenge jeopardizing humanity&#39;s future. This purpose of this project is to investigate the relationship between CO2 emissions, one of the largest drivers of climate change creating greenhouse gasses, and the use of renewable energy such as solar, wind, hydroelectric or nuclear energy. The data to be used in this project incorporates data from two different sources, one measuring total carbon dioxide emissions per country over the years and one measuring proportion of energy use which is renewable over the years. <span class="in">`Total_CO2_Emission`</span> is in 1000 tons of CO2 and <span class="in">`Percent_Consumption_Renewables`</span> is a percentage of total energy use produced by renewable sources per country over the years. There are 207 distinct countries observed over 29 years. The relationship between Total_CO2_Emission and Percent_Consumption_Renewables is hypothesized to be negative whereas a country uses more renewable energy they produce less CO2. Through this investigation hopefully more information can be learned about climate change and potential solutions to this global problem affecting every living and non-living object.</span>
-<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a><span class="fu"># Materials and Methods</span></span>
-<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>As mentioned in the introduction, the master dataset to be used for analysis in this project incorporates data from two sets, one measuring the total carbon dioxide emissions, per country over the years and the other measuring the proportion of energy use, which is classified as renewable energy over the same time. The data was sourced from an online database titled Gapminder which has been a reliable provider of data since 2005, in hopes of promoting global sustainability through easily accessible information. Before analysis, the data had to be properly cleaned and wrangled.</span>
-<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>The CO2 dataset contained values in the form of 25.3k and 4.9M, signaling the units of thousands and millions of units. The first step in the data cleaning process was to replace these letters with proper units to create a numeric variable, which enabled the performance of calculations on the data - a function titled was created for this purpose. The data was then pivoted to be in tidy form and the years of interest (1989 -- 2017) were selected. Once pivoted, the data sets were joined by year and country to produce a master data set which shall be used for model fitting, plotting, and subsequent analysis. A final decision was made to drop all the Na&#39;s in the master set due to a few reasons. The missing values typically occurred in the <span class="in">`Percent_Consumption_Renewables`</span> variable across the earlier years and usually in small countries. Whether these Na&#39;s were include due to lack of observation or for simply not having any renewable energy production or consumption it is unclear. Because of a significant sample size after dropping Na&#39;s, and because of this knowledge gap and lack of patterns about the data, dropping Na&#39;s is appropriate and other data imputation methods such as cell-mean imputation would not be a proper solution as this introduces bias and would make a time-series graph incorrect.</span>
-<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>All the data cleaning, linear regression models, and subsequent analysis was conducted using R code.</span>
-<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(master)<span class="sc">|&gt;</span></span>
-<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&#39;First rows of Master Data Set&#39;</span>)</span>
-<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a><span class="fu"># Analysis and Plots</span></span>
-<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a>energy_emissions_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="st">`</span><span class="at">Total_CO2_Emissions</span><span class="st">`</span> <span class="sc">~</span> <span class="st">`</span><span class="at">Percent_Consumption_Renewable</span><span class="st">`</span>,</span>
-<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a>                             <span class="at">data =</span> master)</span>
-<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(energy_emissions_model)</span>
-<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(energy_emissions_model) <span class="sc">|&gt;</span></span>
-<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&#39;Working Model&#39;</span>)</span>
-<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-101"><a href="#cb7-101" aria-hidden="true" tabindex="-1"></a><span class="fu"># Discussion of Results</span></span>
-<span id="cb7-102"><a href="#cb7-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-103"><a href="#cb7-103" aria-hidden="true" tabindex="-1"></a><span class="fu"># References</span></span>
-<span id="cb7-104"><a href="#cb7-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-105"><a href="#cb7-105" aria-hidden="true" tabindex="-1"></a>https://www.gapminder.org/data/</span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a><span class="fu"># Introduction</span></span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>Climate change is a global challenge jeopardizing humanity&#39;s future. This purpose of this project is to investigate the relationship between CO2 emissions, one of the largest drivers of climate change creating greenhouse gasses, and the use of renewable energy such as solar, wind, hydroelectric or nuclear energy. The data to be used in this project incorporates data from two different sources, one measuring total carbon dioxide emissions per country over the years and one measuring proportion of energy use which is renewable over the years. <span class="in">`Total_CO2_Emission`</span> is in 1000 tons of CO2 and <span class="in">`Percent_Consumption_Renewables`</span> is a percentage of total energy use produced by renewable sources per country over the years. There are 207 distinct countries observed over 29 years. The relationship between Total_CO2_Emission and Percent_Consumption_Renewables is hypothesized to be negative whereas a country uses more renewable energy they produce less CO2. Through this investigation hopefully more information can be learned about climate change and potential solutions to this global problem affecting every living and non-living object.</span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a><span class="fu"># Materials and Methods</span></span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>As mentioned in the introduction, the master dataset to be used for analysis in this project incorporates data from two sets, one measuring the total carbon dioxide emissions, per country over the years and the other measuring the proportion of energy use, which is classified as renewable energy over the same time. The data was sourced from an online database titled Gapminder which has been a reliable provider of data since 2005, in hopes of promoting global sustainability through easily accessible information. Before analysis, the data had to be properly cleaned and wrangled.</span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>The CO2 dataset contained values in the form of 25.3k and 4.9M, signaling the units of thousands and millions of units. The first step in the data cleaning process was to replace these letters with proper units to create a numeric variable, which enabled the performance of calculations on the data - a function titled was created for this purpose. The data was then pivoted to be in tidy form and the years of interest (1989 -- 2017) were selected. Once pivoted, the data sets were joined by year and country to produce a master data set which shall be used for model fitting, plotting, and subsequent analysis. A final decision was made to drop all the Na&#39;s in the master set due to a few reasons. The missing values typically occurred in the <span class="in">`Percent_Consumption_Renewables`</span> variable across the earlier years and usually in small countries. Whether these Na&#39;s were include due to lack of observation or for simply not having any renewable energy production or consumption it is unclear. Because of a significant sample size after dropping Na&#39;s, and because of this knowledge gap and lack of patterns about the data, dropping Na&#39;s is appropriate and other data imputation methods such as cell-mean imputation would not be a proper solution as this introduces bias and would make a time-series graph incorrect.</span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>All the data cleaning, linear regression models, and subsequent analysis was conducted using R code.</span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(master)<span class="sc">|&gt;</span></span>
+<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&#39;First rows of Master Data Set&#39;</span>)</span>
+<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a><span class="fu"># Analysis and Plots</span></span>
+<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a>energy_emissions_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="st">`</span><span class="at">Total_CO2_Emissions</span><span class="st">`</span> <span class="sc">~</span> <span class="st">`</span><span class="at">Percent_Consumption_Renewable</span><span class="st">`</span>,</span>
+<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a>                             <span class="at">data =</span> master)</span>
+<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(energy_emissions_model)</span>
+<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(energy_emissions_model) <span class="sc">|&gt;</span></span>
+<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&#39;Working Model&#39;</span>)</span>
+<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a><span class="fu"># Discussion of Results</span></span>
+<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a><span class="fu"># References</span></span>
+<span id="cb7-101"><a href="#cb7-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-102"><a href="#cb7-102" aria-hidden="true" tabindex="-1"></a>https://www.gapminder.org/data/</span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

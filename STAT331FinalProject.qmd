@@ -62,9 +62,6 @@ master |>
 master |>
   distinct(country) |>
   count()
-
-kable(master) |>
-  kable_styling(latex_options = "striped")
 ```
 
 # Introduction
@@ -87,11 +84,31 @@ head(master)|>
 # Analysis and Plots
 
 ```{r}
+# linear regression analysis on Total_CO2_Emissions and Percent_Consumption_Renewable
 energy_emissions_model <- lm(`Total_CO2_Emissions` ~ `Percent_Consumption_Renewable`,
                              data = master)
 summary(energy_emissions_model)
 tidy(energy_emissions_model) |>
   knitr::kable(caption = 'Working Model')
+```
+
+```{r}
+# Plot
+master|> 
+ggplot(aes(x = Percent_Consumption_Renewable, 
+           y = Total_CO2_Emissions,color=country)
+       ) +
+  geom_point() + 
+  geom_smooth(method = "lm") +
+  theme(legend.position = "none")+
+  labs(x = "Renewable energy consumption percentage/%", 
+       y = "", 
+       title = "Relationships between Renewable Energy Consumption and CO2 Emissions among different contries", 
+       subtitle = "Total CO2 Emissions/tonnes")+
+  annotate("text", x = 25, y = 6200000, label = "China", size=2)+
+  annotate("text", x = 8, y = 6500000, label = "US",size=2)+
+  annotate("text", x = 43, y = 2200000, label = "India",size=2)+
+  annotate("text", x = 3, y = 2900000, label = "Russia",size=2)
 ```
 
 # Discussion of Results
