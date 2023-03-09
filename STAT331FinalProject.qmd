@@ -84,13 +84,17 @@ head(master)|>
 # Analysis and Plots
 
 ```{r}
+#| output: false
 # linear regression analysis on Total_CO2_Emissions and Percent_Consumption_Renewable
 energy_emissions_model <- lm(`Total_CO2_Emissions` ~ `Percent_Consumption_Renewable`,
                              data = master)
-# summary(energy_emissions_model)
-tidy(energy_emissions_model) |>
-  knitr::kable(caption = 'Working Model')
+summary(energy_emissions_model)
+tidy(energy_emissions_model) 
 ```
+Simple regression equation: 
+
+$$ \hat{y} = 217719 - 2590 * Percent\,Consumption\,Renewable $$ 
+
 
 ```{r}
 # Plot
