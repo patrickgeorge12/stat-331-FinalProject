@@ -21,6 +21,9 @@ execute:
 ```{r setup}
 library(tidyverse)
 library(broom)
+library(knitr)
+library(DT)
+library(kableExtra)
 options(scipen = 99999)
 energy <- readxl::read_xlsx(here::here("renewable_energy.xlsx"))
 co2 <- readxl::read_xlsx(here::here("co2.xlsx"))
@@ -59,20 +62,22 @@ master |>
 master |>
   distinct(country) |>
   count()
+
+kable(master) |>
+  kable_styling(latex_options = "striped")
 ```
 
 # Introduction
 
-Climate change is a global challenge jeopardizing humanity’s future. This purpose of this project is to investigate the relationship between CO2 emissions, one of the largest drivers of climate change creating greenhouse gasses, and the use of renewable energy such as solar, wind, hydroelectric or nuclear energy. The data to be used in this project incorporates data from two different sources, one measuring total carbon dioxide emissions per country over the years and one measuring proportion of energy use which is renewable over the years. `Total_CO2_Emission` is in 1000 tons of CO2 and `Percent_Consumption_Renewables` is a percentage of total energy use produced by renewable sources per country over the years. There are 207 distinct countries observed over 29 years. The relationship between Total_CO2_Emission and Percent_Consumption_Renewables is hypothesized to be negative whereas a country uses more renewable energy they produce less CO2. Through this investigation hopefully more information can be learned about climate change and potential solutions to this global problem affecting every living and non-living object.
+Climate change is a global challenge jeopardizing humanity's future. This purpose of this project is to investigate the relationship between CO2 emissions, one of the largest drivers of climate change creating greenhouse gasses, and the use of renewable energy such as solar, wind, hydroelectric or nuclear energy. The data to be used in this project incorporates data from two different sources, one measuring total carbon dioxide emissions per country over the years and one measuring proportion of energy use which is renewable over the years. `Total_CO2_Emission` is in 1000 tons of CO2 and `Percent_Consumption_Renewables` is a percentage of total energy use produced by renewable sources per country over the years. There are 207 distinct countries observed over 29 years. The relationship between Total_CO2_Emission and Percent_Consumption_Renewables is hypothesized to be negative whereas a country uses more renewable energy they produce less CO2. Through this investigation hopefully more information can be learned about climate change and potential solutions to this global problem affecting every living and non-living object.
 
 # Materials and Methods
 
-As mentioned in the introduction, the master dataset to be used for analysis in this project incorporates data from two sets, one measuring the total carbon dioxide emissions, per country over the years and the other measuring the proportion of energy use, which is classified as renewable energy over the same time. The data was sourced from an online database titled Gapminder which has  been a reliable provider of data since 2005, in hopes of promoting global sustainability through easily accessible information. 
-Before analysis, the data had to be properly cleaned and wrangled. 
+As mentioned in the introduction, the master dataset to be used for analysis in this project incorporates data from two sets, one measuring the total carbon dioxide emissions, per country over the years and the other measuring the proportion of energy use, which is classified as renewable energy over the same time. The data was sourced from an online database titled Gapminder which has been a reliable provider of data since 2005, in hopes of promoting global sustainability through easily accessible information. Before analysis, the data had to be properly cleaned and wrangled.
 
-The CO2 dataset contained values in the form of 25.3k and 4.9M, signaling the units of thousands and millions of units. The first step in the data cleaning process was to replace these letters with proper units to create a numeric variable, which enabled the performance of calculations on the data - a function titled was created for this purpose. The data was then pivoted to be in tidy form and the years of interest (1989 – 2017) were selected. Once pivoted, the data sets were joined by year and country to produce a master data set which shall be used for model fitting, plotting, and subsequent analysis. A final decision was made to drop all the Na’s in the master set due to a few reasons. The missing values typically occurred in the `Percent_Consumption_Renewables` variable across the earlier years and usually in small countries. Whether these Na’s were include due to lack of observation or for simply not having any renewable energy production or consumption it is unclear. Because of a significant sample size after dropping Na’s, and because of this knowledge gap and lack of patterns about the data, dropping Na’s is appropriate and other data imputation methods such as cell-mean imputation would not be a proper solution as this introduces bias and would make a time-series graph incorrect. 
+The CO2 dataset contained values in the form of 25.3k and 4.9M, signaling the units of thousands and millions of units. The first step in the data cleaning process was to replace these letters with proper units to create a numeric variable, which enabled the performance of calculations on the data - a function titled was created for this purpose. The data was then pivoted to be in tidy form and the years of interest (1989 -- 2017) were selected. Once pivoted, the data sets were joined by year and country to produce a master data set which shall be used for model fitting, plotting, and subsequent analysis. A final decision was made to drop all the Na's in the master set due to a few reasons. The missing values typically occurred in the `Percent_Consumption_Renewables` variable across the earlier years and usually in small countries. Whether these Na's were include due to lack of observation or for simply not having any renewable energy production or consumption it is unclear. Because of a significant sample size after dropping Na's, and because of this knowledge gap and lack of patterns about the data, dropping Na's is appropriate and other data imputation methods such as cell-mean imputation would not be a proper solution as this introduces bias and would make a time-series graph incorrect.
 
-All the data cleaning, linear regression models, and subsequent analysis was conducted using R code. 
+All the data cleaning, linear regression models, and subsequent analysis was conducted using R code.
 
 ```{r}
 head(master)|>
