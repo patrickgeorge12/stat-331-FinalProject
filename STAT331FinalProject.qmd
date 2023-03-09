@@ -97,7 +97,8 @@ $$ \hat{y} = 217719 - 2590 * Percent\,Consumption\,Renewable $$
 
 
 ```{r}
-# Plot
+#| fig-align: center
+# Plot 1
 master |> 
 ggplot(aes(x = Percent_Consumption_Renewable, 
            y = Total_CO2_Emissions, color=country)
@@ -114,6 +115,13 @@ ggplot(aes(x = Percent_Consumption_Renewable,
   annotate("text", x = 43, y = 2200000, label = "India", size=2) +
   annotate("text", x = 3, y = 2900000, label = "Russia", size=2)
 ```
+Present and discuss the visualizations of the relationship between the variables
+Describe the statistical method used – linear regression
+Present the estimated regression model (in notation)
+Interpret the Linear Regression coefficients (in context)
+Describe the fit of the regression model (both table and written format)
+
+
 
 # Discussion of Results
 
