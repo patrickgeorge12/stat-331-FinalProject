@@ -113,7 +113,7 @@ ggplot(aes(x = Percent_Consumption_Renewable,
   annotate("text", x = 25, y = 6200000, label = "China", size=2) +
   annotate("text", x = 8, y = 6500000, label = "US",size=2) +
   annotate("text", x = 43, y = 2200000, label = "India", size=2) +
-  annotate("text", x = 3, y = 2900000, label = "Russia", size=2)
+  annotate("text", x = 3, y = 2900000, label = "Russia", size=2) + ylim(1250000, 10000000)
 ```
 Present and discuss the visualizations of the relationship between the variables
 Describe the statistical method used – linear regression
