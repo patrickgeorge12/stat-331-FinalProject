@@ -94,7 +94,21 @@ tidy(energy_emissions_model)
 Simple regression equation: 
 
 $$ \hat{y} = 217719 - 2590 * Percent\,Consumption\,Renewable $$ 
-
+```{r}
+#| fig-align: center
+# Plot 1
+master |> 
+ggplot(aes(x = Percent_Consumption_Renewable, 
+           y = Total_CO2_Emissions)
+       ) +
+  geom_point() + 
+  geom_smooth(method = "lm") +
+  theme(legend.position = "none") +
+  labs(x = "Renewable energy consumption percentage", 
+       y = "", 
+       title = "Relationships between Renewable Energy Consumption and CO2 Emissions among different contries", 
+       subtitle = "Total CO2 Emissions/1000 tonnes") 
+```
 
 ```{r}
 #| fig-align: center
@@ -113,7 +127,7 @@ ggplot(aes(x = Percent_Consumption_Renewable,
   annotate("text", x = 25, y = 6200000, label = "China", size=2) +
   annotate("text", x = 8, y = 6500000, label = "US",size=2) +
   annotate("text", x = 43, y = 2200000, label = "India", size=2) +
-  annotate("text", x = 3, y = 2900000, label = "Russia", size=2) + ylim(1250000, 10000000)
+  annotate("text", x = 3, y = 2900000, label = "Russia", size=2) + ylim(900000, 10000000)
 ```
 ```{r}
 #| output: false
