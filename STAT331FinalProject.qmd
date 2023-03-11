@@ -115,6 +115,21 @@ ggplot(aes(x = Percent_Consumption_Renewable,
   annotate("text", x = 43, y = 2200000, label = "India", size=2) +
   annotate("text", x = 3, y = 2900000, label = "Russia", size=2) + ylim(1250000, 10000000)
 ```
+```{r}
+#| output: false
+## This is just for model using Chinese data
+china <- master |>
+  filter(country == 'China')
+
+china_model <- lm(`Total_CO2_Emissions` ~ `Percent_Consumption_Renewable`,
+                             data = china)
+summary(china_model)
+tidy(china_model) 
+
+```
+
+
+
 Present and discuss the visualizations of the relationship between the variables
 Describe the statistical method used – linear regression
 Present the estimated regression model (in notation)
