@@ -91,6 +91,11 @@ energy_emissions_model <- lm(`Total_CO2_Emissions` ~ `Percent_Consumption_Renewa
 summary(energy_emissions_model)
 tidy(energy_emissions_model) 
 ```
+Simple regression equation:
+
+$$ \hat{y} = 217719 - 2590 * Percent\,Consumption\,Renewable $$
+
+Based on the linear regression model investigating the relationship between total carbon dioxide emissions and proportion of renewable energy, we can see that there is a negative relationship. This means that generally, the higher the proportion of renewable energy a country uses, the lower the total carbon dioxide emissions. The response variable in this equation is the country’s Total CO2 emissions in 1000 of tons while the explanatory variable is the percentage of energy a country uses which is classified as renewable. To interpret the coefficient of -2590 this means that for each additional 1% of renewable energy consumption used a country’s predicted total CO2 emission in thousands of tons decreases by 2590 on average.
 
  
 
@@ -154,11 +159,6 @@ energy_emissions_model |>
 ```
 
 
-Simple regression equation:
-
-$$ \hat{y} = 217719 - 2590 * Percent\,Consumption\,Renewable $$
-
-Based on the linear regression model investigating the relationship between total carbon dioxide emissions and proportion of renewable energy, we can see that there is a negative relationship. This means that generally, the higher the proportion of renewable energy a country uses, the lower the total carbon dioxide emissions. The response variable in this equation is the country’s Total CO2 emissions in 1000 of tons while the explanatory variable is the percentage of energy a country uses which is classified as renewable. To interpret the coefficient of -2590 this means that for each additional 1% of renewable energy consumption used a country’s predicted total CO2 emission in thousands of tons decreases by 2590 on average.
 
 
 # Discussion of Results
