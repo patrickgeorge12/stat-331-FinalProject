@@ -1,0 +1,237 @@
+---
+title: "Investigating CO2 Emissions and Renewable Energy Usage"
+author: "Noel Lopez, Patrick George, Riley Svensson, Ningjing Hua"
+format: 
+  html:
+    self-contained: true
+    code-tools: true
+    toc: true
+    number-sections: true
+    code-fold: true
+theme: 
+  dark: darkly
+editor: source
+execute: 
+  error: true
+  echo: true
+  message: false
+  warning: false
+---
+
+```{r setup}
+library(tidyverse)
+library(broom)
+library(knitr)
+library(DT)
+library(kableExtra)
+options(scipen = 99999)
+energy <- readxl::read_xlsx(here::here("data","renewable_energy.xlsx"))
+co2 <- readxl::read_xlsx(here::here("data","co2.xlsx"))
+
+```
+
+```{r clean data}
+#| output: false
+convert_to_numeric <- function(x) {
+  x <- str_replace_all(x, "k", "e3")
+  x <- str_replace_all(x, "M", "e6")
+  return(as.numeric(x))
+}
+
+
+co2_clean <- co2 |>
+  select(country, `1989`:`2017`) |>
+  mutate(across(.cols = `1989`:`2017`, 
+                ~ convert_to_numeric(.))) |>
+  pivot_longer(cols = !country,
+               names_to = "year",
+               values_to = "Total_CO2_Emissions")
+
+energy_clean <- energy |>
+  pivot_longer(cols = !country,
+               names_to = "year",
+               values_to = "Percent_Consumption_Renewable")
+
+master <- inner_join(co2_clean, energy_clean) |>
+  drop_na()
+
+master |>
+  distinct(year) |>
+  count()
+
+master |>
+  distinct(country) |>
+  count()
+```
+
+# Introduction
+
+Climate change is a global challenge jeopardizing humanity's future. This purpose of this project is to investigate the relationship between CO2 emissions, one of the largest drivers of climate change creating greenhouse gasses, and the use of renewable energy such as solar, wind, hydroelectric or nuclear energy. The data to be used in this project incorporates data from two different sources, one measuring total carbon dioxide emissions per country over the years and one measuring proportion of energy use which is renewable over the years. `Total_CO2_Emission` is in 1000 tons of CO2 and `Percent_Consumption_Renewables` is a percentage of total energy use produced by renewable sources per country over the years. There are 207 distinct countries observed over 29 years. The relationship between Total_CO2_Emission and Percent_Consumption_Renewables is hypothesized to be negative whereas a country uses more renewable energy they produce less CO2. Through this investigation hopefully more information can be learned about climate change and potential solutions to this global problem affecting every living and non-living object.
+
+# Materials and Methods
+
+As mentioned in the introduction, the master dataset to be used for analysis in this project incorporates data from two sets, one measuring the total carbon dioxide emissions, per country over the years and the other measuring the proportion of energy use, which is classified as renewable energy over the same time. The data was sourced from an online database titled Gapminder which has been a reliable provider of data since 2005, in hopes of promoting global sustainability through easily accessible information. Before analysis, the data had to be properly cleaned and wrangled.
+
+The CO2 dataset contained values in the form of 25.3k and 4.9M, signaling the units of thousands and millions of units. The first step in the data cleaning process was to replace these letters with proper units to create a numeric variable, which enabled the performance of calculations on the data - a function titled was created for this purpose. The data was then pivoted to be in tidy form and the years of interest (1989 -- 2017) were selected. Once pivoted, the data sets were joined by year and country to produce a master data set which shall be used for model fitting, plotting, and subsequent analysis. A final decision was made to drop all the Na's in the master set due to a few reasons. The missing values typically occurred in the `Percent_Consumption_Renewables` variable across the earlier years and usually in small countries. Whether these Na's were include due to lack of observation or for simply not having any renewable energy production or consumption it is unclear. Because of a significant sample size after dropping Na's, and because of this knowledge gap and lack of patterns about the data, dropping Na's is appropriate and other data imputation methods such as cell-mean imputation would not be a proper solution as this introduces bias and would make a time-series graph incorrect.
+
+All the data cleaning, linear regression models, and subsequent analysis was conducted using R code.
+
+```{r}
+head(master)|>
+  knitr::kable(caption = 'First rows of Master Data Set')
+```
+
+# Analysis and Plots
+
+```{r}
+#| output: false
+# linear regression analysis on Total_CO2_Emissions and Percent_Consumption_Renewable
+energy_emissions_model <- lm(`Total_CO2_Emissions` ~ `Percent_Consumption_Renewable`,
+                             data = master)
+summary(energy_emissions_model)
+tidy(energy_emissions_model) 
+```
+
+Simple regression equation:
+
+$$ \hat{y} = 217719 - 2590 * Percent\,Consumption\,Renewable $$
+
+Based on the linear regression model investigating the relationship between total carbon dioxide emissions and proportion of renewable energy, we can see that there is a negative relationship. This means that generally, the higher the proportion of renewable energy a country uses, the lower the total carbon dioxide emissions.
+
+```{r}
+#| fig-align: center
+# Plot 1
+master |> 
+ggplot(aes(x = Percent_Consumption_Renewable, 
+           y = Total_CO2_Emissions)
+       ) +
+  geom_point() + 
+  geom_smooth(method = "lm") +
+  theme(legend.position = "none") +
+  labs(x = "Renewable energy consumption percentage", 
+       y = "", 
+       title = "Relationships between Renewable Energy Consumption and CO2 Emissions among different contries", 
+       subtitle = "Total CO2 Emissions/1000 tonnes") 
+```
+
+```{r}
+#| fig-align: center
+# Plot 1
+master |> 
+ggplot(aes(x = Percent_Consumption_Renewable, 
+           y = Total_CO2_Emissions, color=country)
+       ) +
+  geom_point() + 
+  geom_smooth(method = "lm") +
+  theme(legend.position = "none") +
+  labs(x = "Renewable energy consumption percentage", 
+       y = "", 
+       title = "Relationships between Renewable Energy Consumption and CO2 Emissions among different contries", 
+       subtitle = "Total CO2 Emissions/1000 tonnes") +
+  annotate("text", x = 25, y = 6200000, label = "China", size=2) +
+  annotate("text", x = 8, y = 6500000, label = "US",size=2) +
+  annotate("text", x = 43, y = 2200000, label = "India", size=2) +
+  annotate("text", x = 3, y = 2900000, label = "Russia", size=2) + ylim(900000, 10000000)
+```
+
+```{r}
+#| output: false
+## This is just for model using Chinese data
+china <- master |>
+  filter(country == 'China')
+
+china_model <- lm(`Total_CO2_Emissions` ~ `Percent_Consumption_Renewable`,
+                             data = china)
+summary(china_model)
+tidy(china_model) 
+
+```
+
+```{r}
+# check fit of Chinese data
+china_model |> 
+  augment() |> 
+ggplot(aes(x = .fitted, y = .resid)) +
+  geom_point() 
+```
+
+```{r}
+#| output: false
+## This is just for model using Inida data
+india <- master |>
+  filter(country == 'India')
+
+india_model <- lm(`Total_CO2_Emissions` ~ `Percent_Consumption_Renewable`,
+                             data = india)
+summary(india_model)
+tidy(india_model) 
+```
+
+```{r}
+# check fit of India data
+india_model |> 
+  augment() |> 
+ggplot(aes(x = .fitted, y = .resid)) +
+  geom_point() 
+```
+
+```{r}
+# Linear regression model for countries other than China, India, Russia, and US
+Other <- master |>
+  filter(country != 'India')|>
+    filter(country != 'China')|>
+    filter(country != 'Russia')|>
+    filter(country != 'United States')
+
+other_model <- lm(`Total_CO2_Emissions` ~ `Percent_Consumption_Renewable`,
+                             data = Other)
+summary(other_model)
+tidy(other_model) 
+```
+
+```{r}
+# Linear regression among the countries other than China, India, Russia, and US
+Other |> 
+ggplot(aes(x = Percent_Consumption_Renewable, 
+           y = Total_CO2_Emissions)
+       ) +
+  geom_point() + 
+  geom_smooth(method = "lm") +
+  theme(legend.position = "none") +
+  labs(x = "Renewable energy consumption percentage", 
+       y = "", 
+       title = "Relationships between Renewable Energy Consumption and CO2 Emissions among different contries", 
+       subtitle = "Total CO2 Emissions/1000 tonnes") 
+```
+
+```{r}
+# Check the fit for the models of countries other than China, India, Russia, and US.
+other_model |> 
+  augment() |> 
+ggplot(aes(x = .fitted, y = .resid)) +
+  geom_point() 
+```
+
+```{r}
+# Check the fit for all countries model
+energy_emissions_model |> 
+  augment() |> 
+ggplot(aes(x = .fitted, y = .resid)) +
+  geom_point() 
+```
+
+Present and discuss the visualizations of the relationship between the variables
+
+Describe the statistical method used -- linear regression
+
+Present the estimated regression model (in notation
+
+) Interpret the Linear Regression coefficients (in context
+
+) Describe the fit of the regression model (both table and written format)
+
+# Discussion of Results
+
+# References
+
+https://www.gapminder.org/data/
