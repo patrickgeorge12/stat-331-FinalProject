@@ -95,7 +95,6 @@ Simple regression equation:
 
 $$ \hat{y} = 217719 - 2590 * Percent\,Consumption\,Renewable $$
 
-Based on the linear regression model investigating the relationship between total carbon dioxide emissions and proportion of renewable energy, we can see that there is a negative relationship. This means that generally, the higher the proportion of renewable energy a country uses, the lower the total carbon dioxide emissions. The response variable in this equation is the country's Total CO2 emissions in 1000 of tons while the explanatory variable is the percentage of energy a country uses which is classified as renewable. To interpret the coefficient of -2590 this means that for each additional 1% of renewable energy consumption used a country's predicted total CO2 emission in thousands of tons decreases by 2590 on average.
 
 The method used to predict this model was simple linear regression. This method involves predicting the values of one variable, based on another, through producing a straight line minimizing the value for the sum of squared residuals. Based on the linear regression model investigating the relationship between total carbon dioxide emissions and proportion of renewable energy, we can see that there is a negative relationship. This means that generally, the higher the proportion of renewable energy a country uses, the lower the total carbon dioxide emissions. The response variable in this equation is the country's Total CO2 emissions in 1000 of tons while the explanatory variable is the percentage of energy a country uses which is classified as renewable. To interpret the coefficient of -2590 this means that for each additional 1% of renewable energy consumption used a country's predicted total CO2 emission in thousands of tons decreases by 2590 on average.
 
@@ -135,9 +134,11 @@ ggplot(aes(x = Percent_Consumption_Renewable,
 grid.arrange(raw_graph, countries_graph)
 ```
 
-The graph displayed on the top demonstrates the relationship between Total Co2 Emissions and Percent Renewable Energy, shown by plotting the raw data. The distribution illustrates a negative pattern with considerable noise, explained by the smallest countries and relative values of Total Co2 Emissions. To better visualize how the relationship between Co2 Emissions and Percent Renewable Energy differentiates for the four largest producers of Co2, we filtered to only include India, Russia, US, and China in the second plot. In doing this, we were able to take out countries with insignificant Co2 emissions, as the model better explained the variability $$R\^{2}\$$ in Co2 emissions for the top countries. Essentially, we were able to see that there needs to be a minimum amount of Total_Co2_Emission data, in order for the model to be accurate in making conclusions about the variable's relationship.
+The graph displayed on the top demonstrates the relationship between `Total_CO2_Emission` and `Percent_Renewable_Energy`, shown by plotting the raw data. The distribution illustrates a negative pattern with considerable noise, explained by the smallest countries and relative values of Total Co2 Emissions. To better visualize how the relationship between Co2 Emissions and `Percent_Renewable_Energy` differentiates for the four largest producers of Co2, we filtered to only include India, Russia, US, and China in the second plot. In doing this, we were able to take out countries with insignificant Co2 emissions, as the model better explained the variability ($R^{2}$) in Co2 emissions for the top countries. Essentially, we were able to see that there needs to be a minimum amount of Total_Co2_Emission data, in order for the model to be accurate in making conclusions about the variable's relationship.
 
 ```{r}
+#| fig-align: center
+
 co2_by_year_graph <- master |>
   group_by(year) |>
   summarize(avg_co2 = mean(Total_CO2_Emissions)) |>
@@ -165,7 +166,7 @@ energy_by_year_graph<- master |>
 grid.arrange(co2_by_year_graph, energy_by_year_graph)
 ```
 
-As shown by the two distributions of Total_Co2_Emissions and Percent Renewable Energy over time, the relationship follows the negative relationship as expected. This means that as the predictor variable, Percent of Renewable Energy decreases throughout the years, the response variable, Total_Co2_Emmissions increases in turn. It's worth noting that during the timespan of 1989 to 2017, the total Co2 emissions has been increasing as expected, and is likely due to the extreme population growth over this time. On the other hand, the Percent of Renewable Energy has shockingly been declining in modern years, which is likely due to the varying definition of renewable energy, it only encompasses solar, wind, geothermal, and hydro powered. Before this discovery, we had assumed that energy sources such as nuclear power and natural gas, fell under the umbrella of renewable energy, which was ultimately false. Following this analysis, we were able to understand that the value of Co2 emissions was expanding, due to population increase, while the amount of renewable energy has actually been declining, as this only included specific sources of energy which have lost popularity today.
+As shown by the two distributions of `Total_CO2_Emission` and Percent Renewable Energy over time, the relationship follows the negative relationship as expected. This means that as the predictor variable, Percent of Renewable Energy decreases throughout the years, the response variable, `Total_CO2_Emission` increases in turn. It's worth noting that during the timespan of 1989 to 2017, the total Co2 emissions has been increasing as expected, and is likely due to the extreme population growth over this time. On the other hand, the Percent of Renewable Energy has shockingly been declining in modern years, which is likely due to the varying definition of renewable energy, it only encompasses solar, wind, geothermal, and hydro powered. Before this discovery, we had assumed that energy sources such as nuclear power and natural gas, fell under the umbrella of renewable energy, which was ultimately false. Following this analysis, we were able to understand that the value of Co2 emissions was expanding, due to population increase, while the amount of renewable energy has actually been declining, as this only included specific sources of energy which have lost popularity today.
 
 ```{r}
 energy_emissions_model |>
@@ -186,10 +187,15 @@ The proportion of variability in the response values that was accounted for by t
 
 https://www.gapminder.org/data/
 
+<<<<<<< HEAD
 # For reference
+=======
+
+>>>>>>> 6e066d92958a06d4a3538b04b5517a5cedbba5f0
 
 ```{r}
 #| output: false
+## FOR REFERENCE
 ## This is just for model using Chinese data
 china <- master |>
   filter(country == 'China')
@@ -201,9 +207,3 @@ tidy(china_model)
 
 ```
 
-```{r}
-energy_emissions_model |> 
-  augment() |> 
-ggplot(aes(x = .fitted, y = .resid)) +
-  geom_point() 
-```
