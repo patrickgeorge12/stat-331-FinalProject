@@ -134,6 +134,25 @@ ggplot(aes(x = Percent_Consumption_Renewable,
   annotate("text", x = 3, y = 2900000, label = "Russia", size=2) + ylim(900000, 10000000)
 ```
 
+
+
+Present and discuss the visualizations of the relationship between the variables
+
+Describe the statistical method used -- linear regression
+
+Present the estimated regression model (in notation
+
+) Interpret the Linear Regression coefficients (in context
+
+) Describe the fit of the regression model (both table and written format)
+
+# Discussion of Results
+
+# References
+
+https://www.gapminder.org/data/
+
+# For reference
 ```{r}
 #| output: false
 ## This is just for model using Chinese data
@@ -153,21 +172,4 @@ energy_emissions_model |>
 ggplot(aes(x = .fitted, y = .resid)) +
   geom_point() 
 ```
-
-Present and discuss the visualizations of the relationship between the variables
-
-Describe the statistical method used -- linear regression
-
-Present the estimated regression model (in notation
-
-) Interpret the Linear Regression coefficients (in context
-
-) Describe the fit of the regression model (both table and written format)
-
-# Discussion of Results
-
-# References
-
-https://www.gapminder.org/data/
-
 
