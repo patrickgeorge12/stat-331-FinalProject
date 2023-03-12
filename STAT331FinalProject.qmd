@@ -187,11 +187,9 @@ The proportion of variability in the response values that was accounted for by t
 
 https://www.gapminder.org/data/
 
-<<<<<<< HEAD
-# For reference
-=======
 
->>>>>>> 6e066d92958a06d4a3538b04b5517a5cedbba5f0
+# For reference
+
 
 ```{r}
 #| output: false
