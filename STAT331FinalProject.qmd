@@ -141,15 +141,19 @@ master |>
   summarize(avg_percent = mean(Percent_Consumption_Renewable)) |>
   ggplot(aes(x = year, y = avg_percent)) +
   geom_point()
-
-
+```
+```{r}
 energy_emissions_model |>
   augment() |>
+  summarize(`Variance of Fitted` = var(.fitted),
+            `Variance of Residuals` = var(.resid),
+            `Variance of Total_CO2_Emissions` = var(Total_CO2_Emissions)) |>
   datatable(class = 'cell-border stripe', 
-            editable = 'cell', 
-            caption = "Model Fit",
-            filter = 'top')
+            caption = "Variances of Model")
+
 ```
+
+
 Simple regression equation:
 
 $$ \hat{y} = 217719 - 2590 * Percent\,Consumption\,Renewable $$
