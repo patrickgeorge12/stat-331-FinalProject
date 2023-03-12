@@ -135,7 +135,7 @@ ggplot(aes(x = Percent_Consumption_Renewable,
 grid.arrange(raw_graph, countries_graph)
 ```
 
-The graph displayed on the top demonstrates the relationship between Total Co2 Emissions and Percent Renewable Energy, shown by plotting the raw data.  The distribution illustrates a negative pattern with considerable noise, explained by the smallest countries and relative values of Total Co2 Emissions.  To better visualize how the relationship between Co2 Emissions and Percent Renewable Energy differentiates for the four largest producers of Co2, we filtered to only include India, Russia, US, and China in the second plot.  In doing this, we were able to take out countries with insignificant Co2 emissions, as the model better explained the variability \$\$R\^{2}\$\$ in Co2 emissions for the top countries.  Essentially, we were able to see that there needs to be a minimum amount of Total_Co2_Emission data, in order for the model to be accurate in making conclusions about the variable's relationship.   
+The graph displayed on the top demonstrates the relationship between Total Co2 Emissions and Percent Renewable Energy, shown by plotting the raw data. The distribution illustrates a negative pattern with considerable noise, explained by the smallest countries and relative values of Total Co2 Emissions. To better visualize how the relationship between Co2 Emissions and Percent Renewable Energy differentiates for the four largest producers of Co2, we filtered to only include India, Russia, US, and China in the second plot. In doing this, we were able to take out countries with insignificant Co2 emissions, as the model better explained the variability $$R\^{2}\$$ in Co2 emissions for the top countries. Essentially, we were able to see that there needs to be a minimum amount of Total_Co2_Emission data, in order for the model to be accurate in making conclusions about the variable's relationship.
 
 ```{r}
 co2_by_year_graph <- master |>
@@ -185,8 +185,7 @@ The proportion of variability in the response values that was accounted for by t
 # References
 
 https://www.gapminder.org/data/
-<<<<<<< HEAD
-=======
+
 
 # For reference
 
@@ -209,8 +208,3 @@ energy_emissions_model |>
 ggplot(aes(x = .fitted, y = .resid)) +
   geom_point() 
 ```
-<<<<<<< HEAD
-
->>>>>>> 86a462327691cb015ddefff122a7c4572c9567c1
-=======
->>>>>>> 5143aa1ae774b8d2af84ec6d696a57a5bd24371e
