@@ -22,6 +22,7 @@ library(broom)
 library(knitr)
 library(DT)
 library(kableExtra)
+library(gridExtra)
 options(scipen = 99999)
 energy <- readxl::read_xlsx(here::here("renewable_energy.xlsx"))
 co2 <- readxl::read_xlsx(here::here("co2.xlsx"))
@@ -101,7 +102,7 @@ The method used to predict this model was simple linear regression. This method 
 ```{r}
 #| fig-align: center
 # Plot 1
-master |> 
+raw_graph <- master |> 
 ggplot(aes(x = Percent_Consumption_Renewable, 
            y = Total_CO2_Emissions)
        ) +
@@ -110,14 +111,11 @@ ggplot(aes(x = Percent_Consumption_Renewable,
   theme(legend.position = "none") +
   labs(x = "Renewable energy consumption percentage", 
        y = "", 
-       title = "Relationships between Renewable Energy Consumption and CO2 Emissions among different contries", 
-       subtitle = "Total CO2 Emissions/1000 tonnes") 
-```
+       title = "Relationships between Renewable Energy Consumption and \nCO2 Emissions among different contries", 
+       subtitle = "Total CO2 Emissions/1000 tonnes") +
+  theme(plot.title.position = "plot")
 
-```{r}
-#| fig-align: center
-# Plot 1
-master |> 
+countries_graph <-master |> 
 ggplot(aes(x = Percent_Consumption_Renewable, 
            y = Total_CO2_Emissions, color=country)
        ) +
@@ -126,27 +124,48 @@ ggplot(aes(x = Percent_Consumption_Renewable,
   theme(legend.position = "none") +
   labs(x = "Renewable energy consumption percentage", 
        y = "", 
-       title = "Relationships between Renewable Energy Consumption and CO2 Emissions among different contries", 
+       title = "Relationships between Renewable Energy Consumption and \nCO2 Emissions among four largest producers of Co2", 
        subtitle = "Total CO2 Emissions/1000 tonnes") +
   annotate("text", x = 25, y = 6200000, label = "China", size=2) +
-  annotate("text", x = 8, y = 6500000, label = "US",size=2) +
+  annotate("text", x = 8, y = 6500000, label = "US",size=2) + 
   annotate("text", x = 43, y = 2200000, label = "India", size=2) +
-  annotate("text", x = 3, y = 2900000, label = "Russia", size=2) + ylim(900000, 10000000)
+  annotate("text", x = 3, y = 2900000, label = "Russia", size=2) + ylim(900000, 10000000)+
+    theme(plot.title.position = "plot")
+
+grid.arrange(raw_graph, countries_graph)
 ```
 
+The graph displayed on the top demonstrates the relationship between Total Co2 Emissions and Percent Renewable Energy, shown by plotting the raw data.  The distribution illustrates a negative pattern with considerable noise, explained by the smallest countries and relative values of Total Co2 Emissions.  To better visualize how the relationship between Co2 Emissions and Percent Renewable Energy differentiates for the four largest producers of Co2, we filtered to only include India, Russia, US, and China in the second plot.  In doing this, we were able to take out countries with insignificant Co2 emissions, as the model better explained the variability \$\$R\^{2}\$\$ in Co2 emissions for the top countries.  Essentially, we were able to see that there needs to be a minimum amount of Total_Co2_Emission data, in order for the model to be accurate in making conclusions about the variable's relationship.   
+
 ```{r}
-master |>
+co2_by_year_graph <- master |>
   group_by(year) |>
   summarize(avg_co2 = mean(Total_CO2_Emissions)) |>
   ggplot(aes(x = year , y = avg_co2)) +
-  geom_point() 
+  geom_point() +
+  scale_x_discrete(guide = guide_axis(n.dodge=2))+
+  labs(x = "Year", 
+       y = "", 
+       title = "Average CO2 Emissions from 1989-2017", 
+       subtitle = "Average CO2 Emissions/1000 tonnes")+
+  theme(plot.title.position = "plot")
 
-master |>
+energy_by_year_graph<- master |>
   group_by(year) |>
   summarize(avg_percent = mean(Percent_Consumption_Renewable)) |>
   ggplot(aes(x = year, y = avg_percent)) +
-  geom_point()
+  geom_point()+
+   scale_x_discrete(guide = guide_axis(n.dodge=2))+
+    labs(x = "Year", 
+       y = "", 
+       title = "Average Percentage of Renewable Energy from 1989-2017",
+       subtitle = "Average Percentage of Renewable Energy")+
+      theme(plot.title.position = "plot")
+
+grid.arrange(co2_by_year_graph, energy_by_year_graph)
 ```
+
+As shown by the two distributions of Total_Co2_Emissions and Percent Renewable Energy over time, the relationship follows the negative relationship as expected.  This means that as the predictor variable, Percent of Renewable Energy decreases throughout the years, the response variable, Total_Co2_Emmissions increases in turn.  It's worth noting that during the timespan of 1989 to 2017, the total Co2 emissions has been increasing as expected, and is likely due to the extreme population growth over this time.  On the other hand, the Percent of Renewable Energy  has shockingly been declining in modern years, which is likely due to the varying definition of renewable energy, it only encompasses solar, wind, geothermal, and hydro powered.  Before this discovery, we had assumed that energy sources such as nuclear power and natural gas, fell under the umbrella of renewable energy, which was ultimately false.  Following this analysis, we were able to understand that the value of Co2 emissions was expanding, due to population increase, while the amount of renewable energy has actually been declining, as this only included specific sources of energy which have lost popularity today. 
 
 ```{r}
 energy_emissions_model |>
