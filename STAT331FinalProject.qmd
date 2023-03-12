@@ -185,6 +185,8 @@ The proportion of variability in the response values that was accounted for by t
 # References
 
 https://www.gapminder.org/data/
+<<<<<<< HEAD
+=======
 
 # For reference
 
@@ -207,3 +209,8 @@ energy_emissions_model |>
 ggplot(aes(x = .fitted, y = .resid)) +
   geom_point() 
 ```
+<<<<<<< HEAD
+
+>>>>>>> 86a462327691cb015ddefff122a7c4572c9567c1
+=======
+>>>>>>> 5143aa1ae774b8d2af84ec6d696a57a5bd24371e
