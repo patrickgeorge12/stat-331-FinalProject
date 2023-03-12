@@ -140,7 +140,15 @@ master |>
   group_by(year) |>
   summarize(avg_percent = mean(Percent_Consumption_Renewable)) |>
   ggplot(aes(x = year, y = avg_percent)) +
-  geom_point() 
+  geom_point()
+
+
+energy_emissions_model |>
+  augment() |>
+  datatable(class = 'cell-border stripe', 
+            editable = 'cell', 
+            caption = "Model Fit",
+            filter = 'top')
 ```
 Simple regression equation:
 
