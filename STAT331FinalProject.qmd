@@ -8,8 +8,6 @@ format:
     toc: true
     number-sections: true
     code-fold: true
-theme: 
-  dark: darkly
 editor: source
 execute: 
   error: true
