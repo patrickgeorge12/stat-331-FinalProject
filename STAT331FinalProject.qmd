@@ -153,8 +153,7 @@ energy_emissions_model |>
   summarize(`Variance of Fitted` = var(.fitted),
             `Variance of Residuals` = var(.resid),
             `Variance of Total_CO2_Emissions` = var(Total_CO2_Emissions)) |>
-  datatable(class = 'cell-border stripe', 
-            caption = "Variances of Model")
+  knitr::kable()
 
 ```
 
