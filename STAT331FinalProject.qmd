@@ -138,6 +138,7 @@ The graph displayed on the top demonstrates the relationship between `Total_CO2_
 
 ```{r}
 #| fig-align: center
+
 co2_by_year_graph <- master |>
   group_by(year) |>
   summarize(avg_co2 = mean(Total_CO2_Emissions)) |>
