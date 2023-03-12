@@ -8,8 +8,6 @@ format:
     toc: true
     number-sections: true
     code-fold: true
-theme: 
-  dark: darkly
 editor: source
 execute: 
   error: true
@@ -24,6 +22,7 @@ library(broom)
 library(knitr)
 library(DT)
 library(kableExtra)
+library(gridExtra)
 options(scipen = 99999)
 energy <- readxl::read_xlsx(here::here("renewable_energy.xlsx"))
 co2 <- readxl::read_xlsx(here::here("co2.xlsx"))
@@ -96,12 +95,14 @@ Simple regression equation:
 
 $$ \hat{y} = 217719 - 2590 * Percent\,Consumption\,Renewable $$
 
-Based on the linear regression model investigating the relationship between total carbon dioxide emissions and proportion of renewable energy, we can see that there is a negative relationship. This means that generally, the higher the proportion of renewable energy a country uses, the lower the total carbon dioxide emissions. The response variable in this equation is the country’s Total CO2 emissions in 1000 of tons while the explanatory variable is the percentage of energy a country uses which is classified as renewable. To interpret the coefficient of -2590 this means that for each additional 1% of renewable energy consumption used a country’s predicted total CO2 emission in thousands of tons decreases by 2590 on average. 
+Based on the linear regression model investigating the relationship between total carbon dioxide emissions and proportion of renewable energy, we can see that there is a negative relationship. This means that generally, the higher the proportion of renewable energy a country uses, the lower the total carbon dioxide emissions. The response variable in this equation is the country's Total CO2 emissions in 1000 of tons while the explanatory variable is the percentage of energy a country uses which is classified as renewable. To interpret the coefficient of -2590 this means that for each additional 1% of renewable energy consumption used a country's predicted total CO2 emission in thousands of tons decreases by 2590 on average.
+
+The method used to predict this model was simple linear regression. This method involves predicting the values of one variable, based on another, through producing a straight line minimizing the value for the sum of squared residuals. Based on the linear regression model investigating the relationship between total carbon dioxide emissions and proportion of renewable energy, we can see that there is a negative relationship. This means that generally, the higher the proportion of renewable energy a country uses, the lower the total carbon dioxide emissions. The response variable in this equation is the country's Total CO2 emissions in 1000 of tons while the explanatory variable is the percentage of energy a country uses which is classified as renewable. To interpret the coefficient of -2590 this means that for each additional 1% of renewable energy consumption used a country's predicted total CO2 emission in thousands of tons decreases by 2590 on average.
 
 ```{r}
 #| fig-align: center
 # Plot 1
-master |> 
+raw_graph <- master |> 
 ggplot(aes(x = Percent_Consumption_Renewable, 
            y = Total_CO2_Emissions)
        ) +
@@ -110,14 +111,11 @@ ggplot(aes(x = Percent_Consumption_Renewable,
   theme(legend.position = "none") +
   labs(x = "Renewable energy consumption percentage", 
        y = "", 
-       title = "Relationships between Renewable Energy Consumption and CO2 Emissions among different contries", 
-       subtitle = "Total CO2 Emissions/1000 tonnes") 
-```
+       title = "Relationships between Renewable Energy Consumption and \nCO2 Emissions among different contries", 
+       subtitle = "Total CO2 Emissions/1000 tonnes") +
+  theme(plot.title.position = "plot")
 
-```{r}
-#| fig-align: center
-# Plot 1
-master |> 
+countries_graph <-master |> 
 ggplot(aes(x = Percent_Consumption_Renewable, 
            y = Total_CO2_Emissions, color=country)
        ) +
@@ -126,37 +124,61 @@ ggplot(aes(x = Percent_Consumption_Renewable,
   theme(legend.position = "none") +
   labs(x = "Renewable energy consumption percentage", 
        y = "", 
-       title = "Relationships between Renewable Energy Consumption and CO2 Emissions among different contries", 
+       title = "Relationships between Renewable Energy Consumption and \nCO2 Emissions among four largest producers of Co2", 
        subtitle = "Total CO2 Emissions/1000 tonnes") +
   annotate("text", x = 25, y = 6200000, label = "China", size=2) +
-  annotate("text", x = 8, y = 6500000, label = "US",size=2) +
+  annotate("text", x = 8, y = 6500000, label = "US",size=2) + 
   annotate("text", x = 43, y = 2200000, label = "India", size=2) +
-  annotate("text", x = 3, y = 2900000, label = "Russia", size=2) + ylim(900000, 10000000)
+  annotate("text", x = 3, y = 2900000, label = "Russia", size=2) + ylim(900000, 10000000)+
+    theme(plot.title.position = "plot")
+
+grid.arrange(raw_graph, countries_graph)
 ```
+
+The graph displayed on the top demonstrates the relationship between Total Co2 Emissions and Percent Renewable Energy, shown by plotting the raw data.  The distribution illustrates a negative pattern with considerable noise, explained by the smallest countries and relative values of Total Co2 Emissions.  To better visualize how the relationship between Co2 Emissions and Percent Renewable Energy differentiates for the four largest producers of Co2, we filtered to only include India, Russia, US, and China in the second plot.  In doing this, we were able to take out countries with insignificant Co2 emissions, as the model better explained the variability \$\$R\^{2}\$\$ in Co2 emissions for the top countries.  Essentially, we were able to see that there needs to be a minimum amount of Total_Co2_Emission data, in order for the model to be accurate in making conclusions about the variable's relationship.   
+
 ```{r}
-master |>
+co2_by_year_graph <- master |>
   group_by(year) |>
   summarize(avg_co2 = mean(Total_CO2_Emissions)) |>
   ggplot(aes(x = year , y = avg_co2)) +
-  geom_point() 
+  geom_point() +
+  scale_x_discrete(guide = guide_axis(n.dodge=2))+
+  labs(x = "Year", 
+       y = "", 
+       title = "Average CO2 Emissions from 1989-2017", 
+       subtitle = "Average CO2 Emissions/1000 tonnes")+
+  theme(plot.title.position = "plot")
 
-master |>
+energy_by_year_graph<- master |>
   group_by(year) |>
   summarize(avg_percent = mean(Percent_Consumption_Renewable)) |>
   ggplot(aes(x = year, y = avg_percent)) +
-  geom_point() 
+  geom_point()+
+   scale_x_discrete(guide = guide_axis(n.dodge=2))+
+    labs(x = "Year", 
+       y = "", 
+       title = "Average Percentage of Renewable Energy from 1989-2017",
+       subtitle = "Average Percentage of Renewable Energy")+
+      theme(plot.title.position = "plot")
+
+grid.arrange(co2_by_year_graph, energy_by_year_graph)
 ```
 
+As shown by the two distributions of Total_Co2_Emissions and Percent Renewable Energy over time, the relationship follows the negative relationship as expected.  This means that as the predictor variable, Percent of Renewable Energy decreases throughout the years, the response variable, Total_Co2_Emmissions increases in turn.  It's worth noting that during the timespan of 1989 to 2017, the total Co2 emissions has been increasing as expected, and is likely due to the extreme population growth over this time.  On the other hand, the Percent of Renewable Energy  has shockingly been declining in modern years, which is likely due to the varying definition of renewable energy, it only encompasses solar, wind, geothermal, and hydro powered.  Before this discovery, we had assumed that energy sources such as nuclear power and natural gas, fell under the umbrella of renewable energy, which was ultimately false.  Following this analysis, we were able to understand that the value of Co2 emissions was expanding, due to population increase, while the amount of renewable energy has actually been declining, as this only included specific sources of energy which have lost popularity today. 
 
-Present and discuss the visualizations of the relationship between the variables
+```{r}
+energy_emissions_model |>
+  augment() |>
+  summarize(`Variance of Fitted` = var(.fitted),
+            `Variance of Residuals` = var(.resid),
+            `Variance of Total_CO2_Emissions` = var(Total_CO2_Emissions)) |>
+  kable(caption = 'Model Fit') |>
+  kable_styling(bootstrap_options = c('striped', 'bordered'))
 
-Describe the statistical method used -- linear regression
+```
 
-Present the estimated regression model (in notation
-
-) Interpret the Linear Regression coefficients (in context
-
-) Describe the fit of the regression model (both table and written format)
+The proportion of variability in the response values that was accounted for by the model was very small at about 1.573 percent. This suggests a poor model, where very little of the variation in the response is truly explained by the explanatory variable. This suggests that for all countries around the world there are many more factors influencing the amount of CO2 emissions produced rather than the proportion of renewable energy used. When investigating individual countries, however, for example China or India, we see high R squared suggesting that more developed countries follow a better trend and renewable energy usage has a bigger impact.
 
 # Discussion of Results
 
@@ -167,6 +189,7 @@ https://www.gapminder.org/data/
 =======
 
 # For reference
+
 ```{r}
 #| output: false
 ## This is just for model using Chinese data
@@ -186,5 +209,8 @@ energy_emissions_model |>
 ggplot(aes(x = .fitted, y = .resid)) +
   geom_point() 
 ```
+<<<<<<< HEAD
 
 >>>>>>> 86a462327691cb015ddefff122a7c4572c9567c1
+=======
+>>>>>>> 5143aa1ae774b8d2af84ec6d696a57a5bd24371e
