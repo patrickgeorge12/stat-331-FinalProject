@@ -8,8 +8,6 @@ format:
     toc: true
     number-sections: true
     code-fold: true
-theme: 
-  dark: darkly
 editor: source
 execute: 
   error: true
@@ -167,7 +165,7 @@ energy_by_year_graph<- master |>
 grid.arrange(co2_by_year_graph, energy_by_year_graph)
 ```
 
-As shown by the two distributions of Total_Co2_Emissions and Percent Renewable Energy over time, the relationship follows the negative relationship as expected.  This means that as the predictor variable, Percent of Renewable Energy decreases throughout the years, the response variable, Total_Co2_Emmissions increases in turn.  It\'s worth noting that during the timespan of 1989 to 2017, the total Co2 emissions has been increasing as expected, and is likely due to the extreme population growth over this time.  On the other hand, the Percent of Renewable Energy  has shockingly been declining in modern years, which is likely due to the varying definition of renewable energy, it only encompasses solar, wind, geothermal, and hydro powered.  Before this discovery, we had assumed that energy sources such as nuclear power and natural gas, fell under the umbrella of renewable energy, which was ultimately false.  Following this analysis, we were able to understand that the value of Co2 emissions was expanding, due to population increase, while the amount of renewable energy has actually been declining, as this only included specific sources of energy which have lost popularity today. 
+As shown by the two distributions of Total_Co2_Emissions and Percent Renewable Energy over time, the relationship follows the negative relationship as expected.  This means that as the predictor variable, Percent of Renewable Energy decreases throughout the years, the response variable, Total_Co2_Emmissions increases in turn.  It's worth noting that during the timespan of 1989 to 2017, the total Co2 emissions has been increasing as expected, and is likely due to the extreme population growth over this time.  On the other hand, the Percent of Renewable Energy  has shockingly been declining in modern years, which is likely due to the varying definition of renewable energy, it only encompasses solar, wind, geothermal, and hydro powered.  Before this discovery, we had assumed that energy sources such as nuclear power and natural gas, fell under the umbrella of renewable energy, which was ultimately false.  Following this analysis, we were able to understand that the value of Co2 emissions was expanding, due to population increase, while the amount of renewable energy has actually been declining, as this only included specific sources of energy which have lost popularity today. 
 
 ```{r}
 energy_emissions_model |>
