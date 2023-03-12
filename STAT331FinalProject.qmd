@@ -156,7 +156,8 @@ energy_emissions_model |>
   summarize(`Variance of Fitted` = var(.fitted),
             `Variance of Residuals` = var(.resid),
             `Variance of Total_CO2_Emissions` = var(Total_CO2_Emissions)) |>
-  knitr::kable()
+  kable(caption = 'Model Fit') |>
+  kable_styling(bootstrap_options = c('striped', 'bordered'))
 
 ```
 

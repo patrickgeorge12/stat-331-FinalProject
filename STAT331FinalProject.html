@@ -5244,6 +5244,230 @@ l.each(u,function(a,b){l.fn.DataTable[a]=b});return u});
 </style>
 <script>!function o(u,a,l){function s(n,e){if(!a[n]){if(!u[n]){var t="function"==typeof require&&require;if(!e&&t)return t(n,!0);if(f)return f(n,!0);var r=new Error("Cannot find module '"+n+"'");throw r.code="MODULE_NOT_FOUND",r}var i=a[n]={exports:{}};u[n][0].call(i.exports,function(e){var t=u[n][1][e];return s(t||e)},i,i.exports,o,u,a,l)}return a[n].exports}for(var f="function"==typeof require&&require,e=0;e<l.length;e++)s(l[e]);return s}({1:[function(e,t,n){"use strict";Object.defineProperty(n,"__esModule",{value:!0});var r=function(){function r(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(e,t,n){return t&&r(e.prototype,t),n&&r(e,n),e}}();var i=function(){function e(){!function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,e),this._types={},this._seq=0}return r(e,[{key:"on",value:function(e,t){var n=this._types[e];n||(n=this._types[e]={});var r="sub"+this._seq++;return n[r]=t,r}},{key:"off",value:function(e,t){var n=this._types[e];if("function"==typeof t){for(var r in n)if(n.hasOwnProperty(r)&&n[r]===t)return delete n[r],r;return!1}if("string"==typeof t)return!(!n||!n[t])&&(delete n[t],t);throw new Error("Unexpected type for listener")}},{key:"trigger",value:function(e,t,n){var r=this._types[e];for(var i in r)r.hasOwnProperty(i)&&r[i].call(n,t)}}]),e}();n.default=i},{}],2:[function(e,t,n){"use strict";Object.defineProperty(n,"__esModule",{value:!0}),n.FilterHandle=void 0;var r=function(){function r(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(e,t,n){return t&&r(e.prototype,t),n&&r(e,n),e}}(),i=l(e("./events")),o=l(e("./filterset")),u=l(e("./group")),a=function(e){{if(e&&e.__esModule)return e;var t={};if(null!=e)for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n]);return t.default=e,t}}(e("./util"));function l(e){return e&&e.__esModule?e:{default:e}}var s=1;n.FilterHandle=function(){function n(e,t){!function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,n),this._eventRelay=new i.default,this._emitter=new a.SubscriptionTracker(this._eventRelay),this._group=null,this._filterSet=null,this._filterVar=null,this._varOnChangeSub=null,this._extraInfo=a.extend({sender:this},t),this._id="filter"+s++,this.setGroup(e)}return r(n,[{key:"setGroup",value:function(e){var t,n,r=this;if(this._group!==e&&((this._group||e)&&(this._filterVar&&(this._filterVar.off("change",this._varOnChangeSub),this.clear(),this._varOnChangeSub=null,this._filterVar=null,this._filterSet=null),this._group=e))){e=(0,u.default)(e),this._filterSet=(t=e.var("filterset"),(n=t.get())||(n=new o.default,t.set(n)),n),this._filterVar=(0,u.default)(e).var("filter");var i=this._filterVar.on("change",function(e){r._eventRelay.trigger("change",e,r)});this._varOnChangeSub=i}}},{key:"_mergeExtraInfo",value:function(e){return a.extend({},this._extraInfo?this._extraInfo:null,e||null)}},{key:"close",value:function(){this._emitter.removeAllListeners(),this.clear(),this.setGroup(null)}},{key:"clear",value:function(e){this._filterSet&&(this._filterSet.clear(this._id),this._onChange(e))}},{key:"set",value:function(e,t){this._filterSet&&(this._filterSet.update(this._id,e),this._onChange(t))}},{key:"on",value:function(e,t){return this._emitter.on(e,t)}},{key:"off",value:function(e,t){return this._emitter.off(e,t)}},{key:"_onChange",value:function(e){this._filterSet&&this._filterVar.set(this._filterSet.value,this._mergeExtraInfo(e))}},{key:"filteredKeys",get:function(){return this._filterSet?this._filterSet.value:null}}]),n}()},{"./events":1,"./filterset":3,"./group":4,"./util":11}],3:[function(e,t,n){"use strict";Object.defineProperty(n,"__esModule",{value:!0});var r=function(){function r(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(e,t,n){return t&&r(e.prototype,t),n&&r(e,n),e}}(),a=e("./util");function l(e,t){return e===t?0:e<t?-1:t<e?1:void 0}var i=function(){function e(){!function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,e),this.reset()}return r(e,[{key:"reset",value:function(){this._handles={},this._keys={},this._value=null,this._activeHandles=0}},{key:"update",value:function(e,t){null!==t&&(t=t.slice(0)).sort(l);var n=(0,a.diffSortedLists)(this._handles[e],t),r=n.added,i=n.removed;this._handles[e]=t;for(var o=0;o<r.length;o++)this._keys[r[o]]=(this._keys[r[o]]||0)+1;for(var u=0;u<i.length;u++)this._keys[i[u]]--;this._updateValue(t)}},{key:"_updateValue",value:function(){var e=0<arguments.length&&void 0!==arguments[0]?arguments[0]:this._allKeys,t=Object.keys(this._handles).length;if(0===t)this._value=null;else{this._value=[];for(var n=0;n<e.length;n++){this._keys[e[n]]===t&&this._value.push(e[n])}}}},{key:"clear",value:function(e){if(void 0!==this._handles[e]){var t=this._handles[e];t||(t=[]);for(var n=0;n<t.length;n++)this._keys[t[n]]--;delete this._handles[e],this._updateValue()}}},{key:"value",get:function(){return this._value}},{key:"_allKeys",get:function(){var e=Object.keys(this._keys);return e.sort(l),e}}]),e}();n.default=i},{"./util":11}],4:[function(l,e,s){(function(e){"use strict";Object.defineProperty(s,"__esModule",{value:!0});var n=function(){function r(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(e,t,n){return t&&r(e.prototype,t),n&&r(e,n),e}}(),r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e};s.default=function e(t){{if(t&&"string"==typeof t)return u.hasOwnProperty(t)||(u[t]=new a(t)),u[t];if("object"===(void 0===t?"undefined":r(t))&&t._vars&&t.var)return t;if(Array.isArray(t)&&1==t.length&&"string"==typeof t[0])return e(t[0]);throw new Error("Invalid groupName argument")}};var t,i=l("./var"),o=(t=i)&&t.__esModule?t:{default:t};e.__crosstalk_groups=e.__crosstalk_groups||{};var u=e.__crosstalk_groups;var a=function(){function t(e){!function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,t),this.name=e,this._vars={}}return n(t,[{key:"var",value:function(e){if(!e||"string"!=typeof e)throw new Error("Invalid var name");return this._vars.hasOwnProperty(e)||(this._vars[e]=new o.default(this,e)),this._vars[e]}},{key:"has",value:function(e){if(!e||"string"!=typeof e)throw new Error("Invalid var name");return this._vars.hasOwnProperty(e)}}]),t}()}).call(this,"undefined"!=typeof global?global:"undefined"!=typeof self?self:"undefined"!=typeof window?window:{})},{"./var":12}],5:[function(f,e,c){(function(e){"use strict";Object.defineProperty(c,"__esModule",{value:!0});var t,n=f("./group"),r=(t=n)&&t.__esModule?t:{default:t},i=f("./selection"),o=f("./filter"),u=f("./input");f("./input_selectize"),f("./input_checkboxgroup"),f("./input_slider");var a=(0,r.default)("default");function l(e){return a.var(e)}e.Shiny&&e.Shiny.addCustomMessageHandler("update-client-value",function(e){"string"==typeof e.group?(0,r.default)(e.group).var(e.name).set(e.value):l(e.name).set(e.value)});var s={group:r.default,var:l,has:function(e){return a.has(e)},SelectionHandle:i.SelectionHandle,FilterHandle:o.FilterHandle,bind:u.bind};c.default=s,e.crosstalk=s}).call(this,"undefined"!=typeof global?global:"undefined"!=typeof self?self:"undefined"!=typeof window?window:{})},{"./filter":2,"./group":4,"./input":6,"./input_checkboxgroup":7,"./input_selectize":8,"./input_slider":9,"./selection":10}],6:[function(e,t,a){(function(t){"use strict";Object.defineProperty(a,"__esModule",{value:!0}),a.register=function(e){r[e.className]=e,t.document&&"complete"!==t.document.readyState?o(function(){n()}):t.document&&setTimeout(n,100)},a.bind=n;var o=t.jQuery,r={};function n(){Object.keys(r).forEach(function(e){var n=r[e];o("."+n.className).not(".crosstalk-input-bound").each(function(e,t){i(n,t)})})}function i(e,t){var n=o(t).find("script[type='application/json'][data-for='"+t.id.replace(/([!"#$%&'()*+,./:;<=>?@[\\\]^`{|}~])/g,"\\$1")+"']"),r=JSON.parse(n[0].innerText),i=e.factory(t,r);o(t).data("crosstalk-instance",i),o(t).addClass("crosstalk-input-bound")}if(t.Shiny){var e=new t.Shiny.InputBinding,u=t.jQuery;u.extend(e,{find:function(e){return u(e).find(".crosstalk-input")},initialize:function(e){var t,n;u(e).hasClass("crosstalk-input-bound")||(n=o(t=e),Object.keys(r).forEach(function(e){n.hasClass(e)&&!n.hasClass("crosstalk-input-bound")&&i(r[e],t)}))},getId:function(e){return e.id},getValue:function(e){},setValue:function(e,t){},receiveMessage:function(e,t){},subscribe:function(e,t){u(e).data("crosstalk-instance").resume()},unsubscribe:function(e){u(e).data("crosstalk-instance").suspend()}}),t.Shiny.inputBindings.register(e,"crosstalk.inputBinding")}}).call(this,"undefined"!=typeof global?global:"undefined"!=typeof self?self:"undefined"!=typeof window?window:{})},{}],7:[function(r,e,t){(function(e){"use strict";var t=function(e){{if(e&&e.__esModule)return e;var t={};if(null!=e)for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n]);return t.default=e,t}}(r("./input")),n=r("./filter");var a=e.jQuery;t.register({className:"crosstalk-input-checkboxgroup",factory:function(e,r){var i=new n.FilterHandle(r.group),o=void 0,u=a(e);return u.on("change","input[type='checkbox']",function(){var e=u.find("input[type='checkbox']:checked");if(0===e.length)o=null,i.clear();else{var t={};e.each(function(){r.map[this.value].forEach(function(e){t[e]=!0})});var n=Object.keys(t);n.sort(),o=n,i.set(n)}}),{suspend:function(){i.clear()},resume:function(){o&&i.set(o)}}}})}).call(this,"undefined"!=typeof global?global:"undefined"!=typeof self?self:"undefined"!=typeof window?window:{})},{"./filter":2,"./input":6}],8:[function(r,e,t){(function(e){"use strict";var t=n(r("./input")),l=n(r("./util")),s=r("./filter");function n(e){if(e&&e.__esModule)return e;var t={};if(null!=e)for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n]);return t.default=e,t}var f=e.jQuery;t.register({className:"crosstalk-input-select",factory:function(e,n){var t=l.dataframeToD3(n.items),r={options:[{value:"",label:"(All)"}].concat(t),valueField:"value",labelField:"label",searchField:"label"},i=f(e).find("select")[0],o=f(i).selectize(r)[0].selectize,u=new s.FilterHandle(n.group),a=void 0;return o.on("change",function(){if(0===o.items.length)a=null,u.clear();else{var t={};o.items.forEach(function(e){n.map[e].forEach(function(e){t[e]=!0})});var e=Object.keys(t);e.sort(),a=e,u.set(e)}}),{suspend:function(){u.clear()},resume:function(){a&&u.set(a)}}}})}).call(this,"undefined"!=typeof global?global:"undefined"!=typeof self?self:"undefined"!=typeof window?window:{})},{"./filter":2,"./input":6,"./util":11}],9:[function(n,e,t){(function(e){"use strict";var d=function(e,t){if(Array.isArray(e))return e;if(Symbol.iterator in Object(e))return function(e,t){var n=[],r=!0,i=!1,o=void 0;try{for(var u,a=e[Symbol.iterator]();!(r=(u=a.next()).done)&&(n.push(u.value),!t||n.length!==t);r=!0);}catch(e){i=!0,o=e}finally{try{!r&&a.return&&a.return()}finally{if(i)throw o}}return n}(e,t);throw new TypeError("Invalid attempt to destructure non-iterable instance")},t=function(e){{if(e&&e.__esModule)return e;var t={};if(null!=e)for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n]);return t.default=e,t}}(n("./input")),a=n("./filter");var v=e.jQuery,p=e.strftime;function y(e,t){for(var n=e.toString();n.length<t;)n="0"+n;return n}t.register({className:"crosstalk-input-slider",factory:function(e,l){var s=new a.FilterHandle(l.group),t={},f=v(e).find("input"),n=f.data("data-type"),r=f.data("time-format"),i=f.data("round"),o=void 0;if("date"===n)o=p.utc(),t.prettify=function(e){return o(r,new Date(e))};else if("datetime"===n){var u=f.data("timezone");o=u?p.timezone(u):p,t.prettify=function(e){return o(r,new Date(e))}}else"number"===n&&void 0!==i&&(t.prettify=function(e){var t=Math.pow(10,i);return Math.round(e*t)/t});function c(){var e=f.data("ionRangeSlider").result,t=void 0,n=f.data("data-type");return t="date"===n?function(e){return(t=new Date(+e))instanceof Date?t.getUTCFullYear()+"-"+y(t.getUTCMonth()+1,2)+"-"+y(t.getUTCDate(),2):null;var t}:"datetime"===n?function(e){return+e/1e3}:function(e){return+e},"double"===f.data("ionRangeSlider").options.type?[t(e.from),t(e.to)]:t(e.from)}f.ionRangeSlider(t);var h=null;return f.on("change.crosstalkSliderInput",function(e){if(!f.data("updating")&&!f.data("animating")){for(var t=c(),n=d(t,2),r=n[0],i=n[1],o=[],u=0;u<l.values.length;u++){var a=l.values[u];r<=a&&a<=i&&o.push(l.keys[u])}o.sort(),s.set(o),h=o}}),{suspend:function(){s.clear()},resume:function(){h&&s.set(h)}}}})}).call(this,"undefined"!=typeof global?global:"undefined"!=typeof self?self:"undefined"!=typeof window?window:{})},{"./filter":2,"./input":6}],10:[function(e,t,n){"use strict";Object.defineProperty(n,"__esModule",{value:!0}),n.SelectionHandle=void 0;var r=function(){function r(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(e,t,n){return t&&r(e.prototype,t),n&&r(e,n),e}}(),i=a(e("./events")),o=a(e("./group")),u=function(e){{if(e&&e.__esModule)return e;var t={};if(null!=e)for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n]);return t.default=e,t}}(e("./util"));function a(e){return e&&e.__esModule?e:{default:e}}n.SelectionHandle=function(){function n(){var e=0<arguments.length&&void 0!==arguments[0]?arguments[0]:null,t=1<arguments.length&&void 0!==arguments[1]?arguments[1]:null;!function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,n),this._eventRelay=new i.default,this._emitter=new u.SubscriptionTracker(this._eventRelay),this._group=null,this._var=null,this._varOnChangeSub=null,this._extraInfo=u.extend({sender:this},t),this.setGroup(e)}return r(n,[{key:"setGroup",value:function(e){var t=this;if(this._group!==e&&(this._group||e)&&(this._var&&(this._var.off("change",this._varOnChangeSub),this._var=null,this._varOnChangeSub=null),this._group=e)){this._var=(0,o.default)(e).var("selection");var n=this._var.on("change",function(e){t._eventRelay.trigger("change",e,t)});this._varOnChangeSub=n}}},{key:"_mergeExtraInfo",value:function(e){return u.extend({},this._extraInfo?this._extraInfo:null,e||null)}},{key:"set",value:function(e,t){this._var&&this._var.set(e,this._mergeExtraInfo(t))}},{key:"clear",value:function(e){this._var&&this.set(void 0,this._mergeExtraInfo(e))}},{key:"on",value:function(e,t){return this._emitter.on(e,t)}},{key:"off",value:function(e,t){return this._emitter.off(e,t)}},{key:"close",value:function(){this._emitter.removeAllListeners(),this.setGroup(null)}},{key:"value",get:function(){return this._var?this._var.get():null}}]),n}()},{"./events":1,"./group":4,"./util":11}],11:[function(e,t,n){"use strict";Object.defineProperty(n,"__esModule",{value:!0});var r=function(){function r(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(e,t,n){return t&&r(e.prototype,t),n&&r(e,n),e}}(),l="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e};function u(e){for(var t=1;t<e.length;t++)if(e[t]<=e[t-1])throw new Error("List is not sorted or contains duplicate")}n.extend=function(e){for(var t=arguments.length,n=Array(1<t?t-1:0),r=1;r<t;r++)n[r-1]=arguments[r];for(var i=0;i<n.length;i++){var o=n[i];if(null!=o)for(var u in o)o.hasOwnProperty(u)&&(e[u]=o[u])}return e},n.checkSorted=u,n.diffSortedLists=function(e,t){var n=0,r=0;e||(e=[]);t||(t=[]);var i=[],o=[];u(e),u(t);for(;n<e.length&&r<t.length;)e[n]===t[r]?(n++,r++):e[n]<t[r]?i.push(e[n++]):o.push(t[r++]);n<e.length&&(i=i.concat(e.slice(n)));r<t.length&&(o=o.concat(t.slice(r)));return{removed:i,added:o}},n.dataframeToD3=function(e){var t=[],n=void 0;for(var r in e){if(e.hasOwnProperty(r)&&t.push(r),"object"!==l(e[r])||void 0===e[r].length)throw new Error("All fields must be arrays");if(void 0!==n&&n!==e[r].length)throw new Error("All fields must be arrays of the same length");n=e[r].length}for(var i=[],o=void 0,u=0;u<n;u++){o={};for(var a=0;a<t.length;a++)o[t[a]]=e[t[a]][u];i.push(o)}return i};n.SubscriptionTracker=function(){function t(e){!function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,t),this._emitter=e,this._subs={}}return r(t,[{key:"on",value:function(e,t){var n=this._emitter.on(e,t);return this._subs[n]=e,n}},{key:"off",value:function(e,t){var n=this._emitter.off(e,t);return n&&delete this._subs[n],n}},{key:"removeAllListeners",value:function(){var t=this,n=this._subs;this._subs={},Object.keys(n).forEach(function(e){t._emitter.off(n[e],e)})}}]),t}()},{}],12:[function(a,e,l){(function(o){"use strict";Object.defineProperty(l,"__esModule",{value:!0});var e,u="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},t=function(){function r(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(e,t,n){return t&&r(e.prototype,t),n&&r(e,n),e}}(),n=a("./events"),i=(e=n)&&e.__esModule?e:{default:e};var r=function(){function r(e,t,n){!function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,r),this._group=e,this._name=t,this._value=n,this._events=new i.default}return t(r,[{key:"get",value:function(){return this._value}},{key:"set",value:function(e,t){if(this._value!==e){var n=this._value;this._value=e;var r={};if(t&&"object"===(void 0===t?"undefined":u(t)))for(var i in t)t.hasOwnProperty(i)&&(r[i]=t[i]);r.oldValue=n,r.value=e,this._events.trigger("change",r,this),o.Shiny&&o.Shiny.onInputChange&&o.Shiny.onInputChange(".clientValue-"+(null!==this._group.name?this._group.name+"-":"")+this._name,void 0===e?null:e)}}},{key:"on",value:function(e,t){return this._events.on(e,t)}},{key:"off",value:function(e,t){return this._events.off(e,t)}}]),r}();l.default=r}).call(this,"undefined"!=typeof global?global:"undefined"!=typeof self?self:"undefined"!=typeof window?window:{})},{"./events":1}]},{},[5]);
 //# sourceMappingURL=crosstalk.min.js.map</script>
+<script>$(document).ready(function(){
+    if (typeof $('[data-toggle="tooltip"]').tooltip === 'function') {
+        $('[data-toggle="tooltip"]').tooltip();
+    }
+    if ($('[data-toggle="popover"]').popover === 'function') {
+        $('[data-toggle="popover"]').popover();
+    }
+});
+</script>
+<style type="text/css">
+.lightable-minimal {
+border-collapse: separate;
+border-spacing: 16px 1px;
+width: 100%;
+margin-bottom: 10px;
+}
+.lightable-minimal td {
+margin-left: 5px;
+margin-right: 5px;
+}
+.lightable-minimal th {
+margin-left: 5px;
+margin-right: 5px;
+}
+.lightable-minimal thead tr:last-child th {
+border-bottom: 2px solid #00000050;
+empty-cells: hide;
+}
+.lightable-minimal tbody tr:first-child td {
+padding-top: 0.5em;
+}
+.lightable-minimal.lightable-hover tbody tr:hover {
+background-color: #f5f5f5;
+}
+.lightable-minimal.lightable-striped tbody tr:nth-child(even) {
+background-color: #f5f5f5;
+}
+.lightable-classic {
+border-top: 0.16em solid #111111;
+border-bottom: 0.16em solid #111111;
+width: 100%;
+margin-bottom: 10px;
+margin: 10px 5px;
+}
+.lightable-classic tfoot tr td {
+border: 0;
+}
+.lightable-classic tfoot tr:first-child td {
+border-top: 0.14em solid #111111;
+}
+.lightable-classic caption {
+color: #222222;
+}
+.lightable-classic td {
+padding-left: 5px;
+padding-right: 5px;
+color: #222222;
+}
+.lightable-classic th {
+padding-left: 5px;
+padding-right: 5px;
+font-weight: normal;
+color: #222222;
+}
+.lightable-classic thead tr:last-child th {
+border-bottom: 0.10em solid #111111;
+}
+.lightable-classic.lightable-hover tbody tr:hover {
+background-color: #F9EEC1;
+}
+.lightable-classic.lightable-striped tbody tr:nth-child(even) {
+background-color: #f5f5f5;
+}
+.lightable-classic-2 {
+border-top: 3px double #111111;
+border-bottom: 3px double #111111;
+width: 100%;
+margin-bottom: 10px;
+}
+.lightable-classic-2 tfoot tr td {
+border: 0;
+}
+.lightable-classic-2 tfoot tr:first-child td {
+border-top: 3px double #111111;
+}
+.lightable-classic-2 caption {
+color: #222222;
+}
+.lightable-classic-2 td {
+padding-left: 5px;
+padding-right: 5px;
+color: #222222;
+}
+.lightable-classic-2 th {
+padding-left: 5px;
+padding-right: 5px;
+font-weight: normal;
+color: #222222;
+}
+.lightable-classic-2 tbody tr:last-child td {
+border-bottom: 3px double #111111;
+}
+.lightable-classic-2 thead tr:last-child th {
+border-bottom: 1px solid #111111;
+}
+.lightable-classic-2.lightable-hover tbody tr:hover {
+background-color: #F9EEC1;
+}
+.lightable-classic-2.lightable-striped tbody tr:nth-child(even) {
+background-color: #f5f5f5;
+}
+.lightable-material {
+min-width: 100%;
+white-space: nowrap;
+table-layout: fixed;
+font-family: Roboto, sans-serif;
+border: 1px solid #EEE;
+border-collapse: collapse;
+margin-bottom: 10px;
+}
+.lightable-material tfoot tr td {
+border: 0;
+}
+.lightable-material tfoot tr:first-child td {
+border-top: 1px solid #EEE;
+}
+.lightable-material th {
+height: 56px;
+padding-left: 16px;
+padding-right: 16px;
+}
+.lightable-material td {
+height: 52px;
+padding-left: 16px;
+padding-right: 16px;
+border-top: 1px solid #eeeeee;
+}
+.lightable-material.lightable-hover tbody tr:hover {
+background-color: #f5f5f5;
+}
+.lightable-material.lightable-striped tbody tr:nth-child(even) {
+background-color: #f5f5f5;
+}
+.lightable-material.lightable-striped tbody td {
+border: 0;
+}
+.lightable-material.lightable-striped thead tr:last-child th {
+border-bottom: 1px solid #ddd;
+}
+.lightable-material-dark {
+min-width: 100%;
+white-space: nowrap;
+table-layout: fixed;
+font-family: Roboto, sans-serif;
+border: 1px solid #FFFFFF12;
+border-collapse: collapse;
+margin-bottom: 10px;
+background-color: #363640;
+}
+.lightable-material-dark tfoot tr td {
+border: 0;
+}
+.lightable-material-dark tfoot tr:first-child td {
+border-top: 1px solid #FFFFFF12;
+}
+.lightable-material-dark th {
+height: 56px;
+padding-left: 16px;
+padding-right: 16px;
+color: #FFFFFF60;
+}
+.lightable-material-dark td {
+height: 52px;
+padding-left: 16px;
+padding-right: 16px;
+color: #FFFFFF;
+border-top: 1px solid #FFFFFF12;
+}
+.lightable-material-dark.lightable-hover tbody tr:hover {
+background-color: #FFFFFF12;
+}
+.lightable-material-dark.lightable-striped tbody tr:nth-child(even) {
+background-color: #FFFFFF12;
+}
+.lightable-material-dark.lightable-striped tbody td {
+border: 0;
+}
+.lightable-material-dark.lightable-striped thead tr:last-child th {
+border-bottom: 1px solid #FFFFFF12;
+}
+.lightable-paper {
+width: 100%;
+margin-bottom: 10px;
+color: #444;
+}
+.lightable-paper tfoot tr td {
+border: 0;
+}
+.lightable-paper tfoot tr:first-child td {
+border-top: 1px solid #00000020;
+}
+.lightable-paper thead tr:last-child th {
+color: #666;
+vertical-align: bottom;
+border-bottom: 1px solid #00000020;
+line-height: 1.15em;
+padding: 10px 5px;
+}
+.lightable-paper td {
+vertical-align: middle;
+border-bottom: 1px solid #00000010;
+line-height: 1.15em;
+padding: 7px 5px;
+}
+.lightable-paper.lightable-hover tbody tr:hover {
+background-color: #F9EEC1;
+}
+.lightable-paper.lightable-striped tbody tr:nth-child(even) {
+background-color: #00000008;
+}
+.lightable-paper.lightable-striped tbody td {
+border: 0;
+}
+</style>
 
   
   <script>
@@ -5365,8 +5589,8 @@ l.each(u,function(a,b){l.fn.DataTable[a]=b});return u});
 </details>
 <div class="cell-output-display">
 
-<div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-5edb7d7108e9816f02af" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-5edb7d7108e9816f02af">{"x":{"filter":"none","vertical":false,"caption":"<caption>Interactive Preview of Data Set<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50"],["Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan"],["1989","1990","1991","1992","1993","1994","1995","1996","1997","1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010","2011","2012","2013","2014","2015","2016","2017","1989","1990","1991","1992","1993","1994","1995","1996","1997","1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009"],[488,532,539,649,660,708,726,759,807,810,2380,2410,2440,2560,2620,2720,2720,2820,2660,2630,2510,2500,1350,862,873,898,884,891,898,2600,2430,1380,1330,1280,1230,1170,1090,1030,810,769,813,1060,1210,909,1320,1640,2270,4200,6770,8460],[0.269,0.235,0.239,0.195,0.183,0.173,0.167,0.16,0.158,0.161,0.175,0.18,0.181,0.185,0.187,0.187,0.19,0.19,0.194,0.3,5.46,5.66,6.86,6.89,6.93,6.73,6.99,6.7,8.02,15.9,17,26.5,30.6,32.8,35.1,37.9,41.4,44.1,52.2,54.2,54.1,43.8,42.3,49.8,40.9,37.1,33.9,21.3,17.9,14.9]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>country<\/th>\n      <th>year<\/th>\n      <th>Total_CO2_Emissions<\/th>\n      <th>Percent_Consumption_Renewable<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-2e72f31c4dde6591645f" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-2e72f31c4dde6591645f">{"x":{"filter":"none","vertical":false,"caption":"<caption>Interactive Preview of Data Set<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50"],["Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Aruba","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan","Afghanistan"],["1989","1990","1991","1992","1993","1994","1995","1996","1997","1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010","2011","2012","2013","2014","2015","2016","2017","1989","1990","1991","1992","1993","1994","1995","1996","1997","1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009"],[488,532,539,649,660,708,726,759,807,810,2380,2410,2440,2560,2620,2720,2720,2820,2660,2630,2510,2500,1350,862,873,898,884,891,898,2600,2430,1380,1330,1280,1230,1170,1090,1030,810,769,813,1060,1210,909,1320,1640,2270,4200,6770,8460],[0.269,0.235,0.239,0.195,0.183,0.173,0.167,0.16,0.158,0.161,0.175,0.18,0.181,0.185,0.187,0.187,0.19,0.19,0.194,0.3,5.46,5.66,6.86,6.89,6.93,6.73,6.99,6.7,8.02,15.9,17,26.5,30.6,32.8,35.1,37.9,41.4,44.1,52.2,54.2,54.1,43.8,42.3,49.8,40.9,37.1,33.9,21.3,17.9,14.9]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>country<\/th>\n      <th>year<\/th>\n      <th>Total_CO2_Emissions<\/th>\n      <th>Percent_Consumption_Renewable<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </section>
@@ -5384,6 +5608,7 @@ l.each(u,function(a,b){l.fn.DataTable[a]=b});return u});
 </div>
 <p>Simple regression equation:</p>
 <p><span class="math display">\[ \hat{y} = 217719 - 2590 * Percent\,Consumption\,Renewable \]</span></p>
+<p>Based on the linear regression model investigating the relationship between total carbon dioxide emissions and proportion of renewable energy, we can see that there is a negative relationship. This means that generally, the higher the proportion of renewable energy a country uses, the lower the total carbon dioxide emissions. The response variable in this equation is the country’s Total CO2 emissions in 1000 of tons while the explanatory variable is the percentage of energy a country uses which is classified as renewable. To interpret the coefficient of -2590 this means that for each additional 1% of renewable energy consumption used a country’s predicted total CO2 emission in thousands of tons decreases by 2590 on average.</p>
 <p>The method used to predict this model was simple linear regression. This method involves predicting the values of one variable, based on another, through producing a straight line minimizing the value for the sum of squared residuals. Based on the linear regression model investigating the relationship between total carbon dioxide emissions and proportion of renewable energy, we can see that there is a negative relationship. This means that generally, the higher the proportion of renewable energy a country uses, the lower the total carbon dioxide emissions. The response variable in this equation is the country’s Total CO2 emissions in 1000 of tons while the explanatory variable is the percentage of energy a country uses which is classified as renewable. To interpret the coefficient of -2590 this means that for each additional 1% of renewable energy consumption used a country’s predicted total CO2 emission in thousands of tons decreases by 2590 on average.</p>
 <div class="cell" data-layout-align="center">
 <details>
@@ -5469,13 +5694,29 @@ l.each(u,function(a,b){l.fn.DataTable[a]=b});return u});
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="st">`</span><span class="at">Variance of Fitted</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">var</span>(.fitted),</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">Variance of Residuals</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">var</span>(.resid),</span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">Variance of Total_CO2_Emissions</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">var</span>(Total_CO2_Emissions)) <span class="sc">|&gt;</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">datatable</span>(<span class="at">class =</span> <span class="st">&#39;cell-border stripe&#39;</span>, </span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">caption =</span> <span class="st">&quot;Variances of Model&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&#39;Model Fit&#39;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">&#39;striped&#39;</span>, <span class="st">&#39;bordered&#39;</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 
-<div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-e5b72f0659669b6a27d7" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-e5b72f0659669b6a27d7">{"x":{"filter":"none","vertical":false,"caption":"<caption>Variances of Model<\/caption>","data":[["1"],[6325224540.14379],[395717826625.528],[402043051165.672]],"container":"<table class=\"cell-border stripe\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Variance of Fitted<\/th>\n      <th>Variance of Residuals<\/th>\n      <th>Variance of Total_CO2_Emissions<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2,3]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<table class="table table-striped table-bordered" style="margin-left: auto; margin-right: auto;">
+<caption>Model Fit</caption>
+ <thead>
+  <tr>
+   <th style="text-align:right;"> Variance of Fitted </th>
+   <th style="text-align:right;"> Variance of Residuals </th>
+   <th style="text-align:right;"> Variance of Total_CO2_Emissions </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:right;"> 6325224540 </td>
+   <td style="text-align:right;"> 395717826626 </td>
+   <td style="text-align:right;"> 402043051166 </td>
+  </tr>
+</tbody>
+</table>
+
 </div>
 </div>
 <p>The proportion of variability in the response values that was accounted for by the model was very small at about 1.573 percent. This suggests a poor model, where very little of the variation in the response is truly explained by the exlpanatory variable. This suggests that for all countries around the world there are many more factors influecing the amount of CO2 emissions produced rather than the proportion of renewable energy used. When investigating individual countries, however, for example China or India, we see high R squared suggesting that more developed contries follow a better trend and renewable energy usage has a bigger impact.</p>
@@ -5912,102 +6153,105 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb12-95"><a href="#cb12-95" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(energy_emissions_model)</span>
 <span id="cb12-96"><a href="#cb12-96" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(energy_emissions_model) </span>
 <span id="cb12-97"><a href="#cb12-97" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-98"><a href="#cb12-98" aria-hidden="true" tabindex="-1"></a>Simple regression equation:</span>
-<span id="cb12-99"><a href="#cb12-99" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-100"><a href="#cb12-100" aria-hidden="true" tabindex="-1"></a>$$ \hat{y} = 217719 - 2590 * Percent\,Consumption\,Renewable $$</span>
-<span id="cb12-101"><a href="#cb12-101" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-102"><a href="#cb12-102" aria-hidden="true" tabindex="-1"></a>The method used to predict this model was simple linear regression. This method involves predicting the values of one variable, based on another, through producing a straight line minimizing the value for the sum of squared residuals. Based on the linear regression model investigating the relationship between total carbon dioxide emissions and proportion of renewable energy, we can see that there is a negative relationship. This means that generally, the higher the proportion of renewable energy a country uses, the lower the total carbon dioxide emissions. The response variable in this equation is the country’s Total CO2 emissions in 1000 of tons while the explanatory variable is the percentage of energy a country uses which is classified as renewable. To interpret the coefficient of -2590 this means that for each additional 1% of renewable energy consumption used a country’s predicted total CO2 emission in thousands of tons decreases by 2590 on average.</span>
-<span id="cb12-103"><a href="#cb12-103" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-104"><a href="#cb12-104" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb12-105"><a href="#cb12-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-108"><a href="#cb12-108" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb12-109"><a href="#cb12-109" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-align: center</span></span>
-<span id="cb12-110"><a href="#cb12-110" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot 1</span></span>
-<span id="cb12-111"><a href="#cb12-111" aria-hidden="true" tabindex="-1"></a>master <span class="sc">|&gt;</span> </span>
-<span id="cb12-112"><a href="#cb12-112" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Percent_Consumption_Renewable, </span>
-<span id="cb12-113"><a href="#cb12-113" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> Total_CO2_Emissions)</span>
-<span id="cb12-114"><a href="#cb12-114" aria-hidden="true" tabindex="-1"></a>       ) <span class="sc">+</span></span>
-<span id="cb12-115"><a href="#cb12-115" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb12-116"><a href="#cb12-116" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="sc">+</span></span>
-<span id="cb12-117"><a href="#cb12-117" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
-<span id="cb12-118"><a href="#cb12-118" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Renewable energy consumption percentage&quot;</span>, </span>
-<span id="cb12-119"><a href="#cb12-119" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;&quot;</span>, </span>
-<span id="cb12-120"><a href="#cb12-120" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&quot;Relationships between Renewable Energy Consumption and CO2 Emissions among different contries&quot;</span>, </span>
-<span id="cb12-121"><a href="#cb12-121" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">&quot;Total CO2 Emissions/1000 tonnes&quot;</span>) </span>
-<span id="cb12-122"><a href="#cb12-122" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-123"><a href="#cb12-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-126"><a href="#cb12-126" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb12-127"><a href="#cb12-127" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-align: center</span></span>
-<span id="cb12-128"><a href="#cb12-128" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot 1</span></span>
-<span id="cb12-129"><a href="#cb12-129" aria-hidden="true" tabindex="-1"></a>master <span class="sc">|&gt;</span> </span>
-<span id="cb12-130"><a href="#cb12-130" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Percent_Consumption_Renewable, </span>
-<span id="cb12-131"><a href="#cb12-131" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> Total_CO2_Emissions, <span class="at">color=</span>country)</span>
-<span id="cb12-132"><a href="#cb12-132" aria-hidden="true" tabindex="-1"></a>       ) <span class="sc">+</span></span>
-<span id="cb12-133"><a href="#cb12-133" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb12-134"><a href="#cb12-134" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="sc">+</span></span>
-<span id="cb12-135"><a href="#cb12-135" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
-<span id="cb12-136"><a href="#cb12-136" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Renewable energy consumption percentage&quot;</span>, </span>
-<span id="cb12-137"><a href="#cb12-137" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;&quot;</span>, </span>
-<span id="cb12-138"><a href="#cb12-138" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&quot;Relationships between Renewable Energy Consumption and CO2 Emissions among different contries&quot;</span>, </span>
-<span id="cb12-139"><a href="#cb12-139" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">&quot;Total CO2 Emissions/1000 tonnes&quot;</span>) <span class="sc">+</span></span>
-<span id="cb12-140"><a href="#cb12-140" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="dv">25</span>, <span class="at">y =</span> <span class="dv">6200000</span>, <span class="at">label =</span> <span class="st">&quot;China&quot;</span>, <span class="at">size=</span><span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb12-141"><a href="#cb12-141" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="dv">8</span>, <span class="at">y =</span> <span class="dv">6500000</span>, <span class="at">label =</span> <span class="st">&quot;US&quot;</span>,<span class="at">size=</span><span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb12-142"><a href="#cb12-142" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="dv">43</span>, <span class="at">y =</span> <span class="dv">2200000</span>, <span class="at">label =</span> <span class="st">&quot;India&quot;</span>, <span class="at">size=</span><span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb12-143"><a href="#cb12-143" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="dv">3</span>, <span class="at">y =</span> <span class="dv">2900000</span>, <span class="at">label =</span> <span class="st">&quot;Russia&quot;</span>, <span class="at">size=</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">900000</span>, <span class="dv">10000000</span>)</span>
-<span id="cb12-144"><a href="#cb12-144" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-147"><a href="#cb12-147" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb12-148"><a href="#cb12-148" aria-hidden="true" tabindex="-1"></a>master <span class="sc">|&gt;</span></span>
-<span id="cb12-149"><a href="#cb12-149" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year) <span class="sc">|&gt;</span></span>
-<span id="cb12-150"><a href="#cb12-150" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_co2 =</span> <span class="fu">mean</span>(Total_CO2_Emissions)) <span class="sc">|&gt;</span></span>
-<span id="cb12-151"><a href="#cb12-151" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year , <span class="at">y =</span> avg_co2)) <span class="sc">+</span></span>
-<span id="cb12-152"><a href="#cb12-152" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() </span>
-<span id="cb12-153"><a href="#cb12-153" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-154"><a href="#cb12-154" aria-hidden="true" tabindex="-1"></a>master <span class="sc">|&gt;</span></span>
-<span id="cb12-155"><a href="#cb12-155" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year) <span class="sc">|&gt;</span></span>
-<span id="cb12-156"><a href="#cb12-156" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_percent =</span> <span class="fu">mean</span>(Percent_Consumption_Renewable)) <span class="sc">|&gt;</span></span>
-<span id="cb12-157"><a href="#cb12-157" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> avg_percent)) <span class="sc">+</span></span>
-<span id="cb12-158"><a href="#cb12-158" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span>
-<span id="cb12-159"><a href="#cb12-159" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-162"><a href="#cb12-162" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb12-163"><a href="#cb12-163" aria-hidden="true" tabindex="-1"></a>energy_emissions_model <span class="sc">|&gt;</span></span>
-<span id="cb12-164"><a href="#cb12-164" aria-hidden="true" tabindex="-1"></a>  <span class="fu">augment</span>() <span class="sc">|&gt;</span></span>
-<span id="cb12-165"><a href="#cb12-165" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="st">`</span><span class="at">Variance of Fitted</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">var</span>(.fitted),</span>
-<span id="cb12-166"><a href="#cb12-166" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">Variance of Residuals</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">var</span>(.resid),</span>
-<span id="cb12-167"><a href="#cb12-167" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">Variance of Total_CO2_Emissions</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">var</span>(Total_CO2_Emissions)) <span class="sc">|&gt;</span></span>
-<span id="cb12-168"><a href="#cb12-168" aria-hidden="true" tabindex="-1"></a>  <span class="fu">datatable</span>(<span class="at">class =</span> <span class="st">&#39;cell-border stripe&#39;</span>, </span>
-<span id="cb12-169"><a href="#cb12-169" aria-hidden="true" tabindex="-1"></a>            <span class="at">caption =</span> <span class="st">&quot;Variances of Model&quot;</span>)</span>
-<span id="cb12-170"><a href="#cb12-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-171"><a href="#cb12-171" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-172"><a href="#cb12-172" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-173"><a href="#cb12-173" aria-hidden="true" tabindex="-1"></a>The proportion of variability in the response values that was accounted for by the model was very small at about 1.573 percent. This suggests a poor model, where very little of the variation in the response is truly explained by the exlpanatory variable. This suggests that for all countries around the world there are many more factors influecing the amount of CO2 emissions produced rather than the proportion of renewable energy used. When investigating individual countries, however, for example China or India, we see high R squared suggesting that more developed contries follow a better trend and renewable energy usage has a bigger impact. </span>
-<span id="cb12-174"><a href="#cb12-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-98"><a href="#cb12-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-99"><a href="#cb12-99" aria-hidden="true" tabindex="-1"></a>Simple regression equation:</span>
+<span id="cb12-100"><a href="#cb12-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-101"><a href="#cb12-101" aria-hidden="true" tabindex="-1"></a>$$ \hat{y} = 217719 - 2590 * Percent\,Consumption\,Renewable $$</span>
+<span id="cb12-102"><a href="#cb12-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-103"><a href="#cb12-103" aria-hidden="true" tabindex="-1"></a>Based on the linear regression model investigating the relationship between total carbon dioxide emissions and proportion of renewable energy, we can see that there is a negative relationship. This means that generally, the higher the proportion of renewable energy a country uses, the lower the total carbon dioxide emissions. The response variable in this equation is the country&#39;s Total CO2 emissions in 1000 of tons while the explanatory variable is the percentage of energy a country uses which is classified as renewable. To interpret the coefficient of -2590 this means that for each additional 1% of renewable energy consumption used a country&#39;s predicted total CO2 emission in thousands of tons decreases by 2590 on average.</span>
+<span id="cb12-104"><a href="#cb12-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-105"><a href="#cb12-105" aria-hidden="true" tabindex="-1"></a>The method used to predict this model was simple linear regression. This method involves predicting the values of one variable, based on another, through producing a straight line minimizing the value for the sum of squared residuals. Based on the linear regression model investigating the relationship between total carbon dioxide emissions and proportion of renewable energy, we can see that there is a negative relationship. This means that generally, the higher the proportion of renewable energy a country uses, the lower the total carbon dioxide emissions. The response variable in this equation is the country&#39;s Total CO2 emissions in 1000 of tons while the explanatory variable is the percentage of energy a country uses which is classified as renewable. To interpret the coefficient of -2590 this means that for each additional 1% of renewable energy consumption used a country&#39;s predicted total CO2 emission in thousands of tons decreases by 2590 on average.</span>
+<span id="cb12-106"><a href="#cb12-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-109"><a href="#cb12-109" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-110"><a href="#cb12-110" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-align: center</span></span>
+<span id="cb12-111"><a href="#cb12-111" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot 1</span></span>
+<span id="cb12-112"><a href="#cb12-112" aria-hidden="true" tabindex="-1"></a>master <span class="sc">|&gt;</span> </span>
+<span id="cb12-113"><a href="#cb12-113" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Percent_Consumption_Renewable, </span>
+<span id="cb12-114"><a href="#cb12-114" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> Total_CO2_Emissions)</span>
+<span id="cb12-115"><a href="#cb12-115" aria-hidden="true" tabindex="-1"></a>       ) <span class="sc">+</span></span>
+<span id="cb12-116"><a href="#cb12-116" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb12-117"><a href="#cb12-117" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="sc">+</span></span>
+<span id="cb12-118"><a href="#cb12-118" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
+<span id="cb12-119"><a href="#cb12-119" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Renewable energy consumption percentage&quot;</span>, </span>
+<span id="cb12-120"><a href="#cb12-120" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;&quot;</span>, </span>
+<span id="cb12-121"><a href="#cb12-121" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&quot;Relationships between Renewable Energy Consumption and CO2 Emissions among different contries&quot;</span>, </span>
+<span id="cb12-122"><a href="#cb12-122" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">&quot;Total CO2 Emissions/1000 tonnes&quot;</span>) </span>
+<span id="cb12-123"><a href="#cb12-123" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-124"><a href="#cb12-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-127"><a href="#cb12-127" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-128"><a href="#cb12-128" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-align: center</span></span>
+<span id="cb12-129"><a href="#cb12-129" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot 1</span></span>
+<span id="cb12-130"><a href="#cb12-130" aria-hidden="true" tabindex="-1"></a>master <span class="sc">|&gt;</span> </span>
+<span id="cb12-131"><a href="#cb12-131" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Percent_Consumption_Renewable, </span>
+<span id="cb12-132"><a href="#cb12-132" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> Total_CO2_Emissions, <span class="at">color=</span>country)</span>
+<span id="cb12-133"><a href="#cb12-133" aria-hidden="true" tabindex="-1"></a>       ) <span class="sc">+</span></span>
+<span id="cb12-134"><a href="#cb12-134" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb12-135"><a href="#cb12-135" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="sc">+</span></span>
+<span id="cb12-136"><a href="#cb12-136" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
+<span id="cb12-137"><a href="#cb12-137" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Renewable energy consumption percentage&quot;</span>, </span>
+<span id="cb12-138"><a href="#cb12-138" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;&quot;</span>, </span>
+<span id="cb12-139"><a href="#cb12-139" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&quot;Relationships between Renewable Energy Consumption and CO2 Emissions among different contries&quot;</span>, </span>
+<span id="cb12-140"><a href="#cb12-140" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">&quot;Total CO2 Emissions/1000 tonnes&quot;</span>) <span class="sc">+</span></span>
+<span id="cb12-141"><a href="#cb12-141" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="dv">25</span>, <span class="at">y =</span> <span class="dv">6200000</span>, <span class="at">label =</span> <span class="st">&quot;China&quot;</span>, <span class="at">size=</span><span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb12-142"><a href="#cb12-142" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="dv">8</span>, <span class="at">y =</span> <span class="dv">6500000</span>, <span class="at">label =</span> <span class="st">&quot;US&quot;</span>,<span class="at">size=</span><span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb12-143"><a href="#cb12-143" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="dv">43</span>, <span class="at">y =</span> <span class="dv">2200000</span>, <span class="at">label =</span> <span class="st">&quot;India&quot;</span>, <span class="at">size=</span><span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb12-144"><a href="#cb12-144" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="dv">3</span>, <span class="at">y =</span> <span class="dv">2900000</span>, <span class="at">label =</span> <span class="st">&quot;Russia&quot;</span>, <span class="at">size=</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">900000</span>, <span class="dv">10000000</span>)</span>
+<span id="cb12-145"><a href="#cb12-145" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-146"><a href="#cb12-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-149"><a href="#cb12-149" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-150"><a href="#cb12-150" aria-hidden="true" tabindex="-1"></a>master <span class="sc">|&gt;</span></span>
+<span id="cb12-151"><a href="#cb12-151" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year) <span class="sc">|&gt;</span></span>
+<span id="cb12-152"><a href="#cb12-152" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_co2 =</span> <span class="fu">mean</span>(Total_CO2_Emissions)) <span class="sc">|&gt;</span></span>
+<span id="cb12-153"><a href="#cb12-153" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year , <span class="at">y =</span> avg_co2)) <span class="sc">+</span></span>
+<span id="cb12-154"><a href="#cb12-154" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() </span>
+<span id="cb12-155"><a href="#cb12-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-156"><a href="#cb12-156" aria-hidden="true" tabindex="-1"></a>master <span class="sc">|&gt;</span></span>
+<span id="cb12-157"><a href="#cb12-157" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year) <span class="sc">|&gt;</span></span>
+<span id="cb12-158"><a href="#cb12-158" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_percent =</span> <span class="fu">mean</span>(Percent_Consumption_Renewable)) <span class="sc">|&gt;</span></span>
+<span id="cb12-159"><a href="#cb12-159" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> avg_percent)) <span class="sc">+</span></span>
+<span id="cb12-160"><a href="#cb12-160" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span>
+<span id="cb12-161"><a href="#cb12-161" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-162"><a href="#cb12-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-165"><a href="#cb12-165" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-166"><a href="#cb12-166" aria-hidden="true" tabindex="-1"></a>energy_emissions_model <span class="sc">|&gt;</span></span>
+<span id="cb12-167"><a href="#cb12-167" aria-hidden="true" tabindex="-1"></a>  <span class="fu">augment</span>() <span class="sc">|&gt;</span></span>
+<span id="cb12-168"><a href="#cb12-168" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="st">`</span><span class="at">Variance of Fitted</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">var</span>(.fitted),</span>
+<span id="cb12-169"><a href="#cb12-169" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">Variance of Residuals</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">var</span>(.resid),</span>
+<span id="cb12-170"><a href="#cb12-170" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">Variance of Total_CO2_Emissions</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">var</span>(Total_CO2_Emissions)) <span class="sc">|&gt;</span></span>
+<span id="cb12-171"><a href="#cb12-171" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&#39;Model Fit&#39;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb12-172"><a href="#cb12-172" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">&#39;striped&#39;</span>, <span class="st">&#39;bordered&#39;</span>))</span>
+<span id="cb12-173"><a href="#cb12-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-174"><a href="#cb12-174" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb12-175"><a href="#cb12-175" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-176"><a href="#cb12-176" aria-hidden="true" tabindex="-1"></a><span class="fu"># Discussion of Results</span></span>
+<span id="cb12-176"><a href="#cb12-176" aria-hidden="true" tabindex="-1"></a>The proportion of variability in the response values that was accounted for by the model was very small at about 1.573 percent. This suggests a poor model, where very little of the variation in the response is truly explained by the exlpanatory variable. This suggests that for all countries around the world there are many more factors influecing the amount of CO2 emissions produced rather than the proportion of renewable energy used. When investigating individual countries, however, for example China or India, we see high R squared suggesting that more developed contries follow a better trend and renewable energy usage has a bigger impact.</span>
 <span id="cb12-177"><a href="#cb12-177" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-178"><a href="#cb12-178" aria-hidden="true" tabindex="-1"></a><span class="fu"># References</span></span>
+<span id="cb12-178"><a href="#cb12-178" aria-hidden="true" tabindex="-1"></a><span class="fu"># Discussion of Results</span></span>
 <span id="cb12-179"><a href="#cb12-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-180"><a href="#cb12-180" aria-hidden="true" tabindex="-1"></a>https://www.gapminder.org/data/</span>
+<span id="cb12-180"><a href="#cb12-180" aria-hidden="true" tabindex="-1"></a><span class="fu"># References</span></span>
 <span id="cb12-181"><a href="#cb12-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-182"><a href="#cb12-182" aria-hidden="true" tabindex="-1"></a><span class="fu"># For reference</span></span>
-<span id="cb12-185"><a href="#cb12-185" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb12-186"><a href="#cb12-186" aria-hidden="true" tabindex="-1"></a><span class="co">#| output: false</span></span>
-<span id="cb12-187"><a href="#cb12-187" aria-hidden="true" tabindex="-1"></a><span class="do">## This is just for model using Chinese data</span></span>
-<span id="cb12-188"><a href="#cb12-188" aria-hidden="true" tabindex="-1"></a>china <span class="ot">&lt;-</span> master <span class="sc">|&gt;</span></span>
-<span id="cb12-189"><a href="#cb12-189" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(country <span class="sc">==</span> <span class="st">&#39;China&#39;</span>)</span>
-<span id="cb12-190"><a href="#cb12-190" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-191"><a href="#cb12-191" aria-hidden="true" tabindex="-1"></a>china_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="st">`</span><span class="at">Total_CO2_Emissions</span><span class="st">`</span> <span class="sc">~</span> <span class="st">`</span><span class="at">Percent_Consumption_Renewable</span><span class="st">`</span>,</span>
-<span id="cb12-192"><a href="#cb12-192" aria-hidden="true" tabindex="-1"></a>                             <span class="at">data =</span> china)</span>
-<span id="cb12-193"><a href="#cb12-193" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(china_model)</span>
-<span id="cb12-194"><a href="#cb12-194" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(china_model) </span>
-<span id="cb12-195"><a href="#cb12-195" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-196"><a href="#cb12-196" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-197"><a href="#cb12-197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-200"><a href="#cb12-200" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb12-201"><a href="#cb12-201" aria-hidden="true" tabindex="-1"></a>energy_emissions_model <span class="sc">|&gt;</span> </span>
-<span id="cb12-202"><a href="#cb12-202" aria-hidden="true" tabindex="-1"></a>  <span class="fu">augment</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb12-203"><a href="#cb12-203" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> .fitted, <span class="at">y =</span> .resid)) <span class="sc">+</span></span>
-<span id="cb12-204"><a href="#cb12-204" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() </span>
-<span id="cb12-205"><a href="#cb12-205" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-182"><a href="#cb12-182" aria-hidden="true" tabindex="-1"></a>https://www.gapminder.org/data/</span>
+<span id="cb12-183"><a href="#cb12-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-184"><a href="#cb12-184" aria-hidden="true" tabindex="-1"></a><span class="fu"># For reference</span></span>
+<span id="cb12-185"><a href="#cb12-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-188"><a href="#cb12-188" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-189"><a href="#cb12-189" aria-hidden="true" tabindex="-1"></a><span class="co">#| output: false</span></span>
+<span id="cb12-190"><a href="#cb12-190" aria-hidden="true" tabindex="-1"></a><span class="do">## This is just for model using Chinese data</span></span>
+<span id="cb12-191"><a href="#cb12-191" aria-hidden="true" tabindex="-1"></a>china <span class="ot">&lt;-</span> master <span class="sc">|&gt;</span></span>
+<span id="cb12-192"><a href="#cb12-192" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(country <span class="sc">==</span> <span class="st">&#39;China&#39;</span>)</span>
+<span id="cb12-193"><a href="#cb12-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-194"><a href="#cb12-194" aria-hidden="true" tabindex="-1"></a>china_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="st">`</span><span class="at">Total_CO2_Emissions</span><span class="st">`</span> <span class="sc">~</span> <span class="st">`</span><span class="at">Percent_Consumption_Renewable</span><span class="st">`</span>,</span>
+<span id="cb12-195"><a href="#cb12-195" aria-hidden="true" tabindex="-1"></a>                             <span class="at">data =</span> china)</span>
+<span id="cb12-196"><a href="#cb12-196" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(china_model)</span>
+<span id="cb12-197"><a href="#cb12-197" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(china_model) </span>
+<span id="cb12-198"><a href="#cb12-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-199"><a href="#cb12-199" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-200"><a href="#cb12-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-203"><a href="#cb12-203" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-204"><a href="#cb12-204" aria-hidden="true" tabindex="-1"></a>energy_emissions_model <span class="sc">|&gt;</span> </span>
+<span id="cb12-205"><a href="#cb12-205" aria-hidden="true" tabindex="-1"></a>  <span class="fu">augment</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb12-206"><a href="#cb12-206" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> .fitted, <span class="at">y =</span> .resid)) <span class="sc">+</span></span>
+<span id="cb12-207"><a href="#cb12-207" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() </span>
+<span id="cb12-208"><a href="#cb12-208" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
