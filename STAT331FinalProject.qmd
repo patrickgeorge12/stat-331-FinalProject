@@ -73,14 +73,14 @@ As mentioned in the introduction, the master dataset to be used for analysis in 
 
 The CO2 dataset contained values in the form of 25.3k and 4.9M, signaling the units of thousands and millions of units. The first step in the data cleaning process was to replace these letters with proper units to create a numeric variable, which enabled the performance of calculations on the data - a function titled was created for this purpose. The data was then pivoted to be in tidy form and the years of interest (1989 -- 2017) were selected. Once pivoted, the data sets were joined by year and country to produce a master data set which shall be used for model fitting, plotting, and subsequent analysis. A final decision was made to drop all the Na's in the master set due to a few reasons. The missing values typically occurred in the `Percent_Consumption_Renewables` variable across the earlier years and usually in small countries. Whether these Na's were include due to lack of observation or for simply not having any renewable energy production or consumption it is unclear. Because of a significant sample size after dropping Na's, and because of this knowledge gap and lack of patterns about the data, dropping Na's is appropriate and other data imputation methods such as cell-mean imputation would not be a proper solution as this introduces bias and would make a time-series graph incorrect.
 
-All the data cleaning, linear regression models, and subsequent analysis was conducted using R code.
+The method used to predict this model was simple linear regression. This method involves predicting the values of one variable, based on another, through producing a straight line minimizing the value for the sum of squared residuals. All the data cleaning, linear regression models, and subsequent analysis was conducted using R code.
 
 ```{r}
 datatable((head(master, n = 50)),
           caption = 'Interactive Preview of Data Set')
 ```
 
-# Analysis and Plots
+# Analysis and Discussion 
 
 ```{r}
 #| output: false
@@ -95,7 +95,7 @@ Simple regression equation:
 
 $$ \hat{y} = 217719 - 2590 * Percent\,Consumption\,Renewable $$
 
-The method used to predict this model was simple linear regression. This method involves predicting the values of one variable, based on another, through producing a straight line minimizing the value for the sum of squared residuals. Based on the linear regression model investigating the relationship between total carbon dioxide emissions and proportion of renewable energy, we can see that there is a negative relationship. This means that generally, the higher the proportion of renewable energy a country uses, the lower the total carbon dioxide emissions. The response variable in this equation is the country's Total CO2 emissions in 1000 of tons while the explanatory variable is the percentage of energy a country uses which is classified as renewable. To interpret the coefficient of -2590 this means that for each additional 1% of renewable energy consumption used a country's predicted total CO2 emission in thousands of tons decreases by 2590 on average.
+Based on the linear regression model investigating the relationship between total carbon dioxide emissions and proportion of renewable energy, we can see that there is a negative relationship. This means that generally, the higher the proportion of renewable energy a country uses, the lower the total carbon dioxide emissions. The response variable in this equation is the country's Total CO2 emissions in 1000 of tons while the explanatory variable is the percentage of energy a country uses which is classified as renewable. To interpret the coefficient of -2590 this means that for each additional 1% of renewable energy consumption used a country's predicted total CO2 emission in thousands of tons decreases by 2590 on average.
 
 ```{r}
 #| fig-align: center
@@ -135,8 +135,6 @@ grid.arrange(raw_graph, countries_graph)
 
 
 The graph displayed on the top demonstrates the relationship between `Total_CO2_Emission` and `Percent_Renewable_Energy`, shown by plotting the raw data. The distribution illustrates a negative pattern with considerable noise, explained by the smallest countries and relative values of Total Co2 Emissions. To better visualize how the relationship between Co2 Emissions and `Percent_Renewable_Energy` differentiates for the four largest producers of Co2, we filtered to only include India, Russia, US, and China in the second plot. In doing this, we were able to take out countries with insignificant Co2 emissions, as the model better explained the variability ($R^{2}$) in Co2 emissions for the top countries. Essentially, we were able to see that there needs to be a minimum amount of `Total_CO2_Emission` data, in order for the model to be accurate in making conclusions about the variable's relationship.
-
-The graph displayed on the top demonstrates the relationship between `Total_CO2_Emission` and `Percent_Renewable_Energy`, shown by plotting the raw data. The distribution illustrates a negative pattern with considerable noise, explained by the smallest countries and relative values of Total CO2 Emissions. To better visualize how the relationship between CO2 Emissions and `Percent_Renewable_Energy` differentiates for the four largest producers of CO2, we filtered to only include India, Russia, US, and China in the second plot. In doing this, we were able to take out countries with insignificant CO2 emissions, as the model better explained the variability ($R^{2}$) in Co2 emissions for the top countries. Essentially, we were able to see that there needs to be a minimum amount of `Total_CO2_Emission` data, in order for the model to be accurate in making conclusions about the variable's relationship.
 
 
 ```{r}
@@ -186,7 +184,6 @@ energy_emissions_model |>
 
 The proportion of variability in the response values that was accounted for by the model was very small at about 1.573 percent. This suggests a poor model, where very little of the variation in the response is truly explained by the explanatory variable. This suggests that for all countries around the world there are many more factors influencing the amount of CO2 emissions produced rather than the proportion of renewable energy used. When investigating individual countries, however, for example China or India, we see high $R^{2}$ suggesting that more developed countries follow a better trend and renewable energy usage has a bigger impact.
 
-# Discussion of Results
 
 # References
 
