@@ -267,7 +267,7 @@ obs_emissions <- avg_master |>
 sim_emissions_graph <- sim_response |>
   ggplot(aes(x = sim_emissions)) +
   geom_histogram(binwidth = 3500) +
-  labs(x = "Observed Emissions",
+  labs(x = "Simulated Emissions",
        y = "",
        subtitle = "Count") +
   theme_bw()
