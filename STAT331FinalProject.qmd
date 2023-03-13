@@ -76,7 +76,7 @@ The CO2 dataset contained values in the form of 25.3k and 4.9M, signaling the un
 The method used to predict this model was simple linear regression. This method involves predicting the values of one variable, based on another, through producing a straight line minimizing the value for the sum of squared residuals. All the data cleaning, linear regression models, and subsequent analysis was conducted using R code.
 
 ```{r}
-datatable((head(master, n = 50)),
+datatable((head(avg_master, n = 50)),
           caption = 'Interactive Preview of Data Set')
 ```
 
