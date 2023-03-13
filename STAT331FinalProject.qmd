@@ -180,3 +180,140 @@ The proportion of variability in the response values that was accounted for by t
 # References
 
 https://www.gapminder.org/data/
+
+
+```{r}
+convert_to_numeric <- function(x) {
+  x <- str_replace_all(x, "k", "e3")
+  x <- str_replace_all(x, "M", "e6")
+  return(as.numeric(x))
+}
+
+
+co2_clean <- co2 |>
+  select(country, `1989`:`2017`) |>
+  mutate(across(.cols = `1989`:`2017`, 
+                ~ convert_to_numeric(.))) |>
+  pivot_longer(cols = !country,
+               names_to = "year",
+               values_to = "Total_CO2_Emissions")
+
+energy_clean <- energy |>
+  pivot_longer(cols = !country,
+               names_to = "year",
+               values_to = "Percent_Consumption_Renewable")
+
+master <- inner_join(co2_clean, energy_clean) |>
+  drop_na()
+
+avg_master <- master|>
+  group_by(year) |>
+  summarize(avg_emissions = mean(`Total_CO2_Emissions`),
+            avg_prop_renew = mean(`Percent_Consumption_Renewable`))
+
+
+energy_emissions_model_clean <- lm(avg_emissions ~ avg_prop_renew,
+                                   data = avg_master)
+
+```
+
+```{r}
+noise <- function(x, mean = 0, sd){
+  x + rnorm(length(x), 
+            mean, 
+            sd)
+}
+```
+
+```{r}
+master_predict <- predict(energy_emissions_model_clean)
+master_sigma <- sigma(energy_emissions_model_clean)
+
+sim_response <- tibble(sim_emissions = noise(master_predict, 
+                                          sd = master_sigma))
+
+
+
+
+
+
+raw_graph <- avg_master |> 
+ggplot(aes(x = avg_prop_renew, 
+           y = avg_emissions)
+       ) +
+  geom_point() + 
+  geom_smooth(method = "lm") +
+  theme(legend.position = "none") +
+  labs(x = " Avg Renewable energy consumption percentage", 
+       y = "", 
+       title = "Relationships between  Avg Renewable Energy Consumption and \nAvg CO2 Emissions among different contries", 
+       subtitle = "Avg CO2 Emissions/1000 tonnes") +
+  theme(plot.title.position = "plot")
+
+
+
+
+```
+
+```{r}
+obs_emissions <- avg_master |>
+  ggplot(aes(x = avg_emissions)) +
+  geom_histogram(binwidth = 3000) +
+  labs(x = "Observed Emissions",
+       y = "",
+       subtitle = "Count") +
+  theme_bw()
+
+
+sim_emissions_graph <- sim_response |>
+  ggplot(aes(x = sim_emissions)) +
+  geom_histogram(binwidth = 3500) +
+  labs(x = "Observed Emissions",
+       y = "",
+       subtitle = "Count") +
+  theme_bw()
+
+library(patchwork)
+
+sim_emissions_graph + obs_emissions
+
+```
+
+```{r}
+
+sim_data <- avg_master |> 
+  filter(!is.na(avg_emissions), 
+         !is.na(avg_prop_renew)
+         ) |> 
+  select(avg_emissions, avg_prop_renew) |> 
+  bind_cols(sim_response)
+
+
+raw_graph <- avg_master |> 
+ggplot(aes(x = avg_prop_renew, 
+           y = avg_emissions)
+       ) +
+  geom_point() + 
+
+  theme(legend.position = "none") +
+  labs(x = " Avg Renewable energy consumption percentage", 
+       y = "", 
+       title = "Relationships between  Avg Renewable Energy Consumption and \nAvg CO2 Emissions among different contries", 
+       subtitle = "Avg CO2 Emissions/1000 tonnes") +
+  theme(plot.title.position = "plot")
+
+sim_master_graph <- sim_data |> 
+ggplot(aes(x = avg_prop_renew, 
+           y = sim_emissions)
+       ) +
+  geom_point() + 
+  theme(legend.position = "none") +
+  labs(x = " Avg Renewable energy consumption percentage", 
+       y = "", 
+       title = "Relationships between  Avg Renewable Energy Consumption and \nAvg CO2 Emissions among different contries", 
+       subtitle = "Avg CO2 Emissions/1000 tonnes") +
+  theme(plot.title.position = "plot")
+
+raw_graph + sim_master_graph
+```
+
