@@ -310,7 +310,7 @@ ggplot(aes(x = avg_prop_renew,
   labs(x = " Avg Renewable energy consumption percentage", 
        y = "", 
        title = "Simulated Relationships between Avg Renewable Energy Consumption and \nAvg CO2 Emissions among different contries", 
-       subtitle = "Avg CO2 Emissions/1000 tonnes") +
+       subtitle = "Simulated Avg CO2 Emissions/1000 tonnes") +
   theme(plot.title.position = "plot")
 
 raw_graph + sim_master_graph
