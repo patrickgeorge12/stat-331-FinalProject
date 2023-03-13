@@ -274,7 +274,7 @@ sim_emissions_graph <- sim_response |>
 
 library(patchwork)
 
-sim_emissions_graph + obs_emissions
+obs_emissions + sim_emissions_graph
 
 ```
 
