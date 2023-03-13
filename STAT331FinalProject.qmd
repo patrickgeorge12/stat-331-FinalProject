@@ -297,7 +297,7 @@ ggplot(aes(x = avg_prop_renew,
   theme(legend.position = "none") +
   labs(x = " Avg Renewable energy consumption percentage", 
        y = "", 
-       title = "Relationships between  Avg Renewable Energy Consumption and \nAvg CO2 Emissions among different contries", 
+       title = "Observed Relationships between Avg Renewable Energy Consumption and \nAvg CO2 Emissions among different contries", 
        subtitle = "Avg CO2 Emissions/1000 tonnes") +
   theme(plot.title.position = "plot")
 
@@ -309,7 +309,7 @@ ggplot(aes(x = avg_prop_renew,
   theme(legend.position = "none") +
   labs(x = " Avg Renewable energy consumption percentage", 
        y = "", 
-       title = "Relationships between  Avg Renewable Energy Consumption and \nAvg CO2 Emissions among different contries", 
+       title = "Simulated Relationships between Avg Renewable Energy Consumption and \nAvg CO2 Emissions among different contries", 
        subtitle = "Avg CO2 Emissions/1000 tonnes") +
   theme(plot.title.position = "plot")
 
