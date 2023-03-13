@@ -172,6 +172,13 @@ energy_emissions_model_clean |>
 
 ```
 
+```{r}
+energy_emissions_model_clean |> 
+  augment() |> 
+  ggplot(aes(x=.fitted, y = .resid))+
+  geom_point()
+```
+
 The proportion of variability in the response values that was accounted for by the model was very small at about 1.573 percent. This suggests a poor model, where very little of the variation in the response is truly explained by the explanatory variable. This suggests that for all countries around the world there are many more factors influencing the amount of CO2 emissions produced rather than the proportion of renewable energy used. When investigating individual countries, however, for example China or India, we see high $R^{2}$ suggesting that more developed countries follow a better trend and renewable energy usage has a bigger impact.
 
 # References
