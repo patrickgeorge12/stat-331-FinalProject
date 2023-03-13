@@ -84,11 +84,18 @@ datatable((head(master, n = 50)),
 
 ```{r}
 #| output: false
-# linear regression analysis on Total_CO2_Emissions and Percent_Consumption_Renewable
-energy_emissions_model <- lm(`Total_CO2_Emissions` ~ `Percent_Consumption_Renewable`,
-                             data = master)
-summary(energy_emissions_model)
-tidy(energy_emissions_model) 
+
+avg_master <- master|>
+  group_by(year) |>
+  summarize(avg_emissions = mean(`Total_CO2_Emissions`),
+            avg_prop_renew = mean(`Percent_Consumption_Renewable`))
+
+
+energy_emissions_model_clean <- lm(avg_emissions ~ avg_prop_renew,
+                                   data = avg_master)
+
+summary(energy_emissions_model_clean)
+
 ```
 
 Simple regression equation:
