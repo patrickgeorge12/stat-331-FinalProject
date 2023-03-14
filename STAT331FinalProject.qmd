@@ -333,3 +333,11 @@ sim_data |>
               lwd = 1.5) +
   theme_bw()
 ```
+
+```{r}
+# check how the simulated data fit the observed data, especially the R square.
+lm(avg_emissions ~ sim_emissions, 
+   data = sim_data
+   ) |> 
+  glance() 
+```
