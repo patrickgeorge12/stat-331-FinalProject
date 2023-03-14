@@ -341,3 +341,14 @@ lm(avg_emissions ~ sim_emissions,
    ) |> 
   glance() 
 ```
+
+```{r}
+# get the R squared for the simulated data fit for observed data.
+sim_r2 <- lm(avg_emissions ~ sim_emissions, 
+             data = sim_data
+             ) |> 
+  glance() |> 
+  select(r.squared) |> 
+  pull()
+sim_r2
+```
