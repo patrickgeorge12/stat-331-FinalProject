@@ -187,8 +187,6 @@ energy_emissions_model |>
 
 The proportion of variability in the response values that was accounted for by the model, $R^{2}$, was very large at about at about 89.93 percent. This suggests a good quality model, where a lot, about 89%, of the variation in the response, `Average Emissions` is explained by the explanatory variable, `Average Percent Renewable`. This suggests that a high proportion of variability in response is accounted for by the linear model and there are not many other large factors influencing emissions.
 
-
-
 ```{r}
 #| fig-align: center
 energy_emissions_model |> 
@@ -220,11 +218,6 @@ master_sigma <- sigma(energy_emissions_model)
 
 sim_response <- tibble(sim_emissions = noise(master_predict, 
                                           sd = master_sigma))
-
-
-
-
-
 
 raw_graph <- master |> 
 ggplot(aes(x = `Average Percent Renewawable`, 
@@ -312,6 +305,7 @@ sim_data |>
   geom_point() + 
    labs(x = "Simulated Avg CO2 Emissions/1000 tonnes", 
         y = "",
+        title = "The Similarity between Observed Data and Simulated Data",
         subtitle = "Avg CO2 Emissions/1000 tonnes" ) + 
   geom_abline(slope = 1,
               intercept = 0, 
@@ -321,13 +315,20 @@ sim_data |>
   theme_bw()
 ```
 
+p value
+
 ```{r}
-# check how the simulated data fit the observed data, especially the R square.
-lm(`Average Emissions` ~ sim_emissions, 
+# check how the simulated data fit the observed data, especially the P value and R square.
+p_value<-lm(`Average Emissions` ~ sim_emissions, 
    data = sim_data
    ) |> 
-  glance() 
+  glance() |>
+  select(p.value)|>
+  pull()
+p_value
 ```
+
+r square
 
 ```{r}
 # get the R squared for the simulated data fit for observed data.
@@ -348,8 +349,6 @@ sims <- map_dfc(.x = 1:nsims,
                                           sd = master_sigma)
                               )
                 )
-
-head(sims)
 ```
 
 ```{r}
@@ -357,8 +356,9 @@ head(sims)
 colnames(sims) <- colnames(sims) |> 
   str_replace(pattern = "\\.\\.\\.",
                   replace = "_")
-head(sims)
 ```
+
+Original Average Emission data with 1000 simulated datasets
 
 ```{r}
 # bind 1000 simulated dataset and the observed dataset together
@@ -371,6 +371,8 @@ sims <- master |>
 head(sims)
 ```
 
+R squared for 1000 simulated datasets.
+
 ```{r}
 # mapping to get 1000 simulated R squared.
 sim_r_sq <- sims |> 
@@ -380,6 +382,8 @@ sim_r_sq <- sims |>
 
 head(sim_r_sq)
 ```
+
+Simulated R squared distribution
 
 ```{r}
 # to see the distribution of the 1000 simulated R square.
@@ -393,9 +397,6 @@ tibble(sims = sim_r_sq) |>
 # Our model is R square is around 0.8.
 ```
 
-
 # References
 
 https://www.gapminder.org/data/
-
-
