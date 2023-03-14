@@ -393,3 +393,13 @@ sim_r_sq<-sims |>
 
 head(sim_r_sq)
 ```
+
+```{r}
+# to see the distribution of the 1000 simulated R square.
+tibble(sims = sim_r_sq) |> 
+  ggplot(aes(x = sims)) + 
+  geom_histogram(binwidth = 0.025) +
+  labs(x = expression("Simulated"~ R^2),
+       y = "",
+       subtitle = "Number of Simulated Models")
+```
