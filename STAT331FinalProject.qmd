@@ -315,3 +315,21 @@ ggplot(aes(x = avg_prop_renew,
 
 raw_graph + sim_master_graph
 ```
+
+```{r}
+# Check the similarity between the simulated data and observed data
+sim_data |> 
+  ggplot(aes(x = sim_emissions, 
+             y = avg_emissions)
+         ) + 
+  geom_point() + 
+   labs(x = "Simulated Avg CO2 Emissions/1000 tonnes", 
+        y = "",
+        subtitle = "Avg CO2 Emissions/1000 tonnes" ) + 
+  geom_abline(slope = 1,
+              intercept = 0, 
+              color = "steelblue",
+              linetype = "dashed",
+              lwd = 1.5) +
+  theme_bw()
+```
