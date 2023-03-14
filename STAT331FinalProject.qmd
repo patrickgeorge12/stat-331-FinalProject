@@ -381,6 +381,8 @@ sim_r_sq <- sims |>
 head(sim_r_sq)
 ```
 
+Simulated R squared distribution
+
 ```{r}
 # to see the distribution of the 1000 simulated R square.
 tibble(sims = sim_r_sq) |> 
