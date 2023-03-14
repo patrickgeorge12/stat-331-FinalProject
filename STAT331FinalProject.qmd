@@ -352,3 +352,15 @@ sim_r2 <- lm(avg_emissions ~ sim_emissions,
   pull()
 sim_r2
 ```
+
+```{r}
+# Created 1000 simulated dataset
+nsims <- 1000
+sims <- map_dfc(.x = 1:nsims,
+                .f = ~ tibble(sim = noise(master_predict, 
+                                          sd = master_sigma)
+                              )
+                )
+
+head(sims)
+```
