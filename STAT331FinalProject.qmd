@@ -24,8 +24,6 @@ library(DT)
 library(kableExtra)
 library(gridExtra)
 library(patchwork)
-library(gganimate) ## NEED TO INSTALL
-library(av) ## NEED TO INSTALL
 options(scipen = 99999)
 energy <- readxl::read_xlsx(here::here("renewable_energy.xlsx"))
 co2 <- readxl::read_xlsx(here::here("co2.xlsx"))
@@ -162,10 +160,6 @@ energy_by_year_graph <- master |>
        title = "Average Percentage of Renewable Energy Over Time",
        subtitle = "Average Renewable Energy Consumption (%)") +
       theme(plot.title = element_text(hjust = 0.5, face = 'bold'))
-
-animate(co2_by_year_graph,
-        renderer = av_renderer()
-      )
 
 grid.arrange(co2_by_year_graph, energy_by_year_graph)
 ```
