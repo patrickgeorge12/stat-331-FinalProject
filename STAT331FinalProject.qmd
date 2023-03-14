@@ -315,6 +315,8 @@ sim_data |>
   theme_bw()
 ```
 
+p value
+
 ```{r}
 # check how the simulated data fit the observed data, especially the P value and R square.
 p_value<-lm(`Average Emissions` ~ sim_emissions, 
@@ -325,6 +327,8 @@ p_value<-lm(`Average Emissions` ~ sim_emissions,
   pull()
 p_value
 ```
+
+r square
 
 ```{r}
 # get the R squared for the simulated data fit for observed data.
