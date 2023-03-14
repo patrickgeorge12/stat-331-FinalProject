@@ -402,4 +402,6 @@ tibble(sims = sim_r_sq) |>
   labs(x = expression("Simulated"~ R^2),
        y = "",
        subtitle = "Number of Simulated Models")
+#The distribution of these values will tell if our assumed model does a good job of producing data similar to what was observed. If the model produces data similar to what was observed, we would expect values near 1.
+# Our model is R square is around 0.8.
 ```
