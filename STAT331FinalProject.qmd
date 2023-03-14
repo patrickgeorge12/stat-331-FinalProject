@@ -23,6 +23,7 @@ library(knitr)
 library(DT)
 library(kableExtra)
 library(gridExtra)
+library(patchwork)
 options(scipen = 99999)
 energy <- readxl::read_xlsx(here::here("renewable_energy.xlsx"))
 co2 <- readxl::read_xlsx(here::here("co2.xlsx"))
@@ -51,18 +52,18 @@ energy_clean <- energy |>
                names_to = "year",
                values_to = "Percent_Consumption_Renewable")
 
-master <- inner_join(co2_clean, energy_clean) |>
+joined <- inner_join(co2_clean, energy_clean) |>
   drop_na()
 
-master |>
+joined |>
   distinct(year) |>
   count()
 
-master |>
+joined |>
   distinct(country) |>
   count()
 
-avg_master <- master|>
+master <- joined|>
   rename(Year = year) |>
   group_by(Year) |>
   summarize(`Average Emissions` = mean(`Total_CO2_Emissions`),
@@ -83,7 +84,7 @@ The CO2 dataset contained values in the form of 25.3k and 4.9M, signaling the un
 The method used to predict this model was simple linear regression. This method involves predicting the values of one variable, based on another, through producing a straight line minimizing the value for the sum of squared residuals. All the data cleaning, linear regression models, and subsequent analysis was conducted using R code.
 
 ```{r}
-datatable((head(avg_master, n = 50)),
+datatable((head(master, n = 50)),
           caption = 'Interactive Preview of Data Set')
 ```
 
@@ -93,7 +94,7 @@ datatable((head(avg_master, n = 50)),
 #| output: false
 energy_emissions_model <- lm(`Average Emissions` ~ 
                              `Average Proportion Renewawable`,
-                             data = avg_master)
+                             data = master)
 summary(energy_emissions_model)
 tidy(energy_emissions_model)
 
@@ -108,7 +109,7 @@ Based on the linear regression model investigating the relationship between tota
 ```{r}
 #| fig-align: center
 # Plot 1
-raw_graph <- avg_master |> 
+raw_graph <- master |> 
 ggplot(aes(x = `Average Proportion Renewawable`, 
            y = `Average Emissions`)
        ) +
@@ -130,7 +131,7 @@ The graph displayed on the top demonstrates the relationship between `Total_CO2_
 ```{r}
 #| fig-align: center
 
-co2_by_year_graph <- avg_master |>
+co2_by_year_graph <- master |>
   ggplot(aes(x = Year , y = `Average Emissions`)) +
   geom_point() +
   scale_x_discrete(guide = guide_axis(n.dodge=2))+
@@ -140,7 +141,7 @@ co2_by_year_graph <- avg_master |>
        subtitle = "Average CO2 Emissions/1000 tonnes")+
   theme(plot.title.position = "plot")
 
-energy_by_year_graph<- avg_master |>
+energy_by_year_graph<- master |>
   ggplot(aes(x = Year, y = `Average Proportion Renewawable`)) +
   geom_point() +
    scale_x_discrete(guide = guide_axis(n.dodge=2))+
@@ -181,40 +182,6 @@ The proportion of variability in the response values that was accounted for by t
 
 https://www.gapminder.org/data/
 
-```{r}
-convert_to_numeric <- function(x) {
-  x <- str_replace_all(x, "k", "e3")
-  x <- str_replace_all(x, "M", "e6")
-  return(as.numeric(x))
-}
-
-
-co2_clean <- co2 |>
-  select(country, `1989`:`2017`) |>
-  mutate(across(.cols = `1989`:`2017`, 
-                ~ convert_to_numeric(.))) |>
-  pivot_longer(cols = !country,
-               names_to = "year",
-               values_to = "Total_CO2_Emissions")
-
-energy_clean <- energy |>
-  pivot_longer(cols = !country,
-               names_to = "year",
-               values_to = "Percent_Consumption_Renewable")
-
-master <- inner_join(co2_clean, energy_clean) |>
-  drop_na()
-
-avg_master <- master|>
-  group_by(year) |>
-  summarize(avg_emissions = mean(`Total_CO2_Emissions`),
-            avg_prop_renew = mean(`Percent_Consumption_Renewable`))
-
-
-energy_emissions_model_clean <- lm(avg_emissions ~ avg_prop_renew,
-                                   data = avg_master)
-
-```
 
 ```{r}
 noise <- function(x, mean = 0, sd){
@@ -225,8 +192,8 @@ noise <- function(x, mean = 0, sd){
 ```
 
 ```{r}
-master_predict <- predict(energy_emissions_model_clean)
-master_sigma <- sigma(energy_emissions_model_clean)
+master_predict <- predict(energy_emissions_model)
+master_sigma <- sigma(energy_emissions_model)
 
 sim_response <- tibble(sim_emissions = noise(master_predict, 
                                           sd = master_sigma))
@@ -236,9 +203,9 @@ sim_response <- tibble(sim_emissions = noise(master_predict,
 
 
 
-raw_graph <- avg_master |> 
-ggplot(aes(x = avg_prop_renew, 
-           y = avg_emissions)
+raw_graph <- master |> 
+ggplot(aes(x = `Average Proportion Renewawable`, 
+           y = `Average Emissions`)
        ) +
   geom_point() + 
   geom_smooth(method = "lm") +
@@ -255,8 +222,8 @@ ggplot(aes(x = avg_prop_renew,
 ```
 
 ```{r}
-obs_emissions <- avg_master |>
-  ggplot(aes(x = avg_emissions)) +
+obs_emissions <- master |>
+  ggplot(aes(x = `Average Emissions`)) +
   geom_histogram(binwidth = 3000) +
   labs(x = "Observed Emissions",
        y = "",
@@ -272,25 +239,22 @@ sim_emissions_graph <- sim_response |>
        subtitle = "Count") +
   theme_bw()
 
-library(patchwork)
-
 obs_emissions + sim_emissions_graph
 
 ```
 
 ```{r}
-
-sim_data <- avg_master |> 
-  filter(!is.na(avg_emissions), 
-         !is.na(avg_prop_renew)
+sim_data <- master |> 
+  filter(!is.na(`Average Emissions`), 
+         !is.na(`Average Proportion Renewawable`)
          ) |> 
-  select(avg_emissions, avg_prop_renew) |> 
+  select(`Average Emissions`, `Average Proportion Renewawable`) |> 
   bind_cols(sim_response)
 
 
-raw_graph <- avg_master |> 
-ggplot(aes(x = avg_prop_renew, 
-           y = avg_emissions)
+raw_graph <- master |> 
+ggplot(aes(x = `Average Proportion Renewawable`, 
+           y = `Average Emissions`)
        ) +
   geom_point() + 
 
@@ -302,7 +266,7 @@ ggplot(aes(x = avg_prop_renew,
   theme(plot.title.position = "plot")
 
 sim_master_graph <- sim_data |> 
-ggplot(aes(x = avg_prop_renew, 
+ggplot(aes(x = `Average Proportion Renewawable`, 
            y = sim_emissions)
        ) +
   geom_point() + 
@@ -320,7 +284,7 @@ raw_graph + sim_master_graph
 # Check the similarity between the simulated data and observed data
 sim_data |> 
   ggplot(aes(x = sim_emissions, 
-             y = avg_emissions)
+             y = `Average Emissions`)
          ) + 
   geom_point() + 
    labs(x = "Simulated Avg CO2 Emissions/1000 tonnes", 
@@ -336,7 +300,7 @@ sim_data |>
 
 ```{r}
 # check how the simulated data fit the observed data, especially the R square.
-lm(avg_emissions ~ sim_emissions, 
+lm(`Average Emissions` ~ sim_emissions, 
    data = sim_data
    ) |> 
   glance() 
@@ -344,7 +308,7 @@ lm(avg_emissions ~ sim_emissions,
 
 ```{r}
 # get the R squared for the simulated data fit for observed data.
-sim_r2 <- lm(avg_emissions ~ sim_emissions, 
+sim_r2 <- lm(`Average Emissions` ~ sim_emissions, 
              data = sim_data
              ) |> 
   glance() |> 
@@ -375,10 +339,10 @@ head(sims)
 
 ```{r}
 # bind 1000 simulated dataset and the observed dataset together
-sims <- avg_master |> 
-  filter(!is.na(avg_emissions), 
-         !is.na(avg_prop_renew)) |> 
-  select(avg_emissions) |> 
+sims <- master |> 
+  filter(!is.na(`Average Emissions`), 
+         !is.na(`Average Proportion Renewawable`)) |> 
+  select(`Average Emissions`) |> 
   bind_cols(sims)
 
 head(sims)
@@ -386,8 +350,8 @@ head(sims)
 
 ```{r}
 # mapping to get 1000 simulated R squared.
-sim_r_sq<-sims |> 
-  map(~ lm(avg_emissions ~ .x, data = sims)) |> 
+sim_r_sq <- sims |> 
+  map(~ lm(`Average Emissions` ~ .x, data = sims)) |> 
   map(glance) |> 
   map_dbl(~ .x$r.squared)
 
