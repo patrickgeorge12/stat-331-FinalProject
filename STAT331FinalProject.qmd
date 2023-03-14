@@ -163,7 +163,9 @@ energy_by_year_graph <- master |>
        subtitle = "Average Renewable Energy Consumption (%)") +
       theme(plot.title = element_text(hjust = 0.5, face = 'bold'))
 
-
+animate(co2_by_year_graph,
+        renderer = av_renderer()
+      )
 
 grid.arrange(co2_by_year_graph, energy_by_year_graph)
 ```
@@ -400,3 +402,4 @@ tibble(sims = sim_r_sq) |>
 # References
 
 https://www.gapminder.org/data/
+
