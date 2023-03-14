@@ -183,8 +183,6 @@ energy_emissions_model |>
 
 The proportion of variability in the response values that was accounted for by the model, $R^{2}$, was very large at about at about 89.93 percent. This suggests a good quality model, where a lot, about 89%, of the variation in the response, `Average Emissions` is explained by the explanatory variable, `Average Percent Renewable`. This suggests that a high proportion of variability in response is accounted for by the linear model and there are not many other large factors influencing emissions.
 
-
-
 ```{r}
 #| fig-align: center
 energy_emissions_model |> 
@@ -318,11 +316,14 @@ sim_data |>
 ```
 
 ```{r}
-# check how the simulated data fit the observed data, especially the R square.
-lm(`Average Emissions` ~ sim_emissions, 
+# check how the simulated data fit the observed data, especially the P value and R square.
+p_value<-lm(`Average Emissions` ~ sim_emissions, 
    data = sim_data
    ) |> 
-  glance() 
+  glance() |>
+  select(p.value)|>
+  pull()
+p_value
 ```
 
 ```{r}
@@ -389,9 +390,6 @@ tibble(sims = sim_r_sq) |>
 # Our model is R square is around 0.8.
 ```
 
-
 # References
 
 https://www.gapminder.org/data/
-
-
