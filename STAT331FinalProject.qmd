@@ -358,6 +358,8 @@ colnames(sims) <- colnames(sims) |>
                   replace = "_")
 ```
 
+Original Average Emission data with 1000 simulated datasets
+
 ```{r}
 # bind 1000 simulated dataset and the observed dataset together
 sims <- master |> 
