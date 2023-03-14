@@ -349,8 +349,6 @@ sims <- map_dfc(.x = 1:nsims,
                                           sd = master_sigma)
                               )
                 )
-
-head(sims)
 ```
 
 ```{r}
