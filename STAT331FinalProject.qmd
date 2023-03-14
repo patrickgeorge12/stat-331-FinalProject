@@ -383,3 +383,11 @@ sims <- avg_master |>
 
 head(sims)
 ```
+
+```{r}
+# mapping to get 1000 simulated R squared.
+sims |> 
+  map(~ lm(avg_emissions ~ .x, data = sims)) |> 
+  map(glance) |> 
+  map_dbl(~ .x$r.squared)
+```
