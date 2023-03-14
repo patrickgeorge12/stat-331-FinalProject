@@ -306,6 +306,7 @@ sim_data |>
   geom_point() + 
    labs(x = "Simulated Avg CO2 Emissions/1000 tonnes", 
         y = "",
+        title = "The Similarity between Observed Data and Simulated Data",
         subtitle = "Avg CO2 Emissions/1000 tonnes" ) + 
   geom_abline(slope = 1,
               intercept = 0, 
@@ -370,6 +371,8 @@ sims <- master |>
 
 head(sims)
 ```
+
+R squared for 1000 simulated datasets.
 
 ```{r}
 # mapping to get 1000 simulated R squared.
