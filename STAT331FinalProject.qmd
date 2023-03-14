@@ -372,3 +372,14 @@ colnames(sims) <- colnames(sims) |>
                   replace = "_")
 head(sims)
 ```
+
+```{r}
+# bind 1000 simulated dataset and the observed dataset together
+sims <- avg_master |> 
+  filter(!is.na(avg_emissions), 
+         !is.na(avg_prop_renew)) |> 
+  select(avg_emissions) |> 
+  bind_cols(sims)
+
+head(sims)
+```
