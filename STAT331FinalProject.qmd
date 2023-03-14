@@ -364,3 +364,11 @@ sims <- map_dfc(.x = 1:nsims,
 
 head(sims)
 ```
+
+```{r}
+# clean the colnames
+colnames(sims) <- colnames(sims) |> 
+  str_replace(pattern = "\\.\\.\\.",
+                  replace = "_")
+head(sims)
+```
