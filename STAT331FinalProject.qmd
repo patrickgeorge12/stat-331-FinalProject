@@ -67,66 +67,75 @@ master <- joined|>
   rename(Year = year) |>
   group_by(Year) |>
   summarize(`Average Emissions` = mean(`Total_CO2_Emissions`),
-            `Average Proportion Renewawable`
+            `Average Percent Renewawable`
             = mean(`Percent_Consumption_Renewable`))
 ```
 
 # Introduction
 
-Climate change is a global challenge jeopardizing humanity's future. This purpose of this project is to investigate the relationship between CO2 emissions, one of the largest drivers of climate change creating greenhouse gasses, and the use of renewable energy such as solar, wind, hydroelectric or nuclear energy. The data to be used in this project incorporates data from two different sources, one measuring total carbon dioxide emissions per country over the years and one measuring proportion of energy use which is renewable over the years. `Total_CO2_Emission` is in 1000 tons of CO2 and `Percent_Consumption_Renewables` is a percentage of total energy use produced by renewable sources per country over the years. There are 207 distinct countries observed over 29 years. The relationship between Total_CO2_Emission and Percent_Consumption_Renewables is hypothesized to be negative whereas a country uses more renewable energy they produce less CO2. Through this investigation hopefully more information can be learned about climate change and potential solutions to this global problem affecting every living and non-living object.
+Climate change is a global challenge jeopardizing humanity's future. This purpose of this project is to investigate the relationship between CO2 emissions, one of the largest drivers of climate change creating greenhouse gasses, and the use of renewable energy such as solar, wind, or hydroelectric energy. The data to be used in this project incorporates data from two different sources, one measuring total carbon dioxide emissions per country over the years and one measuring proportion of energy use which is renewable over the years. `Total_CO2_Emission` is in 1000 tons of CO2 and `Percent_Consumption_Renewables` is a percentage of total energy use produced by renewable sources per country over the years. Because the data is collected on individual countries over the years, this investigation will primarily focus on the `Average Emissions` as well as the `Average Percent Renewable` of all the countries in a specific year. In the data of which the averages will be investigated, there are 207 distinct countries observed over 29 years. The relationship between `Average Emissions`and `Average Percent Renewable` is hypothesized to be negative whereas humanity used more renewable energy on average there would be less average CO2 emissions. Through this investigation hopefully more information can be learned about climate change and potential solutions to this global problem affecting every organism on planet Earth.
 
 # Materials and Methods
 
-As mentioned in the introduction, the master dataset to be used for analysis in this project incorporates data from two sets, one measuring the total carbon dioxide emissions, per country over the years and the other measuring the proportion of energy use, which is classified as renewable energy over the same time. The data was sourced from an online database titled Gapminder which has been a reliable provider of data since 2005, in hopes of promoting global sustainability through easily accessible information. Before analysis, the data had to be properly cleaned and wrangled.
+The master data to be used for analysis in this project incorporates the averages for all countries over the years from twodifferent data sets, one measuring the total carbon dioxide emissions, per country over the years and the other measuring the proportion of energy use classified as renewable per country over the years. The data sets were sourced from an online database titled *Gapminder* which has been a reliable provider of data since 2005, in hopes of promoting global sustainability through easily accessible information.
 
-The CO2 dataset contained values in the form of 25.3k and 4.9M, signaling the units of thousands and millions of units. The first step in the data cleaning process was to replace these letters with proper units to create a numeric variable, which enabled the performance of calculations on the data - a function titled was created for this purpose. The data was then pivoted to be in tidy form and the years of interest (1989 -- 2017) were selected. Once pivoted, the data sets were joined by year and country to produce a master data set which shall be used for model fitting, plotting, and subsequent analysis. A final decision was made to drop all the Na's in the master set due to a few reasons. The missing values typically occurred in the `Percent_Consumption_Renewables` variable across the earlier years and usually in small countries. Whether these Na's were include due to lack of observation or for simply not having any renewable energy production or consumption it is unclear. Because of a significant sample size after dropping Na's, and because of this knowledge gap and lack of patterns about the data, dropping Na's is appropriate and other data imputation methods such as cell-mean imputation would not be a proper solution as this introduces bias and would make a time-series graph incorrect.
+Before analysis, the data had to be properly cleaned and wrangled. The CO2 data set contained values in the form of 25.3k and 4.9M, signaling the units of thousands and millions. The first step in the data cleaning process was to replace these characters with numbers to create a numeric variable which calculations could be performed on. Once the data was of all the same type, the data was then pivoted to be in tidy form and the years of interest (1989 -- 2017) were selected. Once pivoted, the data sets were joined by year and country to produce a clean master data set which shall be used for model fitting, plotting, and analysis. A final decision was made to drop all the Na's in the master set due to a few reasons. The missing values typically occurred in the `Average Percent Renewable` variable across the earlier years measured and usually in countries with smaller populations. Whether these Na's were included in the data due to lack of observation or for simply not having any renewable energy production or consumption it is unclear. Because the averages are being studied and the Na's usually occured in smaller countries, there was still a large enough sample size to average over once those observations were dropped. Other forms of imputation were contemplated such as cell-mean imputation but not conducted due to fears of introducing bias to the data.
 
-The method used to predict this model was simple linear regression. This method involves predicting the values of one variable, based on another, through producing a straight line minimizing the value for the sum of squared residuals. All the data cleaning, linear regression models, and subsequent analysis was conducted using R code.
+Linear regression, a method involving predicting the values of one variable, based on another, through producing a straight line minimizing the value for the sum of squared residuals, was used to create and predict a model. All the data cleaning, models, and subsequent analysis was conducted using R code.
+
+\n \n \n
 
 ```{r}
+
 datatable((head(master, n = 50)),
           caption = 'Interactive Preview of Data Set')
 ```
 
-# Analysis and Discussion
+\n
+
+# Analysis and Discussion of Model
 
 ```{r}
 #| output: false
 energy_emissions_model <- lm(`Average Emissions` ~ 
-                             `Average Proportion Renewawable`,
+                             `Average Percent Renewawable`,
                              data = master)
 summary(energy_emissions_model)
 tidy(energy_emissions_model)
 
 ```
 
-Simple regression equation:
+**Regression Equation:**
 
 $$ \hat{y} = 693309.6 - 17770.2 * Average\,Percent\,Renewable $$
 
-Above is the linear regression equation based on the model predicting the response variable, Average Carbon Dioxide Emission ($\hat{y}$), based off the explanatory variable, Average Proportion of Renewable Energy consumption. The coefficient on `Average Percent Renewable` is extremely negative sitting at -17770.2 meaning that for each one percent increase in the `Average Percent Renewable` energy used the average amount of CO2 emissions in thousands of tons decreases by 17770.2. The slope coefficient of 693309.6 means that when the `Average Percent Renewable` is zero such that there is no renewable enerygy being used at all on average, the predicted average CO2 emissions would be 693309.6 thousand tons. 
+Above is the simple linear regression equation based on the model predicting the response variable, `Average Emissions` ($\hat{y}$), by the explanatory variable, `Average Percent Renewable`. The coefficient on `Average Percent Renewable` is extremely negative sitting at -17770.2 meaning that for each one percent increase in the `Average Percent Renewable` energy used the average amount of CO2 emissions in thousands of tons decreases by 17770.2. The slope coefficient of 693309.6 means that when the `Average Percent Renewable` is zero such that there is no renewable energy being used at all on average, the predicted `Average Emissions` would be 693309.6 thousand tons.
+
+\n
 
 ```{r}
 #| fig-align: center
 # Plot 1
 raw_graph <- master |> 
-ggplot(aes(x = `Average Proportion Renewawable`, 
+ggplot(aes(x = `Average Percent Renewawable`, 
            y = `Average Emissions`)
        ) +
   geom_point() + 
   geom_smooth(method = "lm") +
   theme(legend.position = "none") +
-  labs(x = " Average Renewable energy consumption percentage", 
+  labs(x = " Average Renewable Energy Consumption (%)", 
        y = "", 
-       title = "Relationships between Average Renewable Energy Consumption and \nAverage CO2 Emissions among different contries", 
-       subtitle = "Average CO2 Emissions/1000 tonnes") +
-  theme(plot.title.position = "plot")
+       title = "Relationship between Renewable Energy Usage and CO2 Emissions", 
+       subtitle = "Average CO2 Emissions (1000 tonnes)") +
+  theme(plot.title = element_text(hjust = 0.5, face = 'bold'),
+        plot.subtitle = element_text(size = 10),
+        axis.title.x = element_text(size = 10))
 
 raw_graph
 
 ```
 
-The graph displayed on the top demonstrates the relationship between `Total_CO2_Emission` and `Percent_Renewable_Energy`, shown by plotting the raw data. The distribution illustrates a negative pattern with considerable noise, explained by the smallest countries and relative values of Total Co2 Emissions. To better visualize how the relationship between Co2 Emissions and `Percent_Renewable_Energy` differentiates for the four largest producers of Co2, we filtered to only include India, Russia, US, and China in the second plot. In doing this, we were able to take out countries with insignificant Co2 emissions, as the model better explained the variability ($R^{2}$) in Co2 emissions for the top countries. Essentially, we were able to see that there needs to be a minimum amount of `Total_CO2_Emission` data, in order for the model to be accurate in making conclusions about the variable's relationship.
+The graph above demonstrates the relationship between `Average Emissions` and `Average Percent Renewable`. The distribution illustrates a negative linear relationship, where the points are relatively close to the plotted regression line with little deviation and noise. There are little to no unusual observations. This illustration is consistent with the hypothesis that as the `Average Percent Renewable` increases the `Average Emissions` decreases at a significant rate.
 
 ```{r}
 #| fig-align: center
@@ -134,30 +143,32 @@ The graph displayed on the top demonstrates the relationship between `Total_CO2_
 co2_by_year_graph <- master |>
   ggplot(aes(x = Year , y = `Average Emissions`)) +
   geom_point() +
-  scale_x_discrete(guide = guide_axis(n.dodge=2))+
+  scale_x_discrete(guide = guide_axis(n.dodge=2)) +
   labs(x = "Year", 
        y = "", 
-       title = "Average CO2 Emissions from 1989-2017", 
-       subtitle = "Average CO2 Emissions/1000 tonnes")+
-  theme(plot.title.position = "plot")
+       title = "Average CO2 Emissions Over Time", 
+       subtitle = "Average CO2 Emissions (1000 tonnes)") +
+  theme(plot.title = element_text(hjust = 0.5, face = 'bold'))
 
-energy_by_year_graph<- master |>
-  ggplot(aes(x = Year, y = `Average Proportion Renewawable`)) +
+energy_by_year_graph <- master |>
+  ggplot(aes(x = Year, y = `Average Percent Renewawable`)) +
   geom_point() +
-   scale_x_discrete(guide = guide_axis(n.dodge=2))+
+   scale_x_discrete(guide = guide_axis(n.dodge=2)) +
     labs(x = "Year", 
        y = "", 
-       title = "Average Percentage of Renewable Energy from 1989-2017",
-       subtitle = "Average Percentage of Renewable Energy")+
-      theme(plot.title.position = "plot")
+       title = "Average Percentage of Renewable Energy Over Time",
+       subtitle = "Average Renewable Energy Consumption (%)") +
+      theme(plot.title = element_text(hjust = 0.5, face = 'bold'))
 
 grid.arrange(co2_by_year_graph, energy_by_year_graph)
 ```
 
-As shown by the two distributions of `Total_CO2_Emission` and Percent Renewable Energy over time, the relationship follows the negative relationship as expected. This means that as the predictor variable, Percent of Renewable Energy decreases throughout the years, the response variable, `Total_CO2_Emission` increases in turn. It's worth noting that during the timespan of 1989 to 2017, the total CO2 emissions has been increasing as expected, and is likely due to the extreme population growth over this time. On the other hand, the Percent of Renewable Energy has shockingly been declining in modern years, which is likely due to the varying definition of renewable energy, it only encompasses solar, wind, geothermal, and hydro powered. Before this discovery, we had assumed that energy sources such as nuclear power and natural gas, fell under the umbrella of renewable energy, which was ultimately false. Following this analysis, we were able to understand that the value of CO2 emissions was expanding, due to population increase, while the amount of renewable energy has actually been declining, as this only included specific sources of energy which have lost popularity today.
+As shown by the two distributions of `Average Emissions` and `Average Percent Renewable` over time, the relationship follows a negative relationship, but perhaps not as expected. `Average Percent Renewable` is decreasing over the years while `Average Emissions` is increasing which still illustrates a negative relationship. As time goes on it makes sense as to why `Average Emissions` is increasing, because of extreme population growth and growing demand for production but `Average Percent Renewable` has shockingly been declining in recent years. While this likely has something to due to the varying definition of renewable energy, for example whether or not nuclear energy is truly renewable, it is surprising that as technology develops renewable energy use does not. This signifies that humanity needs to increase the renewable energy production and usage on average in order to reduce the carbon footprint and preserve nature for future generations.
+
+**Model Fit:**
 
 ```{r}
-energy_emissions_model|>
+energy_emissions_model |>
   augment() |>
   summarize(`Variance of Fitted` = var(.fitted),
             `Variance of Residuals` = var(.resid),
@@ -169,19 +180,26 @@ energy_emissions_model|>
 
 ```
 
+The proportion of variability in the response values that was accounted for by the model, $R^{2}$, was very large at about at about 89.93 percent. This suggests a good quality model, where a lot, about 89%, of the variation in the response, `Average Emissions` is explained by the explanatory variable, `Average Percent Renewable`. This suggests that a high proportion of variability in response is accounted for by the linear model and there are not many other large factors influencing emissions.
+
+
+
 ```{r}
+#| fig-align: center
 energy_emissions_model |> 
   augment() |> 
-  ggplot(aes(x=.fitted, y = .resid))+
-  geom_point()
+  ggplot(aes(x=.fitted, y = .resid)) +
+  geom_point() +
+  labs(y = '',
+       subtitle = 'Residuals',
+       x = 'Fitted Values',
+       title = 'Relationship between Residual and Fitted Values') +
+  theme(plot.title = element_text(hjust = 0.5, face = 'bold'))
 ```
 
-The proportion of variability in the response values that was accounted for by the model was very small at about 1.573 percent. This suggests a poor model, where very little of the variation in the response is truly explained by the explanatory variable. This suggests that for all countries around the world there are many more factors influencing the amount of CO2 emissions produced rather than the proportion of renewable energy used. When investigating individual countries, however, for example China or India, we see high $R^{2}$ suggesting that more developed countries follow a better trend and renewable energy usage has a bigger impact.
+\n
 
-# References
-
-https://www.gapminder.org/data/
-
+**Simulation:**
 
 ```{r}
 noise <- function(x, mean = 0, sd){
@@ -204,7 +222,7 @@ sim_response <- tibble(sim_emissions = noise(master_predict,
 
 
 raw_graph <- master |> 
-ggplot(aes(x = `Average Proportion Renewawable`, 
+ggplot(aes(x = `Average Percent Renewawable`, 
            y = `Average Emissions`)
        ) +
   geom_point() + 
@@ -246,14 +264,14 @@ obs_emissions + sim_emissions_graph
 ```{r}
 sim_data <- master |> 
   filter(!is.na(`Average Emissions`), 
-         !is.na(`Average Proportion Renewawable`)
+         !is.na(`Average Percent Renewawable`)
          ) |> 
-  select(`Average Emissions`, `Average Proportion Renewawable`) |> 
+  select(`Average Emissions`, `Average Percent Renewawable`) |> 
   bind_cols(sim_response)
 
 
 raw_graph <- master |> 
-ggplot(aes(x = `Average Proportion Renewawable`, 
+ggplot(aes(x = `Average Percent Renewawable`, 
            y = `Average Emissions`)
        ) +
   geom_point() + 
@@ -266,7 +284,7 @@ ggplot(aes(x = `Average Proportion Renewawable`,
   theme(plot.title.position = "plot")
 
 sim_master_graph <- sim_data |> 
-ggplot(aes(x = `Average Proportion Renewawable`, 
+ggplot(aes(x = `Average Percent Renewawable`, 
            y = sim_emissions)
        ) +
   geom_point() + 
@@ -341,7 +359,7 @@ head(sims)
 # bind 1000 simulated dataset and the observed dataset together
 sims <- master |> 
   filter(!is.na(`Average Emissions`), 
-         !is.na(`Average Proportion Renewawable`)) |> 
+         !is.na(`Average Percent Renewawable`)) |> 
   select(`Average Emissions`) |> 
   bind_cols(sims)
 
@@ -369,3 +387,10 @@ tibble(sims = sim_r_sq) |>
 #The distribution of these values will tell if our assumed model does a good job of producing data similar to what was observed. If the model produces data similar to what was observed, we would expect values near 1.
 # Our model is R square is around 0.8.
 ```
+
+
+# References
+
+https://www.gapminder.org/data/
+
+
