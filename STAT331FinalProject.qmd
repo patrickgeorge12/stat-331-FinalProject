@@ -163,10 +163,10 @@ energy_by_year_graph <- master |>
   labs( y = '', 
         title = 'Average Emissions Over Time') 
 ggplotly(co2_by_year_graph) |>
-  layout(title = list(text = paste0('Average Emissions Over Time        ',
+  layout(title = list(text = paste0('Average Emissions Over Time',
                                     '<br>',
                                     '<sup>',
-                                     'Average Emissions (1000 tons)           ',
+                                     'Average Emissions (1000 tons)',
                                     '</sup>')))
 ggplotly(energy_by_year_graph) |>
   layout(title = list(text = paste0('Average Percent Renewable Over Time',
