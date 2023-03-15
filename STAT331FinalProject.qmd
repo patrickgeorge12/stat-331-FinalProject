@@ -452,6 +452,9 @@ We can see from the distribution of the 1000 simulated $R^2$ graph that the $R^2
 
 # References
 
-1 https://www.gapminder.org/data/ https://plotly.com/r/line-and-scatter/#custom-color-scales
+1.   https://www.gapminder.org/data/ https://plotly.com/r/line-and-scatter/#custom-color-scales
 
+```{=html}
+<!-- -->
+```
 2.  de Paula Ferreira, W., Armellini, F., & De Santa-Eulalia, L. A. (2020). Simulation in industry 4.0: A state-of-the-art review. Computers & Industrial Engineering, 149, 106868. <https://doi.org/10.1016/J.CIE.2020.106868> 
