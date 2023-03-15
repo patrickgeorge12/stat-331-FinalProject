@@ -17,6 +17,7 @@ execute:
 ---
 
 ```{r setup}
+library(plotly)
 library(tidyverse)
 library(broom)
 library(knitr)
@@ -24,6 +25,7 @@ library(DT)
 library(kableExtra)
 library(gridExtra)
 library(patchwork)
+library(RColorBrewer)
 options(scipen = 99999)
 energy <- readxl::read_xlsx(here::here("renewable_energy.xlsx"))
 co2 <- readxl::read_xlsx(here::here("co2.xlsx"))
@@ -68,7 +70,7 @@ master <- joined|>
   group_by(Year) |>
   mutate(Year = as.numeric(Year)) |>
   summarize(`Average Emissions` = mean(`Total_CO2_Emissions`),
-            `Average Percent Renewawable`
+            `Average Percent Renewable`
             = mean(`Percent_Consumption_Renewable`))
 ```
 
@@ -87,7 +89,6 @@ Linear regression, a method involving predicting the values of one variable, bas
 \n \n \n
 
 ```{r}
-
 datatable((head(master, n = 50)),
           caption = 'Interactive Preview of Data Set')
 ```
@@ -99,7 +100,7 @@ datatable((head(master, n = 50)),
 ```{r}
 #| output: false
 energy_emissions_model <- lm(`Average Emissions` ~ 
-                             `Average Percent Renewawable`,
+                             `Average Percent Renewable`,
                              data = master)
 summary(energy_emissions_model)
 tidy(energy_emissions_model)
@@ -118,7 +119,7 @@ Above is the simple linear regression equation based on the model predicting the
 #| fig-align: center
 # Plot 1
 raw_graph <- master |> 
-ggplot(aes(x = `Average Percent Renewawable`, 
+ggplot(aes(x = `Average Percent Renewable`, 
            y = `Average Emissions`)
        ) +
   geom_point() + 
@@ -140,28 +141,44 @@ The graph above demonstrates the relationship between `Average Emissions` and `A
 
 ```{r}
 #| fig-align: center
+co2_by_year_graph <- plot_ly(
+  master, 
+  x = ~ Year, 
+  y = ~ `Average Emissions`,
+  type = 'scatter',
+  marker = list(
+    color = 'red'))
 
-co2_by_year_graph <- master |>
-  ggplot(aes(x = Year , y = `Average Emissions`)) +
-  geom_point() +
-  scale_x_discrete(guide = guide_axis(n.dodge=2)) +
-  labs(x = "Year", 
-       y = "", 
-       title = "Average CO2 Emissions Over Time", 
-       subtitle = "Average CO2 Emissions (1000 tonnes)") +
-  theme(plot.title = element_text(hjust = 0.5, face = 'bold')) 
+co2_by_year_graph <- co2_by_year_graph |>
+  layout(title = 'Average Emissions Over Time',
+         yaxis = list(
+           title = 'Average Emissions (1000 tons)',
+           titlefont = list(
+             size = 14),
+           xaxis = list(title = 'Year',
+                        titlefont = list(size = 14))))
 
-energy_by_year_graph <- master |>
-  ggplot(aes(x = Year, y = `Average Percent Renewawable`)) +
-  geom_point() +
-   scale_x_discrete(guide = guide_axis(n.dodge=2)) +
-    labs(x = "Year", 
-       y = "", 
-       title = "Average Percentage of Renewable Energy Over Time",
-       subtitle = "Average Renewable Energy Consumption (%)") +
-      theme(plot.title = element_text(hjust = 0.5, face = 'bold'))
+energy_by_year_graph <- plot_ly(
+  master, 
+  x = ~ Year, 
+  y = ~ `Average Percent Renewable`,
+  marker = list(
+    color = 'green'),
+  type = 'scatter')
 
-grid.arrange(co2_by_year_graph, energy_by_year_graph)
+energy_by_year_graph <- energy_by_year_graph |>
+  layout(title = 'Average Percent Renewable Over Time',
+         yaxis = list(
+           title = 'Average Percent Renewable',
+           titlefont = list(
+             size = 14)),
+         xaxis = list(
+           title = 'Year',
+           titlefont = list(size = 14)))
+
+
+co2_by_year_graph
+energy_by_year_graph
 ```
 
 As shown by the two distributions of `Average Emissions` and `Average Percent Renewable` over time, the relationship follows a negative relationship, but perhaps not as expected. `Average Percent Renewable` is decreasing over the years while `Average Emissions` is increasing which still illustrates a negative relationship. As time goes on it makes sense as to why `Average Emissions` is increasing, because of extreme population growth and growing demand for production but `Average Percent Renewable` has shockingly been declining in recent years. While this likely has something to due to the varying definition of renewable energy, for example whether or not nuclear energy is truly renewable, it is surprising that as technology develops renewable energy use does not. This signifies that humanity needs to increase the renewable energy production and usage on average in order to reduce the carbon footprint and preserve nature for future generations.
@@ -216,7 +233,7 @@ sim_response <- tibble(sim_emissions = noise(master_predict,
                                           sd = master_sigma))
 
 raw_graph <- master |> 
-ggplot(aes(x = `Average Percent Renewawable`, 
+ggplot(aes(x = `Average Percent Renewable`, 
            y = `Average Emissions`)
        ) +
   geom_point() + 
@@ -258,14 +275,14 @@ obs_emissions + sim_emissions_graph
 ```{r}
 sim_data <- master |> 
   filter(!is.na(`Average Emissions`), 
-         !is.na(`Average Percent Renewawable`)
+         !is.na(`Average Percent Renewable`)
          ) |> 
-  select(`Average Emissions`, `Average Percent Renewawable`) |> 
+  select(`Average Emissions`, `Average Percent Renewable`) |> 
   bind_cols(sim_response)
 
 
 raw_graph <- master |> 
-ggplot(aes(x = `Average Percent Renewawable`, 
+ggplot(aes(x = `Average Percent Renewable`, 
            y = `Average Emissions`)
        ) +
   geom_point() + 
@@ -278,7 +295,7 @@ ggplot(aes(x = `Average Percent Renewawable`,
   theme(plot.title.position = "plot")
 
 sim_master_graph <- sim_data |> 
-ggplot(aes(x = `Average Percent Renewawable`, 
+ggplot(aes(x = `Average Percent Renewable`, 
            y = sim_emissions)
        ) +
   geom_point() + 
@@ -360,7 +377,7 @@ Original Average Emission data with 1000 simulated datasets
 # bind 1000 simulated dataset and the observed dataset together
 sims <- master |> 
   filter(!is.na(`Average Emissions`), 
-         !is.na(`Average Percent Renewawable`)) |> 
+         !is.na(`Average Percent Renewable`)) |> 
   select(`Average Emissions`) |> 
   bind_cols(sims)
 
@@ -396,4 +413,5 @@ tibble(sims = sim_r_sq) |>
 # References
 
 https://www.gapminder.org/data/
+https://plotly.com/r/line-and-scatter/#custom-color-scales
 
