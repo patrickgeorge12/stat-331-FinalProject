@@ -349,6 +349,8 @@ sim_data |>
   theme_bw()
 ```
 
+In this graph, we can check the similarity between the data from observed data set and the simulated data set. Ideally, the data should fall on the blue dashed line, which is y=x line. The dots/ data above the blue line over estimated/ simulated. The dots/ data below the blue line is under estimated/ simulated. In this study, the observed data is more under estimated. Generally speaking, the dots are close to the y=x line. In this case, there is a strong relationship between the observed values and simulated values.
+
 p value
 
 ```{r}
