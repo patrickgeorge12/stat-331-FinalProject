@@ -381,7 +381,7 @@ sim_r2
 
 p value is extremely small (p\<0.05), which indicates the data is statistically significant.
 
-$R^2$ is 0.803297, which means the simulated data can explain around 80% of the observed data. In this case, we suppose the one time simulation till now did a fairly good job.
+$R^2$ is 0.803297, which means the simulated data can explain around 80% variation of the observed data. In this case, we suppose the one time simulation till now did a fairly good job.
 
 Simulation for a 1000 data sets:
 
