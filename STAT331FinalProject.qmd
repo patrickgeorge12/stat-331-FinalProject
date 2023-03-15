@@ -230,6 +230,8 @@ The basic procedure in this study is:
 5.  Iterating and generating simulated data sets.
 6.  Check, interpret, and plot the simulated $R^2$ values for the simulated data sets.
 
+Simulation for a single data set:
+
 ```{r}
 noise <- function(x, mean = 0, sd){
   x + rnorm(length(x), 
@@ -377,6 +379,12 @@ sim_r2 <- lm(`Average Emissions` ~ sim_emissions,
 sim_r2
 ```
 
+p value is extremely small (p\<0.05), which indicates the data is statistically significant.
+
+$R^2$ is 0.803297, which means the simulated data can explain around 80% of the observed data. In this case, we suppose the one time simulation till now did a fairly good job.
+
+Simulation for a 1000 data sets:
+
 ```{r}
 # Created 1000 simulated dataset
 nsims <- 1000
@@ -386,6 +394,10 @@ sims <- map_dfc(.x = 1:nsims,
                               )
                 )
 ```
+
+Since the error is randomly normally distributed added to the linear regression model line. If we iterate for more times, the result will be more stable. In this way, we can get the entire group of interest, rather than a single sample of that group.
+
+In the following steps, we got 1000 simulated data sets and combined the observed data set to a new full data sets. Then, we also got the $R^2$ of 1000 simulated data sets and plotted the distribution of them.
 
 ```{r}
 # clean the colnames
@@ -432,6 +444,8 @@ tibble(sims = sim_r_sq) |>
 #The distribution of these values will tell if our assumed model does a good job of producing data similar to what was observed. If the model produces data similar to what was observed, we would expect values near 1.
 # Our model is R square is around 0.8.
 ```
+
+We can see from the distribution of the 1000 simulated $R^2$ graph that the $R^2$ have the highest frequency around 0.8, which is in accordance with the single simulated data $R^2$.
 
 # References
 
