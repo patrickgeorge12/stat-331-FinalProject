@@ -291,7 +291,7 @@ obs_emissions + sim_emissions_graph
 
 We can see the differences between observed and simulated data from the distribution visualization. When we first look at the two graphs, they seem not quite similar. However, when we take a close look, the concentrated value ranges are similar.
 
-The left graph described the distribution of the observed yearly emissions data counts world widely. We can see that the most data are within 110000 tonnes to 120000 tonnes and 160000 tonnes to 170000 tonnes. The simulated yearly emissions data are also concentrated in a range of 110000 tonnes to 120000 tonnes and 150000 tonnes to 170000 tonnes.
+The left graph described the distribution of the observed yearly emissions data counts world widely. We can see that the most data are within $1.1\times10^6$ tonnes to $1.2\times10^6$ tonnes and $1.6\times10^6$ tonnes to $1.7\times10^6$ tonnes. The simulated yearly emissions data are also concentrated in a range of $1.1\times10^6$ tonnes to $1.2\times10^6$ tonnes and $1.5\times10^6$ tonnes to $1.7\times10^6$ tonnes.
 
 ```{r}
 sim_data <- master |> 
