@@ -261,7 +261,7 @@ ggplot(aes(x = `Average Percent Renewable`,
 obs_emissions <- master |>
   ggplot(aes(x = `Average Emissions`)) +
   geom_histogram(binwidth = 3000) +
-  labs(x = "Observed Emissions",
+  labs(x = "Observed Emissions/1000 tonnes",
        y = "",
        subtitle = "Count",
        title = "Worldwidely Yearly Emission Counts") +
@@ -272,7 +272,7 @@ obs_emissions <- master |>
 sim_emissions_graph <- sim_response |>
   ggplot(aes(x = sim_emissions)) +
   geom_histogram(binwidth = 3500) +
-  labs(x = "Simulated Emissions",
+  labs(x = "Simulated Emissions/1000 tonnes",
        y = "",
        subtitle = "Count",
        title = "Simulated Worldwidely Yearly Emission Counts") +
