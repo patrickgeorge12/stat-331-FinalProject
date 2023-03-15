@@ -274,8 +274,8 @@ obs_emissions <- master |>
        subtitle = "Count",
        title = "Worldwidely Yearly Emission Counts") +
   theme_bw()+
-  theme(plot.title = element_text(hjust = 0.5, face = 'bold'))
-
+  theme(plot.title = element_text(hjust = 0, face = 'bold', size = 8.5),
+        plot.subtitle = element_text(hjust = 0, size = 7))
 
 sim_emissions_graph <- sim_response |>
   ggplot(aes(x = sim_emissions)) +
@@ -285,7 +285,8 @@ sim_emissions_graph <- sim_response |>
        subtitle = "Count",
        title = "Simulated Worldwidely Yearly Emission Counts") +
   theme_bw()+
-  theme(plot.title = element_text(hjust = 0.5, face = 'bold'))
+  theme(plot.title = element_text(hjust = 0, face = 'bold', size = 8.5),
+        plot.subtitle = element_text(hjust = 0, size = 7))
 
 obs_emissions + sim_emissions_graph
 
