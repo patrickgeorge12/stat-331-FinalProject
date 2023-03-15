@@ -18,6 +18,8 @@ execute:
 
 ```{r setup}
 library(plotly)
+library(gganimate)
+library(av)
 library(tidyverse)
 library(broom)
 library(knitr)
@@ -119,8 +121,8 @@ Above is the simple linear regression equation based on the model predicting the
 #| fig-align: center
 # Plot 1
 raw_graph <- master |> 
-ggplot(aes(x = `Average Percent Renewable`, 
-           y = `Average Emissions`)
+  ggplot(aes(x = `Average Percent Renewable`, 
+            y = `Average Emissions`)
        ) +
   geom_point() + 
   geom_smooth(method = "lm") +
@@ -128,12 +130,16 @@ ggplot(aes(x = `Average Percent Renewable`,
   labs(x = " Average Renewable Energy Consumption (%)", 
        y = "", 
        title = "Relationship between Renewable Energy Usage and CO2 Emissions", 
-       subtitle = "Average CO2 Emissions (1000 tonnes)") +
-  theme(plot.title = element_text(hjust = 0.5, face = 'bold'),
-        plot.subtitle = element_text(size = 10),
-        axis.title.x = element_text(size = 10))
+       subtitle = 'Average Emissions (1000 tons)') 
 
-raw_graph
+
+ggplotly(raw_graph) |>
+  layout(title = list(text = paste0('Relationship between Renewable Energy Usage and CO2 Emissions',
+                                    '<br>',
+                                    '<sup>',
+                                     'Average Emissions (1000 tons)',
+                                    '</sup>')))
+
 
 ```
 
@@ -454,5 +460,6 @@ We can see from the distribution of the 1000 simulated $R^2$ graph that the $R^2
 
 1 https://www.gapminder.org/data/ https://plotly.com/r/line-and-scatter/#custom-color-scales
 https://datascott.com/blog/subtitles-with-ggplotly/
+https://statisticsglobe.com/ggplotly-function-r#:~:text=In%20this%20one%2C%20you%E2%80%99ll%20learn%20how%20to%20use,Graph%20to%20Interactive%20plotly%20Graph%20%28Line%20Plot%20Example%29
 
 2.  de Paula Ferreira, W., Armellini, F., & De Santa-Eulalia, L. A. (2020). Simulation in industry 4.0: A state-of-the-art review. Computers & Industrial Engineering, 149, 106868. <https://doi.org/10.1016/J.CIE.2020.106868> 
