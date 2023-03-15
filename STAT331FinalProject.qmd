@@ -217,9 +217,13 @@ energy_emissions_model |>
 
 **Simulation:**
 
-Simulation is a critical technology to develop planning and explore models to optimized decisions making.
+Simulation is a critical technology to develop planning and explore models to optimized decisions making (de Paula Ferreira et al., 2020).
 
-In this part, we will perform a basic linear model simulation to see how well the model is with the presetting conditions, such as adding normally distributed error to the linear regression line.
+In this part, we will perform a basic linear model simulation to see how well the model is with the presetting conditions, such as adding normally distributed error to the linear regression line. The basic procedure is:
+
+1.  Make a linear regression fit model for the observed data (already done in the previous part).
+2.  Assume the model is right. Add generated error to the linear regression model (we generated normally distributed error for this study).
+3.  Getting the simulated data, and compare with the observed data (by generating value distribution graphs, scatterplots of the relationships modeled and observed).
 
 ```{r}
 noise <- function(x, mean = 0, sd){
@@ -422,4 +426,6 @@ tibble(sims = sim_r_sq) |>
 
 # References
 
-https://www.gapminder.org/data/ https://plotly.com/r/line-and-scatter/#custom-color-scales
+1\. https://www.gapminder.org/data/ https://plotly.com/r/line-and-scatter/#custom-color-scales
+
+​2. de Paula Ferreira, W., Armellini, F., & De Santa-Eulalia, L. A. (2020). Simulation in industry 4.0: A state-of-the-art review. Computers & Industrial Engineering, 149, 106868. <https://doi.org/10.1016/J.CIE.2020.106868> 
