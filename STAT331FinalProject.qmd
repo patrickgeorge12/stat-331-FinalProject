@@ -395,7 +395,7 @@ sims <- map_dfc(.x = 1:nsims,
                 )
 ```
 
-Since the error is randomly normally distributed added to the linear regression model line. If we iterate for more times, the result will be more stable. In this way, we can get the entire group of interest, rather than a single sample of that group.
+Since the normally distributed error is randomly added to the linear regression model line. If we iterate for more times, the result will be more stable. In this way, we can get the entire group of interest, rather than a single sample of that group.
 
 In the following steps, we got 1000 simulated data sets and combined the observed data set to a new full data sets. Then, we also got the $R^2$ of 1000 simulated data sets and plotted the distribution of them.
 
