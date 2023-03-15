@@ -128,7 +128,7 @@ ggplot(aes(x = `Average Percent Renewable`,
   labs(x = " Average Renewable Energy Consumption (%)", 
        y = "", 
        title = "Relationship between Renewable Energy Usage and CO2 Emissions", 
-       subtitle = "Average CO2 Emissions (1000 tonnes)") +
+       subtitle = "Average CO2 Emissions/1000 tonnes") +
   theme(plot.title = element_text(hjust = 0.5, face = 'bold'),
         plot.subtitle = element_text(size = 10),
         axis.title.x = element_text(size = 10))
@@ -141,44 +141,34 @@ The graph above demonstrates the relationship between `Average Emissions` and `A
 
 ```{r}
 #| fig-align: center
-co2_by_year_graph <- plot_ly(
-  master, 
-  x = ~ Year, 
-  y = ~ `Average Emissions`,
-  type = 'scatter',
-  marker = list(
-    color = 'red'))
-
-co2_by_year_graph <- co2_by_year_graph |>
-  layout(title = 'Average Emissions Over Time',
-         yaxis = list(
-           title = 'Average Emissions (1000 tons)',
-           titlefont = list(
-             size = 14),
-           xaxis = list(title = 'Year',
-                        titlefont = list(size = 14))))
-
-energy_by_year_graph <- plot_ly(
-  master, 
-  x = ~ Year, 
-  y = ~ `Average Percent Renewable`,
-  marker = list(
-    color = 'green'),
-  type = 'scatter')
-
-energy_by_year_graph <- energy_by_year_graph |>
-  layout(title = 'Average Percent Renewable Over Time',
-         yaxis = list(
-           title = 'Average Percent Renewable',
-           titlefont = list(
-             size = 14)),
-         xaxis = list(
-           title = 'Year',
-           titlefont = list(size = 14)))
+co2_by_year_graph <- master |>
+  ggplot(aes(x = Year, y = `Average Emissions`)) +
+  geom_point(color = 'red') +
+  geom_line(color = 'red') +
+  labs( y = '', 
+        title = 'Average Emissions Over Time') 
 
 
-co2_by_year_graph
-energy_by_year_graph
+energy_by_year_graph <- master |>
+  ggplot(aes(x = Year, y = `Average Percent Renewable`)) +
+  geom_point(color = 'green') +
+  geom_line(color = 'green') +
+  labs( y = '', 
+        title = 'Average Emissions Over Time') 
+
+
+ggplotly(co2_by_year_graph) |>
+  layout(title = list(text = paste0('Average Emissions Over Time',
+                                    '<br>',
+                                    '<sup>',
+                                     'Average Emissions (1000 tons)',
+                                    '</sup>')))
+ggplotly(energy_by_year_graph) |>
+  layout(title = list(text = paste0('Average Percent Renewable Over Time',
+                                    '<br>',
+                                    '<sup>',
+                                     'Average Renewable Energy Consumption (%)',
+                                    '</sup>')))
 ```
 
 As shown by the two distributions of `Average Emissions` and `Average Percent Renewable` over time, the relationship follows a negative relationship, but perhaps not as expected. `Average Percent Renewable` is decreasing over the years while `Average Emissions` is increasing which still illustrates a negative relationship. As time goes on it makes sense as to why `Average Emissions` is increasing, because of extreme population growth and growing demand for production but `Average Percent Renewable` has shockingly been declining in recent years. While this likely has something to due to the varying definition of renewable energy, for example whether or not nuclear energy is truly renewable, it is surprising that as technology develops renewable energy use does not. This signifies that humanity needs to increase the renewable energy production and usage on average in order to reduce the carbon footprint and preserve nature for future generations.
@@ -213,7 +203,7 @@ energy_emissions_model |>
   theme(plot.title = element_text(hjust = 0.5, face = 'bold'))
 ```
 
-We can see from the relationship between residual and fitted values graph that, the linearity is violated in the range of $1.0\times10^6$ to $1.4\times10^6$ (equal variance). This is because in the range of $1.0\times10^6$ to $1.2\times10^6$, the observed data is over the estimated linear regression line, which render only positive residues. And in the range of $1.2\times10^6$ to $1.4\times10^6$, the observed data is below the linear regression line, which render only negative residues. In the range of $1.4\times10^6$ to $1.6\times10^6$, the linearity is not violated, which means this range of data might fit the linear regression model better.
+We can see from the relationship between residual and fitted values graph that, the linearity is violated in the range of $1.0\times10^8$ to $1.4\times10^8$ (equal variance). This is because in the range of $1.0\times10^8$ to $1.2\times10^8$, the observed data is over the estimated linear regression line, which render only positive residues. And in the range of $1.2\times10^8$ to $1.4\times10^8$, the observed data is below the linear regression line, which render only negative residues. In the range of $1.4\times10^8$ to $1.6\times10^8$, the linearity is not violated, which means this range of data might fit the linear regression model better.
 
 \n
 
@@ -271,7 +261,7 @@ ggplot(aes(x = `Average Percent Renewable`,
 obs_emissions <- master |>
   ggplot(aes(x = `Average Emissions`)) +
   geom_histogram(binwidth = 3000) +
-  labs(x = "Observed Emissions",
+  labs(x = "Observed Emissions/1000 tonnes",
        y = "",
        subtitle = "Count",
        title = "Worldwidely Yearly Emission Counts") +
@@ -282,7 +272,7 @@ obs_emissions <- master |>
 sim_emissions_graph <- sim_response |>
   ggplot(aes(x = sim_emissions)) +
   geom_histogram(binwidth = 3500) +
-  labs(x = "Simulated Emissions",
+  labs(x = "Simulated Emissions/1000 tonnes",
        y = "",
        subtitle = "Count",
        title = "Simulated Worldwidely Yearly Emission Counts") +
@@ -296,7 +286,7 @@ obs_emissions + sim_emissions_graph
 
 We can see the differences between observed and simulated data from the distribution visualization. When we first look at the two graphs, they seem not quite similar. However, when we take a close look, the concentrated value ranges are similar.
 
-The left graph described the distribution of the observed yearly emissions data counts world widely. We can see that the most data are within $1.1\times10^6$ tonnes to $1.2\times10^6$ tonnes and $1.6\times10^6$ tonnes to $1.7\times10^6$ tonnes. The simulated yearly emissions data are also concentrated in a range of $1.1\times10^6$ tonnes to $1.2\times10^6$ tonnes and $1.5\times10^6$ tonnes to $1.7\times10^6$ tonnes.
+The left graph described the distribution of the observed yearly emissions data counts world widely. We can see that the most data are within $1.1\times10^8$ tonnes to $1.2\times10^8$ tonnes and $1.6\times10^8$ tonnes to $1.7\times10^8$ tonnes. The simulated yearly emissions data are also concentrated in a range of $1.1\times10^8$ tonnes to $1.2\times10^8$ tonnes and $1.5\times10^8$ tonnes to $1.7\times10^8$ tonnes.
 
 ```{r}
 sim_data <- master |> 
@@ -314,11 +304,13 @@ ggplot(aes(x = `Average Percent Renewable`,
   geom_point() + 
 
   theme(legend.position = "none") +
-  labs(x = " Avg Renewable energy consumption percentage", 
+  labs(x = " Avg Renewable energy consumption %", 
        y = "", 
-       title = "Observed Relationships between Avg Renewable Energy Consumption and \nAvg CO2 Emissions among different contries", 
+       title = "Observed Relationships between Avg Renewable\nEnergy Consumption and Avg CO2 Emissions", 
        subtitle = "Avg CO2 Emissions/1000 tonnes") +
-  theme(plot.title.position = "plot")
+  theme(plot.title.position = "plot",
+        plot.title = element_text(face = 'bold', size = 8.5),
+        plot.subtitle = element_text(hjust = 0, size = 7))
 
 sim_master_graph <- sim_data |> 
 ggplot(aes(x = `Average Percent Renewable`, 
@@ -326,11 +318,14 @@ ggplot(aes(x = `Average Percent Renewable`,
        ) +
   geom_point() + 
   theme(legend.position = "none") +
-  labs(x = " Avg Renewable energy consumption percentage", 
+  labs(x = " Avg Renewable energy consumption %", 
        y = "", 
-       title = "Simulated Relationships between Avg Renewable Energy Consumption and \nAvg CO2 Emissions among different countries", 
+       title = "Simulated Relationships between Avg Renewable\nEnergy Consumption and Avg CO2 Emissions", 
        subtitle = "Simulated Avg CO2 Emissions/1000 tonnes") +
-  theme(plot.title.position = "plot")
+    theme(plot.title.position = "plot",
+        plot.title = element_text(face = 'bold', size = 8.5),
+        plot.subtitle = element_text(hjust = 0, size = 7))
+
 
 raw_graph + sim_master_graph
 ```
@@ -457,6 +452,6 @@ We can see from the distribution of the 1000 simulated $R^2$ graph that the $R^2
 
 # References
 
-1\. https://www.gapminder.org/data/ https://plotly.com/r/line-and-scatter/#custom-color-scales
+1 https://www.gapminder.org/data/ https://plotly.com/r/line-and-scatter/#custom-color-scales
 
-​2. de Paula Ferreira, W., Armellini, F., & De Santa-Eulalia, L. A. (2020). Simulation in industry 4.0: A state-of-the-art review. Computers & Industrial Engineering, 149, 106868. <https://doi.org/10.1016/J.CIE.2020.106868> 
+2.  de Paula Ferreira, W., Armellini, F., & De Santa-Eulalia, L. A. (2020). Simulation in industry 4.0: A state-of-the-art review. Computers & Industrial Engineering, 149, 106868. <https://doi.org/10.1016/J.CIE.2020.106868> 
