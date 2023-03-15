@@ -273,7 +273,8 @@ obs_emissions <- master |>
        y = "",
        subtitle = "Count",
        title = "Worldwidely Yearly Emission Counts") +
-  theme_bw()
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5, face = 'bold'))
 
 
 sim_emissions_graph <- sim_response |>
@@ -283,7 +284,8 @@ sim_emissions_graph <- sim_response |>
        y = "",
        subtitle = "Count",
        title = "Simulated Worldwidely Yearly Emission Counts") +
-  theme_bw()
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5, face = 'bold'))
 
 obs_emissions + sim_emissions_graph
 
@@ -348,7 +350,8 @@ sim_data |>
               color = "steelblue",
               linetype = "dashed",
               lwd = 1.5) +
-  theme_bw()
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5, face = 'bold'))
 ```
 
 In this graph, we can check the similarity between the data from observed data set and the simulated data set. Ideally, the data should fall on the blue dashed line, which is y=x line. The dots/ data above the blue line over estimated/ simulated. The dots/ data below the blue line is under estimated/ simulated. In this study, the observed data is more under estimated. Generally speaking, the dots are close to the y=x line. In this case, there is a strong relationship between the observed values and simulated values.
@@ -440,7 +443,9 @@ tibble(sims = sim_r_sq) |>
   geom_histogram(binwidth = 0.025) +
   labs(x = expression("Simulated"~ R^2),
        y = "",
-       subtitle = "Number of Simulated Models")
+       subtitle = "Number of Simulated Models",
+       title = "1000 Simulated R-Squared Distribution")+
+  theme(plot.title = element_text(hjust = 0.5, face = 'bold'))
 #The distribution of these values will tell if our assumed model does a good job of producing data similar to what was observed. If the model produces data similar to what was observed, we would expect values near 1.
 # Our model is R square is around 0.8.
 ```
