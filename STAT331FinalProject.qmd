@@ -80,7 +80,7 @@ Climate change is a global challenge jeopardizing humanity's future. This purpos
 
 # Materials and Methods
 
-The master data to be used for analysis in this project incorporates the averages for all countries over the years from twodifferent data sets, one measuring the total carbon dioxide emissions, per country over the years and the other measuring the proportion of energy use classified as renewable per country over the years. The data sets were sourced from an online database titled *Gapminder* which has been a reliable provider of data since 2005, in hopes of promoting global sustainability through easily accessible information.
+The master data to be used for analysis in this project incorporates the averages for all countries over the years from two different data sets, one measuring the total carbon dioxide emissions, per country over the years and the other measuring the proportion of energy use classified as renewable per country over the years. The data sets were sourced from an online database titled *Gapminder* which has been a reliable provider of data since 2005, in hopes of promoting global sustainability through easily accessible information.
 
 Before analysis, the data had to be properly cleaned and wrangled. The CO2 data set contained values in the form of 25.3k and 4.9M, signaling the units of thousands and millions. The first step in the data cleaning process was to replace these characters with numbers to create a numeric variable which calculations could be performed on. Once the data was of all the same type, the data was then pivoted to be in tidy form and the years of interest (1989 -- 2017) were selected. Once pivoted, the data sets were joined by year and country to produce a clean master data set which shall be used for model fitting, plotting, and analysis. A final decision was made to drop all the Na's in the master set due to a few reasons. The missing values typically occurred in the `Average Percent Renewable` variable across the earlier years measured and usually in countries with smaller populations. Whether these Na's were included in the data due to lack of observation or for simply not having any renewable energy production or consumption it is unclear. Because the averages are being studied and the Na's usually occured in smaller countries, there was still a large enough sample size to average over once those observations were dropped. Other forms of imputation were contemplated such as cell-mean imputation but not conducted due to fears of introducing bias to the data.
 
@@ -217,6 +217,10 @@ energy_emissions_model |>
 
 **Simulation:**
 
+Simulation is a critical technology to develop planning and explore models to optimized decisions making.
+
+In this part, we will perform a basic linear model simulation to see how well the model is with the presetting conditions, such as adding normally distributed error to the linear regression line.
+
 ```{r}
 noise <- function(x, mean = 0, sd){
   x + rnorm(length(x), 
@@ -256,7 +260,8 @@ obs_emissions <- master |>
   geom_histogram(binwidth = 3000) +
   labs(x = "Observed Emissions",
        y = "",
-       subtitle = "Count") +
+       subtitle = "Count",
+       title = "Worldwidely Yearly Emission Counts") +
   theme_bw()
 
 
@@ -265,12 +270,17 @@ sim_emissions_graph <- sim_response |>
   geom_histogram(binwidth = 3500) +
   labs(x = "Simulated Emissions",
        y = "",
-       subtitle = "Count") +
+       subtitle = "Count",
+       title = "Simulated Worldwidely Yearly Emission Counts") +
   theme_bw()
 
 obs_emissions + sim_emissions_graph
 
 ```
+
+We can see the differences between observed and simulated data from distribution visualization. When we first look at the two graphs, they seem not quite similar. However, when we take a close look, the concentrated ranges are similar.
+
+The left graph described the distribution of the observed yearly emissions data counts world widely. We can see that the most data are within 110000 tonnes to 120000 tonnes and 160000 tonnes to 170000 tonnes. The simulated yearly emissions data are also concentrated in a range of 110000 tonnes to 120000 tonnes and 150000 tonnes to 170000 tonnes.
 
 ```{r}
 sim_data <- master |> 
@@ -412,6 +422,4 @@ tibble(sims = sim_r_sq) |>
 
 # References
 
-https://www.gapminder.org/data/
-https://plotly.com/r/line-and-scatter/#custom-color-scales
-
+https://www.gapminder.org/data/ https://plotly.com/r/line-and-scatter/#custom-color-scales
