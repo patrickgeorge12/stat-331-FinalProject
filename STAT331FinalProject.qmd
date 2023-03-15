@@ -304,11 +304,13 @@ ggplot(aes(x = `Average Percent Renewable`,
   geom_point() + 
 
   theme(legend.position = "none") +
-  labs(x = " Avg Renewable energy consumption percentage", 
+  labs(x = " Avg Renewable energy consumption %", 
        y = "", 
-       title = "Observed Relationships between Avg Renewable Energy Consumption and \nAvg CO2 Emissions among different contries", 
+       title = "Observed Relationships between Avg Renewable\nEnergy Consumption and Avg CO2 Emissions", 
        subtitle = "Avg CO2 Emissions/1000 tonnes") +
-  theme(plot.title.position = "plot")
+  theme(plot.title.position = "plot",
+        plot.title = element_text(face = 'bold', size = 8.5),
+        plot.subtitle = element_text(hjust = 0, size = 7))
 
 sim_master_graph <- sim_data |> 
 ggplot(aes(x = `Average Percent Renewable`, 
@@ -316,11 +318,14 @@ ggplot(aes(x = `Average Percent Renewable`,
        ) +
   geom_point() + 
   theme(legend.position = "none") +
-  labs(x = " Avg Renewable energy consumption percentage", 
+  labs(x = " Avg Renewable energy consumption %", 
        y = "", 
-       title = "Simulated Relationships between Avg Renewable Energy Consumption and \nAvg CO2 Emissions among different countries", 
+       title = "Simulated Relationships between Avg Renewable\nEnergy Consumption and Avg CO2 Emissions", 
        subtitle = "Simulated Avg CO2 Emissions/1000 tonnes") +
-  theme(plot.title.position = "plot")
+    theme(plot.title.position = "plot",
+        plot.title = element_text(face = 'bold', size = 8.5),
+        plot.subtitle = element_text(hjust = 0, size = 7))
+
 
 raw_graph + sim_master_graph
 ```
