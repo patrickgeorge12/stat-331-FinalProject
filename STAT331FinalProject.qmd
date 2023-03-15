@@ -17,6 +17,7 @@ execute:
 ---
 
 ```{r setup}
+library(plotly)
 library(tidyverse)
 library(broom)
 library(knitr)
@@ -24,6 +25,7 @@ library(DT)
 library(kableExtra)
 library(gridExtra)
 library(patchwork)
+library(RColorBrewer)
 options(scipen = 99999)
 energy <- readxl::read_xlsx(here::here("renewable_energy.xlsx"))
 co2 <- readxl::read_xlsx(here::here("co2.xlsx"))
@@ -66,8 +68,9 @@ joined |>
 master <- joined|>
   rename(Year = year) |>
   group_by(Year) |>
+  mutate(Year = as.numeric(Year)) |>
   summarize(`Average Emissions` = mean(`Total_CO2_Emissions`),
-            `Average Percent Renewawable`
+            `Average Percent Renewable`
             = mean(`Percent_Consumption_Renewable`))
 ```
 
@@ -77,7 +80,7 @@ Climate change is a global challenge jeopardizing humanity's future. This purpos
 
 # Materials and Methods
 
-The master data to be used for analysis in this project incorporates the averages for all countries over the years from twodifferent data sets, one measuring the total carbon dioxide emissions, per country over the years and the other measuring the proportion of energy use classified as renewable per country over the years. The data sets were sourced from an online database titled *Gapminder* which has been a reliable provider of data since 2005, in hopes of promoting global sustainability through easily accessible information.
+The master data to be used for analysis in this project incorporates the averages for all countries over the years from two different data sets, one measuring the total carbon dioxide emissions, per country over the years and the other measuring the proportion of energy use classified as renewable per country over the years. The data sets were sourced from an online database titled *Gapminder* which has been a reliable provider of data since 2005, in hopes of promoting global sustainability through easily accessible information.
 
 Before analysis, the data had to be properly cleaned and wrangled. The CO2 data set contained values in the form of 25.3k and 4.9M, signaling the units of thousands and millions. The first step in the data cleaning process was to replace these characters with numbers to create a numeric variable which calculations could be performed on. Once the data was of all the same type, the data was then pivoted to be in tidy form and the years of interest (1989 -- 2017) were selected. Once pivoted, the data sets were joined by year and country to produce a clean master data set which shall be used for model fitting, plotting, and analysis. A final decision was made to drop all the Na's in the master set due to a few reasons. The missing values typically occurred in the `Average Percent Renewable` variable across the earlier years measured and usually in countries with smaller populations. Whether these Na's were included in the data due to lack of observation or for simply not having any renewable energy production or consumption it is unclear. Because the averages are being studied and the Na's usually occured in smaller countries, there was still a large enough sample size to average over once those observations were dropped. Other forms of imputation were contemplated such as cell-mean imputation but not conducted due to fears of introducing bias to the data.
 
@@ -86,7 +89,6 @@ Linear regression, a method involving predicting the values of one variable, bas
 \n \n \n
 
 ```{r}
-
 datatable((head(master, n = 50)),
           caption = 'Interactive Preview of Data Set')
 ```
@@ -98,7 +100,7 @@ datatable((head(master, n = 50)),
 ```{r}
 #| output: false
 energy_emissions_model <- lm(`Average Emissions` ~ 
-                             `Average Percent Renewawable`,
+                             `Average Percent Renewable`,
                              data = master)
 summary(energy_emissions_model)
 tidy(energy_emissions_model)
@@ -117,7 +119,7 @@ Above is the simple linear regression equation based on the model predicting the
 #| fig-align: center
 # Plot 1
 raw_graph <- master |> 
-ggplot(aes(x = `Average Percent Renewawable`, 
+ggplot(aes(x = `Average Percent Renewable`, 
            y = `Average Emissions`)
        ) +
   geom_point() + 
@@ -139,28 +141,44 @@ The graph above demonstrates the relationship between `Average Emissions` and `A
 
 ```{r}
 #| fig-align: center
+co2_by_year_graph <- plot_ly(
+  master, 
+  x = ~ Year, 
+  y = ~ `Average Emissions`,
+  type = 'scatter',
+  marker = list(
+    color = 'red'))
 
-co2_by_year_graph <- master |>
-  ggplot(aes(x = Year , y = `Average Emissions`)) +
-  geom_point() +
-  scale_x_discrete(guide = guide_axis(n.dodge=2)) +
-  labs(x = "Year", 
-       y = "", 
-       title = "Average CO2 Emissions Over Time", 
-       subtitle = "Average CO2 Emissions (1000 tonnes)") +
-  theme(plot.title = element_text(hjust = 0.5, face = 'bold'))
+co2_by_year_graph <- co2_by_year_graph |>
+  layout(title = 'Average Emissions Over Time',
+         yaxis = list(
+           title = 'Average Emissions (1000 tons)',
+           titlefont = list(
+             size = 14),
+           xaxis = list(title = 'Year',
+                        titlefont = list(size = 14))))
 
-energy_by_year_graph <- master |>
-  ggplot(aes(x = Year, y = `Average Percent Renewawable`)) +
-  geom_point() +
-   scale_x_discrete(guide = guide_axis(n.dodge=2)) +
-    labs(x = "Year", 
-       y = "", 
-       title = "Average Percentage of Renewable Energy Over Time",
-       subtitle = "Average Renewable Energy Consumption (%)") +
-      theme(plot.title = element_text(hjust = 0.5, face = 'bold'))
+energy_by_year_graph <- plot_ly(
+  master, 
+  x = ~ Year, 
+  y = ~ `Average Percent Renewable`,
+  marker = list(
+    color = 'green'),
+  type = 'scatter')
 
-grid.arrange(co2_by_year_graph, energy_by_year_graph)
+energy_by_year_graph <- energy_by_year_graph |>
+  layout(title = 'Average Percent Renewable Over Time',
+         yaxis = list(
+           title = 'Average Percent Renewable',
+           titlefont = list(
+             size = 14)),
+         xaxis = list(
+           title = 'Year',
+           titlefont = list(size = 14)))
+
+
+co2_by_year_graph
+energy_by_year_graph
 ```
 
 As shown by the two distributions of `Average Emissions` and `Average Percent Renewable` over time, the relationship follows a negative relationship, but perhaps not as expected. `Average Percent Renewable` is decreasing over the years while `Average Emissions` is increasing which still illustrates a negative relationship. As time goes on it makes sense as to why `Average Emissions` is increasing, because of extreme population growth and growing demand for production but `Average Percent Renewable` has shockingly been declining in recent years. While this likely has something to due to the varying definition of renewable energy, for example whether or not nuclear energy is truly renewable, it is surprising that as technology develops renewable energy use does not. This signifies that humanity needs to increase the renewable energy production and usage on average in order to reduce the carbon footprint and preserve nature for future generations.
@@ -182,8 +200,6 @@ energy_emissions_model |>
 
 The proportion of variability in the response values that was accounted for by the model, $R^{2}$, was very large at about at about 89.93 percent. This suggests a good quality model, where a lot, about 89%, of the variation in the response, `Average Emissions` is explained by the explanatory variable, `Average Percent Renewable`. This suggests that a high proportion of variability in response is accounted for by the linear model and there are not many other large factors influencing emissions.
 
-
-
 ```{r}
 #| fig-align: center
 energy_emissions_model |> 
@@ -201,6 +217,21 @@ energy_emissions_model |>
 
 **Simulation:**
 
+Simulation is a critical technology to develop planning and explore models to optimized decisions making (de Paula Ferreira et al., 2020).
+
+In this part, we will perform a basic linear model simulation to see how well the model is with the presetting conditions, such as adding normally distributed error to the linear regression line.
+
+The basic procedure in this study is:
+
+1.  Make a linear regression fit model for the observed data (already done in the previous part).
+2.  Assume the model is right. Add generated error to the linear regression model (we generated normally distributed error for this study).
+3.  Getting the simulated data, and compare with the observed data (by generating value distribution graphs, scatterplots of the relationships modeled and observed, and y=x plot).
+4.  Check and interpret the simulated $R^2$ value.
+5.  Iterating and generating simulated data sets.
+6.  Check, interpret, and plot the simulated $R^2$ values for the simulated data sets.
+
+Simulation for a single data set:
+
 ```{r}
 noise <- function(x, mean = 0, sd){
   x + rnorm(length(x), 
@@ -216,13 +247,8 @@ master_sigma <- sigma(energy_emissions_model)
 sim_response <- tibble(sim_emissions = noise(master_predict, 
                                           sd = master_sigma))
 
-
-
-
-
-
 raw_graph <- master |> 
-ggplot(aes(x = `Average Percent Renewawable`, 
+ggplot(aes(x = `Average Percent Renewable`, 
            y = `Average Emissions`)
        ) +
   geom_point() + 
@@ -245,8 +271,10 @@ obs_emissions <- master |>
   geom_histogram(binwidth = 3000) +
   labs(x = "Observed Emissions",
        y = "",
-       subtitle = "Count") +
-  theme_bw()
+       subtitle = "Count",
+       title = "Worldwidely Yearly Emission Counts") +
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5, face = 'bold'))
 
 
 sim_emissions_graph <- sim_response |>
@@ -254,24 +282,30 @@ sim_emissions_graph <- sim_response |>
   geom_histogram(binwidth = 3500) +
   labs(x = "Simulated Emissions",
        y = "",
-       subtitle = "Count") +
-  theme_bw()
+       subtitle = "Count",
+       title = "Simulated Worldwidely Yearly Emission Counts") +
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5, face = 'bold'))
 
 obs_emissions + sim_emissions_graph
 
 ```
 
+We can see the differences between observed and simulated data from the distribution visualization. When we first look at the two graphs, they seem not quite similar. However, when we take a close look, the concentrated value ranges are similar.
+
+The left graph described the distribution of the observed yearly emissions data counts world widely. We can see that the most data are within $1.1\times10^6$ tonnes to $1.2\times10^6$ tonnes and $1.6\times10^6$ tonnes to $1.7\times10^6$ tonnes. The simulated yearly emissions data are also concentrated in a range of $1.1\times10^6$ tonnes to $1.2\times10^6$ tonnes and $1.5\times10^6$ tonnes to $1.7\times10^6$ tonnes.
+
 ```{r}
 sim_data <- master |> 
   filter(!is.na(`Average Emissions`), 
-         !is.na(`Average Percent Renewawable`)
+         !is.na(`Average Percent Renewable`)
          ) |> 
-  select(`Average Emissions`, `Average Percent Renewawable`) |> 
+  select(`Average Emissions`, `Average Percent Renewable`) |> 
   bind_cols(sim_response)
 
 
 raw_graph <- master |> 
-ggplot(aes(x = `Average Percent Renewawable`, 
+ggplot(aes(x = `Average Percent Renewable`, 
            y = `Average Emissions`)
        ) +
   geom_point() + 
@@ -284,19 +318,21 @@ ggplot(aes(x = `Average Percent Renewawable`,
   theme(plot.title.position = "plot")
 
 sim_master_graph <- sim_data |> 
-ggplot(aes(x = `Average Percent Renewawable`, 
+ggplot(aes(x = `Average Percent Renewable`, 
            y = sim_emissions)
        ) +
   geom_point() + 
   theme(legend.position = "none") +
   labs(x = " Avg Renewable energy consumption percentage", 
        y = "", 
-       title = "Simulated Relationships between Avg Renewable Energy Consumption and \nAvg CO2 Emissions among different contries", 
+       title = "Simulated Relationships between Avg Renewable Energy Consumption and \nAvg CO2 Emissions among different countries", 
        subtitle = "Simulated Avg CO2 Emissions/1000 tonnes") +
   theme(plot.title.position = "plot")
 
 raw_graph + sim_master_graph
 ```
+
+In these two graphs, we plotted the relationships between simulated/ observed average renewable energy consumption and average CO2 emissions among different countries. We can see the the simulated data in the right graph is more close to a straight line, which is the modeled linear regression line.
 
 ```{r}
 # Check the similarity between the simulated data and observed data
@@ -307,22 +343,33 @@ sim_data |>
   geom_point() + 
    labs(x = "Simulated Avg CO2 Emissions/1000 tonnes", 
         y = "",
+        title = "The Similarity between Observed Data and Simulated Data",
         subtitle = "Avg CO2 Emissions/1000 tonnes" ) + 
   geom_abline(slope = 1,
               intercept = 0, 
               color = "steelblue",
               linetype = "dashed",
               lwd = 1.5) +
-  theme_bw()
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5, face = 'bold'))
 ```
 
+In this graph, we can check the similarity between the data from observed data set and the simulated data set. Ideally, the data should fall on the blue dashed line, which is y=x line. The dots/ data above the blue line over estimated/ simulated. The dots/ data below the blue line is under estimated/ simulated. In this study, the observed data is more under estimated. Generally speaking, the dots are close to the y=x line. In this case, there is a strong relationship between the observed values and simulated values.
+
+p value
+
 ```{r}
-# check how the simulated data fit the observed data, especially the R square.
-lm(`Average Emissions` ~ sim_emissions, 
+# check how the simulated data fit the observed data, especially the P value and R square.
+p_value<-lm(`Average Emissions` ~ sim_emissions, 
    data = sim_data
    ) |> 
-  glance() 
+  glance() |>
+  select(p.value)|>
+  pull()
+p_value
 ```
+
+r square
 
 ```{r}
 # get the R squared for the simulated data fit for observed data.
@@ -335,6 +382,12 @@ sim_r2 <- lm(`Average Emissions` ~ sim_emissions,
 sim_r2
 ```
 
+p value is extremely small (p\<0.05), which indicates the data is statistically significant.
+
+$R^2$ is 0.803297, which means the simulated data can explain around 80% variation of the observed data. In this case, we suppose the one time simulation till now did a fairly good job.
+
+Simulation for a 1000 data sets:
+
 ```{r}
 # Created 1000 simulated dataset
 nsims <- 1000
@@ -343,28 +396,33 @@ sims <- map_dfc(.x = 1:nsims,
                                           sd = master_sigma)
                               )
                 )
-
-head(sims)
 ```
+
+Since the normally distributed error is randomly added to the linear regression model line. If we iterate for more times, the result will be more stable. In this way, we can get the entire group of interest, rather than a single sample of that group.
+
+In the following steps, we got 1000 simulated data sets and combined the observed data set to a new full data sets. Then, we also got the $R^2$ of 1000 simulated data sets and plotted the distribution of them.
 
 ```{r}
 # clean the colnames
 colnames(sims) <- colnames(sims) |> 
   str_replace(pattern = "\\.\\.\\.",
                   replace = "_")
-head(sims)
 ```
+
+Original Average Emission data with 1000 simulated datasets
 
 ```{r}
 # bind 1000 simulated dataset and the observed dataset together
 sims <- master |> 
   filter(!is.na(`Average Emissions`), 
-         !is.na(`Average Percent Renewawable`)) |> 
+         !is.na(`Average Percent Renewable`)) |> 
   select(`Average Emissions`) |> 
   bind_cols(sims)
 
 head(sims)
 ```
+
+R squared for 1000 simulated datasets.
 
 ```{r}
 # mapping to get 1000 simulated R squared.
@@ -376,6 +434,8 @@ sim_r_sq <- sims |>
 head(sim_r_sq)
 ```
 
+Simulated R squared distribution
+
 ```{r}
 # to see the distribution of the 1000 simulated R square.
 tibble(sims = sim_r_sq) |> 
@@ -383,14 +443,17 @@ tibble(sims = sim_r_sq) |>
   geom_histogram(binwidth = 0.025) +
   labs(x = expression("Simulated"~ R^2),
        y = "",
-       subtitle = "Number of Simulated Models")
+       subtitle = "Number of Simulated Models",
+       title = "1000 Simulated R-Squared Distribution")+
+  theme(plot.title = element_text(hjust = 0.5, face = 'bold'))
 #The distribution of these values will tell if our assumed model does a good job of producing data similar to what was observed. If the model produces data similar to what was observed, we would expect values near 1.
 # Our model is R square is around 0.8.
 ```
 
+We can see from the distribution of the 1000 simulated $R^2$ graph that the $R^2$ have the highest frequency around 0.8, which is in accordance with the single simulated data $R^2$.
 
 # References
 
-https://www.gapminder.org/data/
+1\. https://www.gapminder.org/data/ https://plotly.com/r/line-and-scatter/#custom-color-scales
 
-
+​2. de Paula Ferreira, W., Armellini, F., & De Santa-Eulalia, L. A. (2020). Simulation in industry 4.0: A state-of-the-art review. Computers & Industrial Engineering, 149, 106868. <https://doi.org/10.1016/J.CIE.2020.106868> 
