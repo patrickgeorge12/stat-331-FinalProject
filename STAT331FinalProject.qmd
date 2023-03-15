@@ -128,7 +128,7 @@ ggplot(aes(x = `Average Percent Renewable`,
   labs(x = " Average Renewable Energy Consumption (%)", 
        y = "", 
        title = "Relationship between Renewable Energy Usage and CO2 Emissions", 
-       subtitle = "Average CO2 Emissions (1000 tonnes)") +
+       subtitle = "Average CO2 Emissions/1000 tonnes") +
   theme(plot.title = element_text(hjust = 0.5, face = 'bold'),
         plot.subtitle = element_text(size = 10),
         axis.title.x = element_text(size = 10))
