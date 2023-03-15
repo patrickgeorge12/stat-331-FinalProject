@@ -219,11 +219,16 @@ energy_emissions_model |>
 
 Simulation is a critical technology to develop planning and explore models to optimized decisions making (de Paula Ferreira et al., 2020).
 
-In this part, we will perform a basic linear model simulation to see how well the model is with the presetting conditions, such as adding normally distributed error to the linear regression line. The basic procedure is:
+In this part, we will perform a basic linear model simulation to see how well the model is with the presetting conditions, such as adding normally distributed error to the linear regression line.
+
+The basic procedure in this study is:
 
 1.  Make a linear regression fit model for the observed data (already done in the previous part).
 2.  Assume the model is right. Add generated error to the linear regression model (we generated normally distributed error for this study).
-3.  Getting the simulated data, and compare with the observed data (by generating value distribution graphs, scatterplots of the relationships modeled and observed).
+3.  Getting the simulated data, and compare with the observed data (by generating value distribution graphs, scatterplots of the relationships modeled and observed, and y=x plot).
+4.  Check and interpret the simulated $R^2$ value.
+5.  Iterating and generating simulated data sets.
+6.  Check, interpret, and plot the simulated $R^2$ values for the simulated data sets.
 
 ```{r}
 noise <- function(x, mean = 0, sd){
