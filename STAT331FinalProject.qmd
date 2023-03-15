@@ -27,6 +27,7 @@ library(DT)
 library(kableExtra)
 library(gridExtra)
 library(patchwork)
+library(transformr)
 library(RColorBrewer)
 options(scipen = 99999)
 energy <- readxl::read_xlsx(here::here("renewable_energy.xlsx"))
@@ -143,32 +144,29 @@ ggplotly(raw_graph) |>
 
 
 ```
+\n \n
 
 The graph above demonstrates the relationship between `Average Emissions` and `Average Percent Renewable`. The distribution illustrates a negative linear relationship, where the points are relatively close to the plotted regression line with little deviation and noise. There are little to no unusual observations. This illustration is consistent with the hypothesis that as the `Average Percent Renewable` increases the `Average Emissions` decreases at a significant rate.
+\n
 
 ```{r}
-#| fig-align: center
 co2_by_year_graph <- master |>
   ggplot(aes(x = Year, y = `Average Emissions`)) +
   geom_point(color = 'red') +
   geom_line(color = 'red') +
   labs( y = '', 
         title = 'Average Emissions Over Time') 
-
-
 energy_by_year_graph <- master |>
   ggplot(aes(x = Year, y = `Average Percent Renewable`)) +
   geom_point(color = 'green') +
   geom_line(color = 'green') +
   labs( y = '', 
         title = 'Average Emissions Over Time') 
-
-
 ggplotly(co2_by_year_graph) |>
-  layout(title = list(text = paste0('Average Emissions Over Time',
+  layout(title = list(text = paste0('Average Emissions Over Time        ',
                                     '<br>',
                                     '<sup>',
-                                     'Average Emissions (1000 tons)',
+                                     'Average Emissions (1000 tons)           ',
                                     '</sup>')))
 ggplotly(energy_by_year_graph) |>
   layout(title = list(text = paste0('Average Percent Renewable Over Time',
@@ -177,7 +175,7 @@ ggplotly(energy_by_year_graph) |>
                                      'Average Renewable Energy Consumption (%)',
                                     '</sup>')))
 ```
-
+\n
 As shown by the two distributions of `Average Emissions` and `Average Percent Renewable` over time, the relationship follows a negative relationship, but perhaps not as expected. `Average Percent Renewable` is decreasing over the years while `Average Emissions` is increasing which still illustrates a negative relationship. As time goes on it makes sense as to why `Average Emissions` is increasing, because of extreme population growth and growing demand for production but `Average Percent Renewable` has shockingly been declining in recent years. While this likely has something to due to the varying definition of renewable energy, for example whether or not nuclear energy is truly renewable, it is surprising that as technology develops renewable energy use does not. This signifies that humanity needs to increase the renewable energy production and usage on average in order to reduce the carbon footprint and preserve nature for future generations.
 
 **Model Fit:**
