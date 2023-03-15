@@ -287,7 +287,7 @@ obs_emissions + sim_emissions_graph
 
 ```
 
-We can see the differences between observed and simulated data from distribution visualization. When we first look at the two graphs, they seem not quite similar. However, when we take a close look, the concentrated ranges are similar.
+We can see the differences between observed and simulated data from the distribution visualization. When we first look at the two graphs, they seem not quite similar. However, when we take a close look, the concentrated value ranges are similar.
 
 The left graph described the distribution of the observed yearly emissions data counts world widely. We can see that the most data are within 110000 tonnes to 120000 tonnes and 160000 tonnes to 170000 tonnes. The simulated yearly emissions data are also concentrated in a range of 110000 tonnes to 120000 tonnes and 150000 tonnes to 170000 tonnes.
 
@@ -321,12 +321,14 @@ ggplot(aes(x = `Average Percent Renewable`,
   theme(legend.position = "none") +
   labs(x = " Avg Renewable energy consumption percentage", 
        y = "", 
-       title = "Simulated Relationships between Avg Renewable Energy Consumption and \nAvg CO2 Emissions among different contries", 
+       title = "Simulated Relationships between Avg Renewable Energy Consumption and \nAvg CO2 Emissions among different countries", 
        subtitle = "Simulated Avg CO2 Emissions/1000 tonnes") +
   theme(plot.title.position = "plot")
 
 raw_graph + sim_master_graph
 ```
+
+In these two graphs, we plotted the relationships between simulated/ observed average renewable energy consumption and average CO2 emissions among different countries. We can see the the simulated data in the right graph is more close to a straight line, which is the modeled linear regression line.
 
 ```{r}
 # Check the similarity between the simulated data and observed data
