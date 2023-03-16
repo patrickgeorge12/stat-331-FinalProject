@@ -122,8 +122,8 @@ raw_graph <- master |>
   ggplot(aes(x = `Average Percent Renewable`, 
             y = `Average Emissions`)
        ) +
-  geom_point() + 
-  geom_smooth(method = "lm") +
+  geom_point(color = 'aquamarine4', size = 0.9) + 
+  geom_smooth(method = "lm", color = 'lightgoldenrod4', size = 0.5) +
   theme(legend.position = "none") +
   labs(x = " Average Renewable Energy Consumption (%)", 
        y = "", 
@@ -142,21 +142,19 @@ ggplotly(raw_graph) |>
 
 ```
 
-\n \n
-
-The graph above demonstrates the relationship between `Average Emissions` and `Average Percent Renewable`. The distribution illustrates a negative linear relationship, where the points are relatively close to the plotted regression line with little deviation and noise. There are little to no unusual observations. This illustration is consistent with the hypothesis that as the `Average Percent Renewable` increases the `Average Emissions` decreases at a significant rate. \n
+\n \n The graph above demonstrates the relationship between `Average Emissions` and `Average Percent Renewable`. The distribution illustrates a negative linear relationship, where the points are relatively close to the plotted regression line with little deviation and noise. There are little to no unusual observations. This illustration is consistent with the hypothesis that as the `Average Percent Renewable` increases the `Average Emissions` decreases at a significant rate. \n
 
 ```{r}
 co2_by_year_graph <- master |>
   ggplot(aes(x = Year, y = `Average Emissions`)) +
-  geom_point(color = 'red') +
-  geom_line(color = 'red') +
+  geom_point(color = 'firebrick') +
+  geom_line(color = 'firebrick') +
   labs( y = '', 
         title = 'Average Emissions Over Time') 
 energy_by_year_graph <- master |>
   ggplot(aes(x = Year, y = `Average Percent Renewable`)) +
-  geom_point(color = 'green') +
-  geom_line(color = 'green') +
+  geom_point(color = 'green4') +
+  geom_line(color = 'green4') +
   labs( y = '', 
         title = 'Average Emissions Over Time') 
 ggplotly(co2_by_year_graph) |>
@@ -196,15 +194,35 @@ The proportion of variability in the response values that was accounted for by t
 
 ```{r}
 #| fig-align: center
-energy_emissions_model |> 
-  augment() |> 
-  ggplot(aes(x=.fitted, y = .resid)) +
-  geom_point() +
+
+residuals <- energy_emissions_model |>
+  augment() |>
+  rename(Residual = .resid,
+         Fitted = .fitted) |>
+  mutate(`Residual Sign` = ifelse(Residual > 0 , 1, 0))
+
+
+residual_plot <- residuals |>
+  ggplot(aes(x = Fitted , y = Residual, color = Residual >0)) +
+  geom_point(show.legend = FALSE) +
+  scale_colour_manual(values = 
+                        setNames(c('darkslategray4','darkolivegreen4'),
+                                 c(T, F))) +
+  geom_hline(yintercept=0, 
+             linetype='dotted', 
+             color = 'deeppink3', show.legend = FALSE) +
   labs(y = '',
-       subtitle = 'Residuals',
        x = 'Fitted Values',
        title = 'Relationship between Residual and Fitted Values') +
-  theme(plot.title = element_text(hjust = 0.5, face = 'bold'))
+  theme(legend.position="none")
+
+
+ggplotly(residual_plot) |>
+  layout(title = list(text = paste0('Relationship between Residual and Fitted Values',
+                                    '<br>',
+                                    '<sup>',
+                                     'Residuals',
+                                    '</sup>')))
 ```
 
 We can see from the relationship between residual and fitted values graph that, the linearity is violated in the range of $1.0\times10^8$ to $1.4\times10^8$ (equal variance). This is because in the range of $1.0\times10^8$ to $1.2\times10^8$, the observed data is over the estimated linear regression line, which render only positive residues. And in the range of $1.2\times10^8$ to $1.4\times10^8$, the observed data is below the linear regression line, which render only negative residues. In the range of $1.4\times10^8$ to $1.6\times10^8$, the linearity is not violated, which means this range of data might fit the linear regression model better.
