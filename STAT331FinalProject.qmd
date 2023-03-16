@@ -8,6 +8,7 @@ format:
     toc: true
     number-sections: true
     code-fold: true
+    theme: journal
 editor: source
 execute: 
   error: true
@@ -25,7 +26,6 @@ library(DT)
 library(kableExtra)
 library(gridExtra)
 library(patchwork)
-library(RColorBrewer)
 options(scipen = 99999)
 energy <- readxl::read_xlsx(here::here("renewable_energy.xlsx"))
 co2 <- readxl::read_xlsx(here::here("co2.xlsx"))
@@ -86,14 +86,14 @@ Before analysis, the data had to be properly cleaned and wrangled. The CO2 data 
 
 Linear regression, a method involving predicting the values of one variable, based on another, through producing a straight line minimizing the value for the sum of squared residuals, was used to create and predict a model. All the data cleaning, models, and subsequent analysis was conducted using R code.
 
-\n \n \n
+\
 
 ```{r}
 datatable((head(master, n = 50)),
           caption = 'Interactive Preview of Data Set')
 ```
 
-\n
+\
 
 # Analysis and Discussion of Model
 
@@ -113,7 +113,7 @@ $$ \hat{y} = 693309.6 - 17770.2 * Average\,Percent\,Renewable $$
 
 Above is the simple linear regression equation based on the model predicting the response variable, `Average Emissions` ($\hat{y}$), by the explanatory variable, `Average Percent Renewable`. The coefficient on `Average Percent Renewable` is extremely negative sitting at -17770.2 meaning that for each one percent increase in the `Average Percent Renewable` energy used the average amount of CO2 emissions in thousands of tons decreases by 17770.2. The slope coefficient of 693309.6 means that when the `Average Percent Renewable` is zero such that there is no renewable energy being used at all on average, the predicted `Average Emissions` would be 693309.6 thousand tons.
 
-\n
+\
 
 ```{r}
 #| fig-align: center
@@ -123,7 +123,10 @@ raw_graph <- master |>
             y = `Average Emissions`)
        ) +
   geom_point(color = 'aquamarine4', size = 0.9) + 
-  geom_smooth(method = "lm", color = 'lightgoldenrod4', size = 0.5) +
+  geom_smooth(method = "lm", 
+              color = 'lightgoldenrod4', 
+              size = 0.5,
+              se = FALSE) +
   theme(legend.position = "none") +
   labs(x = " Average Renewable Energy Consumption (%)", 
        y = "", 
@@ -142,7 +145,9 @@ ggplotly(raw_graph) |>
 
 ```
 
-\n \n The graph above demonstrates the relationship between `Average Emissions` and `Average Percent Renewable`. The distribution illustrates a negative linear relationship, where the points are relatively close to the plotted regression line with little deviation and noise. There are little to no unusual observations. This illustration is consistent with the hypothesis that as the `Average Percent Renewable` increases the `Average Emissions` decreases at a significant rate. \n
+\
+The graph above demonstrates the relationship between `Average Emissions` and `Average Percent Renewable`. The distribution illustrates a negative linear relationship, where the points are relatively close to the plotted regression line with little deviation and noise. There are little to no unusual observations. This illustration is consistent with the hypothesis that as the `Average Percent Renewable` increases the `Average Emissions` decreases at a significant rate. 
+\
 
 ```{r}
 co2_by_year_graph <- master |>
@@ -171,7 +176,7 @@ ggplotly(energy_by_year_graph) |>
                                     '</sup>')))
 ```
 
-\n
+\
 
 As shown by the two distributions of `Average Emissions` and `Average Percent Renewable` over time, the relationship follows a negative relationship, but perhaps not as expected. `Average Percent Renewable` is decreasing over the years while `Average Emissions` is increasing which still illustrates a negative relationship. As time goes on it makes sense as to why `Average Emissions` is increasing, because of extreme population growth and growing demand for production but `Average Percent Renewable` has shockingly been declining in recent years. While this likely has something to due to the varying definition of renewable energy, for example whether or not nuclear energy is truly renewable, it is surprising that as technology develops renewable energy use does not. This signifies that humanity needs to increase the renewable energy production and usage on average in order to reduce the carbon footprint and preserve nature for future generations.
 
@@ -195,15 +200,14 @@ The proportion of variability in the response values that was accounted for by t
 ```{r}
 #| fig-align: center
 
-residuals <- energy_emissions_model |>
+model_stats <- energy_emissions_model |>
   augment() |>
   rename(Residual = .resid,
-         Fitted = .fitted) |>
-  mutate(`Residual Sign` = ifelse(Residual > 0 , 1, 0))
+         Fitted = .fitted) 
 
 
-residual_plot <- residuals |>
-  ggplot(aes(x = Fitted , y = Residual, color = Residual >0)) +
+residual_plot <- model_stats |>
+  ggplot(aes(x = Fitted , y = Residual, color = Residual  >0)) +
   geom_point(show.legend = FALSE) +
   scale_colour_manual(values = 
                         setNames(c('darkslategray4','darkolivegreen4'),
@@ -227,15 +231,14 @@ ggplotly(residual_plot) |>
 
 We can see from the relationship between residual and fitted values graph that, the linearity is violated in the range of $1.0\times10^8$ to $1.4\times10^8$ (equal variance). This is because in the range of $1.0\times10^8$ to $1.2\times10^8$, the observed data is over the estimated linear regression line, which render only positive residues. And in the range of $1.2\times10^8$ to $1.4\times10^8$, the observed data is below the linear regression line, which render only negative residues. In the range of $1.4\times10^8$ to $1.6\times10^8$, the linearity is not violated, which means this range of data might fit the linear regression model better.
 
-\n
+\
 
-**Simulation:**
+## Simulation
 
 Simulation is a critical technology used to develop planning and explore models to optimize decision making within the world of data science (de Paula Ferreira et al., 2020).
 
 In this section, we performed a basic linear model simulation to determine how well it fits with the presetting conditions, such as adding normally distributed error to the regression line.
 
-\
 The basic procedure for simulation is to:
 
 1.  Train a linear regression fit model for the observed data.
@@ -245,42 +248,22 @@ The basic procedure for simulation is to:
 5.  Iterate and generate additional simulated data sets.
 6.  Check, interpret, and plot the simulated $R^2$ values for the simulated data sets.
 
-Simulation for a single data set:
+**Simulation for a single data set:**
 
 ```{r}
+#| fig-align: center
+
 noise <- function(x, mean = 0, sd){
   x + rnorm(length(x), 
             mean, 
             sd)
 }
-```
-
-```{r}
 master_predict <- predict(energy_emissions_model)
 master_sigma <- sigma(energy_emissions_model)
 
 sim_response <- tibble(sim_emissions = noise(master_predict, 
                                           sd = master_sigma))
 
-raw_graph <- master |> 
-ggplot(aes(x = `Average Percent Renewable`, 
-           y = `Average Emissions`)
-       ) +
-  geom_point() + 
-  geom_smooth(method = "lm") +
-  theme(legend.position = "none") +
-  labs(x = " Avg Renewable energy consumption percentage", 
-       y = "", 
-       title = "Relationships between Avg Renewable Energy Consumption and \nAvg CO2 Emissions among different contries", 
-       subtitle = "Avg CO2 Emissions/1000 tonnes") +
-  theme(plot.title.position = "plot")
-
-
-
-
-```
-
-```{r}
 obs_emissions <- master |>
   ggplot(aes(x = `Average Emissions`)) +
   geom_histogram(binwidth = 3000) +
@@ -312,6 +295,7 @@ We can identify the differences between observed and simulated data from the dis
 The left graph displays the distribution of observed average emissions over the years from 29 different countries. We can see that most of the values fall within the intervals of $1.1\times10^8$ tons to $1.2\times10^8$ tons and $1.6\times10^8$ tons to $1.7\times10^8$ tons. The simulated yearly average emissions are also concentrated in a range of $1.1\times10^8$ tons to $1.2\times10^8$ tons and $1.5\times10^8$ tons to $1.7\times10^8$ tons.
 
 ```{r}
+#| fig-align: center
 sim_data <- master |> 
   filter(!is.na(`Average Emissions`), 
          !is.na(`Average Percent Renewable`)
@@ -356,6 +340,7 @@ raw_graph + sim_master_graph
 In these two graphs, we plotted the relationships between the simulated and observed, average renewable energy consumption and average CO2 emissions among different countries. We can recognize that the simulated data in the right graph is more closely related to a straight line, which is the modeled linear regression line. 
 
 ```{r}
+#| fig-align: center
 # Check the similarity between the simulated data and observed data
 sim_data |> 
   ggplot(aes(x = sim_emissions, 
@@ -377,39 +362,44 @@ sim_data |>
 
 In this graph, we can examine the similarity between the observed data set and the simulated data set. Ideally, the data should fall on the blue dashed line, which represents the y=x line. The points above the blue line represent an overestimated simulation, while the points below the line indicate an underestimated simulation. Following an analysis of this study, we can determine that the observed data is typically underestimated. Generally speaking, the simulated values are distributed close to the y=x line, meaning that there is a strong relationship between the observed values and simulated values.
 
-p value
-
 ```{r}
-# check how the simulated data fit the observed data, especially the P value and R square.
-p_value<-lm(`Average Emissions` ~ sim_emissions, 
+# get the R squared for the simulated data fit for observed data.
+p_value <- lm(`Average Emissions` ~ sim_emissions, 
    data = sim_data
    ) |> 
   glance() |>
-  select(p.value)|>
+  select(p.value) |>
   pull()
-p_value
-```
 
-r square
-
-```{r}
-# get the R squared for the simulated data fit for observed data.
 sim_r2 <- lm(`Average Emissions` ~ sim_emissions, 
              data = sim_data
              ) |> 
   glance() |> 
   select(r.squared) |> 
   pull()
-sim_r2
+
+simulated_stats <- tibble(p_value, sim_r2) |>
+  rename(`P - Value` = p_value,
+         `Simulated R Squared` = sim_r2)
+
+
+simulated_stats |>
+  kable(caption = 'Simulated R Squared and P-Value', digits = 10) |>
+  kable_styling(bootstrap_options = c('striped', 'bordered'))
 ```
 
-p value is extremely small (p\<0.05), which indicates the data is statistically significant.
+The P - value is extremely small (p\<0.05), which indicates the data is statistically significant.
 
-$R^2$ is 0.803297, which means the simulated data can explain around 80% variation of the observed data. In this case, we suppose that the one time simulation till now did a moderately good job.
+$R^2$ is 0.7618452, which means the simulated data can explain around 76% of the variation in observed data. In this case, we suppose that the one time simulation till now did a moderately good job.
 
-Simulation for a 1000 data sets:
+**Simulation for a 1000 data sets:**
+
+Since the normally distributed error is randomly added to the linear regression model line, if we iterate the simulation many times, the result will be far more stable. With this method, we can get the entire group of interest, rather than a single sample of that group.
+
+In the following steps, we created 1000 simulated data sets and combined the observed data set into a full new data set. Next, we also determined the $R^2$ of the 1000 simulated data sets and plotted their distribution.
 
 ```{r}
+#| fig-align: center
 # Created 1000 simulated dataset
 nsims <- 1000
 sims <- map_dfc(.x = 1:nsims,
@@ -417,47 +407,25 @@ sims <- map_dfc(.x = 1:nsims,
                                           sd = master_sigma)
                               )
                 )
-```
 
-Since the normally distributed error is randomly added to the linear regression model line, if we iterate the simulation many times, the result will be far more stable. With this method, we can get the entire group of interest, rather than a single sample of that group.
-
-In the following steps, we created 1000 simulated data sets and combined the observed data set into a full new data set. Next, we also determined the $R^2$ of the 1000 simulated data sets and plotted their distribution.
-
-```{r}
 # clean the colnames
 colnames(sims) <- colnames(sims) |> 
   str_replace(pattern = "\\.\\.\\.",
                   replace = "_")
-```
 
-Original Average Emission data with 1000 simulated datasets
-
-```{r}
-# bind 1000 simulated dataset and the observed dataset together
 sims <- master |> 
   filter(!is.na(`Average Emissions`), 
          !is.na(`Average Percent Renewable`)) |> 
   select(`Average Emissions`) |> 
   bind_cols(sims)
 
-head(sims)
-```
 
-R squared for 1000 simulated datasets.
-
-```{r}
 # mapping to get 1000 simulated R squared.
 sim_r_sq <- sims |> 
   map(~ lm(`Average Emissions` ~ .x, data = sims)) |> 
   map(glance) |> 
   map_dbl(~ .x$r.squared)
 
-head(sim_r_sq)
-```
-
-Simulated R squared distribution
-
-```{r}
 # to see the distribution of the 1000 simulated R square.
 tibble(sims = sim_r_sq) |> 
   ggplot(aes(x = sims)) + 
@@ -467,11 +435,14 @@ tibble(sims = sim_r_sq) |>
        subtitle = "Number of Simulated Models",
        title = "1000 Simulated R-Squared Distribution")+
   theme(plot.title = element_text(hjust = 0.5, face = 'bold'))
+
 #The distribution of these values will tell if our assumed model does a good job of producing data similar to what was observed. If the model produces data similar to what was observed, we would expect values near 1.
 # Our model is R square is around 0.8.
 ```
 
 We can see from the distribution of the 1000 simulated $R^2$ graph that the $R^2$ have the highest frequency around 0.8, which is in accordance with the single simulated data $R^2$.
+
+# Conclusion
 
 # References
 
