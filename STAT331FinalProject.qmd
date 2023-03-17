@@ -457,7 +457,7 @@ We urge every country to prioritize and help solve this global crisis putting th
 
  1. Gapminder. (2019). *Data*. Gapminder.org; Gapminder. https://www.gapminder.org/data/
 
-2.  https://plotly.com/r/line-and-scatter/#custom-color-scales
+2.  *Scatter and Line Plots in R*. (n.d.). Plotly.com. Retrieved March 17, 2023, from https://plotly.com/r/line-and-scatter/#custom-color-scales
 3.  https://datascott.com/blog/subtitles-with-ggplotly/
 4.  https://statisticsglobe.com/ggplotly-function-r#:\~:text=In%20this%20one%2C%20you%E2%80%99ll%20learn%20how%20to%20use,Graph%20to%20Interactive%20plotly%20Graph%20%28Line%20Plot%20Example%29
 5.  de Paula Ferreira, W., Armellini, F., & De Santa-Eulalia, L. A. (2020). Simulation in industry 4.0: A state-of-the-art review. Computers & Industrial Engineering, 149, 106868. <https://doi.org/10.1016/J.CIE.2020.106868> 
