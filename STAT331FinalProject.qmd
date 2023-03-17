@@ -228,6 +228,7 @@ ggplotly(residual_plot) |>
                                     '</sup>')))
 ```
 
+
 We can see from the relationship between residual and fitted values graph that, the linearity is violated in the range of $1.0\times10^8$ to $1.4\times10^8$ (equal variance). This is because in the range of $1.0\times10^8$ to $1.2\times10^8$, the observed data is over the estimated linear regression line, which render only positive residues. And in the range of $1.2\times10^8$ to $1.4\times10^8$, the observed data is below the linear regression line, which render only negative residues. In the range of $1.4\times10^8$ to $1.6\times10^8$, the linearity is not violated, which means this range of data might fit the linear regression model better.
 
 \
