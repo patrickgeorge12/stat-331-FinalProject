@@ -448,7 +448,7 @@ We can see from the distribution of the 1000 simulated $R^2$ graph that the $R^2
 ![](https://earthobservatory.nasa.gov/ContentWOC/images/globaltemp/global_gis_2022_chart.png)
 \
 
-While the Earth may seem prosperous to us today, there is only a finite amount of resources, and life, on the planet and the human population just hit 8 billion. Global temperature continue to increase threatening many living organisms. Protecting humanity's environment should be number one priority and thought of with every decision made. Energy use, as well CO2 emissions, is also on the rise while the amount of renewable energy the world is using is decreasing. 
+While the Earth may seem prosperous to us today, there is only a finite amount of resources, and life, on the planet and the human population just hit 8 billion. Global temperatures continue to increase threatening life and habit for many living organisms. Protecting humanity's environment should be society's number one priority and thought of with every decision made. Energy use, as well CO2 emissions, is also on the rise while the amount of renewable energy the world is using is decreasing. 
 
 
 Through analyzing this data set it is clear there is strong, statistically significant effect of using renewable energy on the decreasing the amount of CO2 emitted into the atmosphere yet humanity is using less, moving in the wrong direction. 
