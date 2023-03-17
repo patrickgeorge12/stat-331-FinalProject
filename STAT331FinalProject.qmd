@@ -82,7 +82,7 @@ Climate change is a global challenge jeopardizing humanity's future. This purpos
 
 The master data to be used for analysis in this project incorporates the averages for all countries over the years from two different data sets, one measuring the total carbon dioxide emissions, per country over the years and the other measuring the proportion of energy use classified as renewable per country over the years. The data sets were sourced from an online database titled *Gapminder* which has been a reliable provider of data since 2005, in hopes of promoting global sustainability through easily accessible information.
 
-Before analysis, the data had to be properly cleaned and wrangled. The CO2 data set contained values in the form of 25.3k and 4.9M, signaling the units of thousands and millions. The first step in the data cleaning process was to replace these characters with numbers to create a numeric variable which calculations could be performed on. Once the data was of all the same type, the data was then pivoted to be in tidy form and the years of interest (1989 -- 2017) were selected. Once pivoted, the data sets were joined by year and country to produce a clean master data set which shall be used for model fitting, plotting, and analysis. A final decision was made to drop all the Na's in the master set due to a few reasons. The missing values typically occurred in the `Average Percent Renewable` variable across the earlier years measured and usually in countries with smaller populations. Whether these Na's were included in the data due to lack of observation or for simply not having any renewable energy production or consumption it is unclear. Because the averages are being studied and the Na's usually occured in smaller countries, there was still a large enough sample size to average over once those observations were dropped. Other forms of imputation were contemplated such as cell-mean imputation but not conducted due to fears of introducing bias to the data.
+Before analysis, the data had to be properly cleaned and wrangled. The CO~2~ data set contained values in the form of 25.3k and 4.9M, signaling the units of thousands and millions. The first step in the data cleaning process was to replace these characters with numbers to create a numeric variable which calculations could be performed on. Once the data was of all the same type, the data was then pivoted to be in tidy form and the years of interest (1989 -- 2017) were selected. Once pivoted, the data sets were joined by year and country to produce a clean master data set which shall be used for model fitting, plotting, and analysis. A final decision was made to drop all the Na's in the master set due to a few reasons. The missing values typically occurred in the `Average Percent Renewable` variable across the earlier years measured and usually in countries with smaller populations. Whether these Na's were included in the data due to lack of observation or for simply not having any renewable energy production or consumption it is unclear. Because the averages are being studied and the Na's usually occured in smaller countries, there was still a large enough sample size to average over once those observations were dropped. Other forms of imputation were contemplated such as cell-mean imputation but not conducted due to fears of introducing bias to the data.
 
 Linear regression, a method involving predicting the values of one variable, based on another, through producing a straight line minimizing the value for the sum of squared residuals, was used to create and predict a model. All the data cleaning, models, and subsequent analysis was conducted using R code.
 
@@ -111,7 +111,7 @@ tidy(energy_emissions_model)
 
 $$ \hat{y} = 693309.6 - 17770.2 * Average\,Percent\,Renewable $$
 
-Above is the simple linear regression equation based on the model predicting the response variable, `Average Emissions` ($\hat{y}$), by the explanatory variable, `Average Percent Renewable`. The coefficient on `Average Percent Renewable` is extremely negative sitting at -17770.2 meaning that for each one percent increase in the `Average Percent Renewable` energy used the average amount of CO2 emissions in thousands of tons decreases by 17770.2. The slope coefficient on the y-intercept of 693309.6 means that when the `Average Percent Renewable` is zero such that there is no renewable energy being used at all on average, the predicted `Average Emissions` would be 693309.6 thousand tons.
+Above is the simple linear regression equation based on the model predicting the response variable, `Average Emissions` ($\hat{y}$), by the explanatory variable, `Average Percent Renewable`. The coefficient on `Average Percent Renewable` is extremely negative sitting at -17770.2 meaning that for each one percent increase in the `Average Percent Renewable` energy used the average amount of CO~2~ emissions in thousands of tons decreases by 17770.2. The slope coefficient on the y-intercept of 693309.6 means that when the `Average Percent Renewable` is zero such that there is no renewable energy being used at all on average, the predicted `Average Emissions` would be 693309.6 thousand tons.
 
 \
 
@@ -338,7 +338,7 @@ ggplot(aes(x = `Average Percent Renewable`,
 raw_graph + sim_master_graph
 ```
 
-In these two graphs, we plotted the relationships between the simulated and observed, average renewable energy consumption and average CO2 emissions among different countries. We can recognize that the simulated data in the right graph is more closely related to a straight line, which is the modeled linear regression line.
+In these two graphs, we plotted the relationships between the simulated and observed, average renewable energy consumption and average CO~2~ emissions among different countries. We can recognize that the simulated data in the right graph is more closely related to a straight line, which is the modeled linear regression line.
 
 ```{r}
 #| fig-align: center
@@ -389,7 +389,7 @@ simulated_stats |>
   kable_styling(bootstrap_options = c('striped', 'bordered'))
 ```
 
-The P - value is `r p_value`, and it is extremely small (p\<0.05), which indicates the data is statistically significant.
+The p value is `r p_value`, and it is extremely small (p\<0.05), which indicates the data is statistically significant.
 
 $R^2$ is `r sim_r2`, which means the simulated data can explain around `r sim_r2` of the variation in observed data. In this case, we suppose that the one time simulation till now did a moderately good job.
 
@@ -449,9 +449,9 @@ We can see from the distribution of the 1000 simulated $R^2$ graph that the $R^2
 
 ![](https://earthobservatory.nasa.gov/ContentWOC/images/globaltemp/global_gis_2022_chart.png)\
 
-While the Earth may seem prosperous to us today, there is only a finite amount of resources, and life, on the planet and the human population just hit 8 billion. Global temperatures continue to increase threatening life and habit for many living organisms. Protecting humanity's environment should be society's number one priority and thought of with every decision made. Energy use, as well CO2 emissions, is also on the rise while the amount of renewable energy the world is using is decreasing.
+While the Earth may seem prosperous to us today, there is only a finite amount of resources, and life, on the planet and the human population just hit 8 billion. Global temperatures continue to increase threatening life and habit for many living organisms. Protecting humanity's environment should be society's number one priority and thought of with every decision made. Energy use, as well CO~2~ emissions, is also on the rise while the amount of renewable energy the world is using is decreasing.
 
-Through analyzing this data set it is clear there is strong, statistically significant effect of using renewable energy on the decreasing the amount of CO2 emitted into the atmosphere yet humanity is using less, moving in the wrong direction.
+Through analyzing this data set it is clear there is strong, statistically significant effect of using renewable energy on the decreasing the amount of CO~2~ emitted into the atmosphere yet humanity is using less, moving in the wrong direction.
 
 We urge every country to prioritize and help solve this global crisis putting the Earth at risk.
 
