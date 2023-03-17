@@ -387,7 +387,7 @@ simulated_stats |>
   kable_styling(bootstrap_options = c('striped', 'bordered'))
 ```
 
-The P - value is `r p_value`is extremely small (p\<0.05), which indicates the data is statistically significant.
+The P - value is `r p_value`, and it is extremely small (p\<0.05), which indicates the data is statistically significant.
 
 $R^2$ is `r sim_r2`, which means the simulated data can explain around `r sim_r2` of the variation in observed data. In this case, we suppose that the one time simulation till now did a moderately good job.
 
