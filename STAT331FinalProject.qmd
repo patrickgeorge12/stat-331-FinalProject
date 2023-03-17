@@ -439,7 +439,7 @@ tibble(sims = sim_r_sq) |>
 # Our model is R square is around 0.8.
 ```
 
-We can see from the distribution of the 1000 simulated $R^2$ graph that the $R^2$ have the highest frequency around 0.8, which is in accordance with the single simulated data $R^2$.
+We can see from the distribution of the 1000 simulated $R^2$ graph that the $R^2$ have the highest frequency around 0.8 to 0.85, which is in accordance with the single simulated data $R^2$.
 
 # Conclusion
 
