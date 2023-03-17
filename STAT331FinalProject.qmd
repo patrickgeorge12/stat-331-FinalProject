@@ -111,7 +111,7 @@ tidy(energy_emissions_model)
 
 $$ \hat{y} = 693309.6 - 17770.2 * Average\,Percent\,Renewable $$
 
-Above is the simple linear regression equation based on the model predicting the response variable, `Average Emissions` ($\hat{y}$), by the explanatory variable, `Average Percent Renewable`. The coefficient on `Average Percent Renewable` is extremely negative sitting at -17770.2 meaning that for each one percent increase in the `Average Percent Renewable` energy used the average amount of CO2 emissions in thousands of tons decreases by 17770.2. The slope coefficient of 693309.6 means that when the `Average Percent Renewable` is zero such that there is no renewable energy being used at all on average, the predicted `Average Emissions` would be 693309.6 thousand tons.
+Above is the simple linear regression equation based on the model predicting the response variable, `Average Emissions` ($\hat{y}$), by the explanatory variable, `Average Percent Renewable`. The coefficient on `Average Percent Renewable` is extremely negative sitting at -17770.2 meaning that for each one percent increase in the `Average Percent Renewable` energy used the average amount of CO2 emissions in thousands of tons decreases by 17770.2. The slope coefficient on the y-intercept of 693309.6 means that when the `Average Percent Renewable` is zero such that there is no renewable energy being used at all on average, the predicted `Average Emissions` would be 693309.6 thousand tons.
 
 \
 
