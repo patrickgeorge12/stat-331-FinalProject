@@ -189,7 +189,7 @@ energy_emissions_model |>
             `Variance of Residuals` = var(.resid),
             `Variance of Average CO2 Emissions` = var(`Average Emissions`)) |>
   kable(caption = 'Model Fit',
-        digits = 3,
+        digits = 10,
         format.args = list(big.mark = ",")) |>
   kable_styling(bootstrap_options = c('striped', 'bordered'))
 
@@ -266,7 +266,7 @@ sim_response <- tibble(sim_emissions = noise(master_predict,
 
 obs_emissions <- master |>
   ggplot(aes(x = `Average Emissions`)) +
-  geom_histogram(binwidth = 3000) +
+  geom_histogram(binwidth = 3000, fill = 'lightsteelblue4') +
   labs(x = "Observed Emissions/1000 tonnes",
        y = "",
        subtitle = "Count",
@@ -277,7 +277,7 @@ obs_emissions <- master |>
 
 sim_emissions_graph <- sim_response |>
   ggplot(aes(x = sim_emissions)) +
-  geom_histogram(binwidth = 3500) +
+  geom_histogram(binwidth = 3500, fill = 'lightsteelblue4') +
   labs(x = "Simulated Emissions/1000 tonnes",
        y = "",
        subtitle = "Count",
@@ -308,7 +308,7 @@ raw_graph <- master |>
 ggplot(aes(x = `Average Percent Renewable`, 
            y = `Average Emissions`)
        ) +
-  geom_point() + 
+  geom_point(color = 'lightsalmon3') + 
 
   theme(legend.position = "none") +
   labs(x = " Avg Renewable energy consumption %", 
@@ -323,7 +323,7 @@ sim_master_graph <- sim_data |>
 ggplot(aes(x = `Average Percent Renewable`, 
            y = sim_emissions)
        ) +
-  geom_point() + 
+  geom_point(color = 'lightsalmon3') + 
   theme(legend.position = "none") +
   labs(x = " Avg Renewable energy consumption %", 
        y = "", 
@@ -346,7 +346,7 @@ sim_data |>
   ggplot(aes(x = sim_emissions, 
              y = `Average Emissions`)
          ) + 
-  geom_point() + 
+  geom_point(color = 'darkolivegreen') + 
    labs(x = "Simulated Avg CO2 Emissions/1000 tonnes", 
         y = "",
         title = "The Similarity between Observed Data and Simulated Data",
@@ -429,7 +429,7 @@ sim_r_sq <- sims |>
 # to see the distribution of the 1000 simulated R square.
 tibble(sims = sim_r_sq) |> 
   ggplot(aes(x = sims)) + 
-  geom_histogram(binwidth = 0.025) +
+  geom_histogram(binwidth = 0.025, fill = 'lightpink3') +
   labs(x = expression("Simulated"~ R^2),
        y = "",
        subtitle = "Number of Simulated Models",
@@ -443,9 +443,21 @@ tibble(sims = sim_r_sq) |>
 We can see from the distribution of the 1000 simulated $R^2$ graph that the $R^2$ have the highest frequency around 0.8, which is in accordance with the single simulated data $R^2$.
 
 # Conclusion
+\
+
+![](https://earthobservatory.nasa.gov/ContentWOC/images/globaltemp/global_gis_2022_chart.png)
+\
+
+While the Earth may seem prosperous to us today, there is only a finite amount of resources, and life, on the planet and the human population just hit 8 billion. Global temperature continue to increase threatening many living organisms. Protecting humanity's environment should be number one priority and thought of with every decision made. Energy use, as well CO2 emissions, is also on the rise while the amount of renewable energy the world is using is decreasing. 
+
+
+Through analyzing this data set it is clear there is strong, statistically significant effect of using renewable energy on the decreasing the amount of CO2 emitted into the atmosphere yet humanity is using less, moving in the wrong direction. 
+
+We urge every country to prioritize and help solve this global crisis putting the Earth at risk. 
 
 # References
 
-1 https://www.gapminder.org/data/ https://plotly.com/r/line-and-scatter/#custom-color-scales https://datascott.com/blog/subtitles-with-ggplotly/ https://statisticsglobe.com/ggplotly-function-r#:\~:text=In%20this%20one%2C%20you%E2%80%99ll%20learn%20how%20to%20use,Graph%20to%20Interactive%20plotly%20Graph%20%28Line%20Plot%20Example%29 1. https://www.gapminder.org/data/ https://plotly.com/r/line-and-scatter/#custom-color-scales
+1 
+https://www.gapminder.org/data/ https://plotly.com/r/line-and-scatter/#custom-color-scales https://datascott.com/blog/subtitles-with-ggplotly/ https://statisticsglobe.com/ggplotly-function-r#:\~:text=In%20this%20one%2C%20you%E2%80%99ll%20learn%20how%20to%20use,Graph%20to%20Interactive%20plotly%20Graph%20%28Line%20Plot%20Example%29 1. https://www.gapminder.org/data/ https://plotly.com/r/line-and-scatter/#custom-color-scales
 
 2.  de Paula Ferreira, W., Armellini, F., & De Santa-Eulalia, L. A. (2020). Simulation in industry 4.0: A state-of-the-art review. Computers & Industrial Engineering, 149, 106868. <https://doi.org/10.1016/J.CIE.2020.106868> 
