@@ -455,7 +455,7 @@ We urge every country to prioritize and help solve this global crisis putting th
 
 # References
 
- 1. https://www.gapminder.org/data/
+ 1. Gapminder. (2019). *Data*. Gapminder.org; Gapminder. https://www.gapminder.org/data/
 
 2.  https://plotly.com/r/line-and-scatter/#custom-color-scales
 3.  https://datascott.com/blog/subtitles-with-ggplotly/
