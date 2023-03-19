@@ -76,15 +76,15 @@ master <- joined|>
 
 # Introduction
 
-Climate change is a global challenge jeopardizing humanity's future. This purpose of this project is to investigate the relationship between CO~2~ emissions, one of the largest drivers of climate change creating greenhouse gasses, and the use of renewable energy such as solar, wind, or hydroelectric energy. The data to be used in this project incorporates data from two different sources, one measuring total carbon dioxide emissions per country over the years and one measuring proportion of energy use which is renewable over the years. `Total_CO2_Emission` is in 1000 tons of CO~2~ and `Percent_Consumption_Renewables` is a percentage of total energy use produced by renewable sources per country over the years. Because the data is collected on individual countries over the years, this investigation will primarily focus on the `Average Emissions` as well as the `Average Percent Renewable` of all the countries in a specific year. In the data of which the averages will be investigated, there are 207 distinct countries observed over 29 years. The relationship between `Average Emissions`and `Average Percent Renewable` is hypothesized to be negative whereas humanity used more renewable energy on average there would be less average CO~2~ emissions. Through this investigation hopefully more information can be learned about climate change and potential solutions to this global problem affecting every organism on planet Earth.
+Climate change, fueled by emissions from energy consumption, is a global challenge jeopardizing humanity's future. This purpose of this project is to investigate the relationship between CO~2~ emissions, one of the largest drivers of climate change through producing greenhouse gasses, and the use of renewable energy such as solar, wind, or hydroelectric energy. The master data to be used in this project incorporates data from two different data sets, one measuring total carbon dioxide emissions per country over the years and one measuring proportion of energy use that is renewable over the years. `Total_CO2_Emission` is in 1000 tons of CO~2~ and `Percent_Consumption_Renewables` is a percentage of total energy use which can be classified as renewable. Because the data is collected on individual countries over the years, this investigation will primarily focus on the `Average Emissions` , every country's `Total_CO2_Emission` averaged for every year, as well as the `Average Percent Renewable` of all the countries in a specific year. The master incorporates the average across 207 distinct countries observed over 29 years. The relationship between `Average Emissions`and `Average Percent Renewable` is hypothesized to be negative, whereas if humanity uses more renewable energy on average there would be less average CO~2~ emissions released into the environment. Through this investigation more information about climate change and potential solutions to this global problem affecting every organism on planet Earth will be revealed.
 
 # Materials and Methods
 
-The master data to be used for analysis in this project incorporates the averages for all countries over the years from two different data sets, one measuring the total carbon dioxide emissions, per country over the years and the other measuring the proportion of energy use classified as renewable per country over the years. The data sets were sourced from an online database titled *Gapminder* which has been a reliable provider of data since 2005, in hopes of promoting global sustainability through easily accessible information.
+The master data to be used incorporates the average CO~2~ emissions and average percent renewable energy use for every country studied over every year in the data. The data was sourced through *Gapminder*, an online database which has been a reliable provider of data since 2005 in hopes of promoting global sustainability through easily accessible information.
 
-Before analysis, the data had to be properly cleaned and wrangled. The CO~2~ data set contained values in the form of 25.3k and 4.9M, signaling the units of thousands and millions. The first step in the data cleaning process was to replace these characters with numbers to create a numeric variable which calculations could be performed on. Once the data was of all the same type, the data was then pivoted to be in tidy form and the years of interest (1989 -- 2017) were selected. Once pivoted, the data sets were joined by year and country to produce a clean master data set which shall be used for model fitting, plotting, and analysis. A final decision was made to drop all the Na's in the master set due to a few reasons. The missing values typically occurred in the `Average Percent Renewable` variable across the earlier years measured and usually in countries with smaller populations. Whether these Na's were included in the data due to lack of observation or for simply not having any renewable energy production or consumption it is unclear. Because the averages are being studied and the Na's usually occured in smaller countries, there was still a large enough sample size to average over once those observations were dropped. Other forms of imputation were contemplated such as cell-mean imputation but not conducted due to fears of introducing bias to the data.
+Before analysis, the data had to be properly cleaned. The CO~2~ emissions data contained values of incorrect form such as 25.3k and 4.9M, signaling the units of thousands and millions. The first step in the data cleaning process was to replace these characters with numbers to create a numeric variable type with which calculations could be performed. The data was then pivoted to tidy form and only the years of interest (1989 -- 2017) were selected. The two data sets were joined by year and country to produce a master data set which shall be used for model fitting, plotting, and analysis. A final decision was made to drop all the Na's in the master set. The missing values typically occurred in the `Average Percent Renewable` variable across the earlier years and usually occurren in countries with smaller populations. Whether these Na's were included in the original data due to lack of observation or for simply not having any renewable energy production or consumptionis unclear. Because the averages are being studied and the Na's usually occured in smaller countries, there was still a large enough sample size to average over once those missing observations were dropped. Other forms of imputation were considered such as cell-mean imputation but not ultimately not conducted due to fears of introducing bias to the data.
 
-Linear regression, a method involving predicting the values of one variable, based on another, through producing a straight line minimizing the value for the sum of squared residuals, was used to create and predict a model. All the data cleaning, models, and subsequent analysis was conducted using R code.
+Linear regression, a method involving predicting the values of one variable, based on another, through producing a straight line minimizing the value for the sum of squared residuals, was used to create a model predicting the relationship. All the data cleaning, models, and subsequent analysis was conducted using R code.
 
 \
 
@@ -111,7 +111,7 @@ tidy(energy_emissions_model)
 
 $$ \hat{y} = 693309.6 - 17770.2 * Average\,Percent\,Renewable $$
 
-Above is the simple linear regression equation based on the model predicting the response variable, `Average Emissions` ($\hat{y}$), by the explanatory variable, `Average Percent Renewable`. The coefficient on `Average Percent Renewable` is extremely negative sitting at -17770.2 meaning that for each one percent increase in the `Average Percent Renewable` energy used the average amount of CO~2~ emissions in thousands of tons decreases by 17770.2. The slope coefficient on the y-intercept of 693309.6 means that when the `Average Percent Renewable` is zero such that there is no renewable energy being used at all on average, the predicted `Average Emissions` would be 693309.6 thousand tons.
+Above is the simple linear regression equation based on the model predicting the response variable ($\hat{y}$), `Average Emissions` , by the explanatory variable, `Average Percent Renewable`. The coefficient on `Average Percent Renewable` is extremely negative sitting at -17770.2 meaning that for each one percent increase in the `Average Percent Renewable` energy used the average amount of CO~2~ emissions in thousands of tons decreases by 17,770.2. The slope coefficient on the y-intercept of 693,309.6 means that when the `Average Percent Renewable` is zero such that there is no renewable energy being consumed at all on average, the predicted `Average Emissions` would be 693,309.6 thousand tons of CO~2~.
 
 \
 
@@ -146,7 +146,7 @@ ggplotly(raw_graph) |>
 ```
 
 \
-The graph above demonstrates the relationship between `Average Emissions` and `Average Percent Renewable`. The distribution illustrates a negative linear relationship, where the points are relatively close to the plotted regression line with little deviation and noise. There are little to no unusual observations. This illustration is consistent with the hypothesis that as the `Average Percent Renewable` increases the `Average Emissions` decreases at a significant rate.\
+The plot above demonstrates the negative relationship between `Average Emissions` and `Average Percent Renewable`. The distribution illustrates a negative linear relationship, where the points are relatively close to the plotted regression line with little deviation and little noise. There are also little to no unusual observations where points are following this negative trend. This graph is consistent with the hypothesis that as the `Average Percent Renewable` increases the `Average Emissions` decreases at a significant rate.\
 
 ```{r}
 co2_by_year_graph <- master |>
@@ -177,7 +177,7 @@ ggplotly(energy_by_year_graph) |>
 
 \
 
-As shown by the two distributions of `Average Emissions` and `Average Percent Renewable` over time, the relationship follows a negative relationship, but perhaps not as expected. `Average Percent Renewable` is decreasing over the years while `Average Emissions` is increasing which still illustrates a negative relationship. As time goes on it makes sense as to why `Average Emissions` is increasing, because of extreme population growth and growing demand for production but `Average Percent Renewable` has shockingly been declining in recent years. While this likely has something to due to the varying definition of renewable energy, for example whether or not nuclear energy is truly renewable, it is surprising that as technology develops renewable energy use does not. This signifies that humanity needs to increase the renewable energy production and usage on average in order to reduce the carbon footprint and preserve nature for future generations.
+As shown by the two distributions of `Average Emissions` and `Average Percent Renewable` over time, `Average Percent Renewable` is decreasing over the years while `Average Emissions` is increasing which illustrates a negative relationship, but perhaps not as expected. As time passes it makes sense as to why `Average Emissions` is increasing, because of extreme population growth and growing demand for energy production but `Average Percent Renewable` has shockingly been declining in the recent years. While this likely has something to due to the varying definition of renewable energy, for example whether or not nuclear energy is truly renewable, it is surprising that as technology develops renewable energy use does not. This signifies that humanity needs to increase the renewable energy production and usage on average in an effort to reduce the carbon footprint.
 
 **Model Fit:**
 
@@ -194,7 +194,7 @@ energy_emissions_model |>
 
 ```
 
-The proportion of variability in the response values that was accounted for by the model, $R^{2}$, was particularly large, at about 89.93 percent. This suggests a high quality model, where a majority, 89%, of the variation in the response, `Average Emissions` is explained by the explanatory variable, `Average Percent Renewable`. This suggests that a high proportion of variability in response is accounted for by the linear model and there are not many other large factors influencing emissions.
+The proportion of variability in the response values that was accounted for by the model, $R^{2}$, was particularly large, at about 89.93 percent. This suggests a high quality model where a about 90% of the variation in the response, `Average Emissions` is explained by the explanatory variable, `Average Percent Renewable` in the model. This suggests there are potentially not many other extraneous factors influencing CO~2~ emissions.
 
 ```{r}
 #| fig-align: center
@@ -230,24 +230,22 @@ ggplotly(residual_plot) |>
 
 \
 
-We can see from the relationship between residual and fitted values graph that, the linearity is violated in the range of $1.0\times10^5$ to $1.4\times10^5$ (equal variance). This is because in the range of $1.0\times10^5$ to $1.2\times10^5$, the observed data is over the estimated linear regression line, which render only positive residues. And in the range of $1.2\times10^5$ to $1.4\times10^5$, the observed data is below the linear regression line, which render only negative residuals. In the range of $1.4\times10^5$ to $1.6\times10^5$, the linearity is not violated, which means this range of data might fit the linear regression model better.
+We can see from the relationship between residuals and fitted values that the linearity is violated in the range of $1.0\times10^5$ to $1.4\times10^5$ . This is because in the range of $1.0\times10^5$ to $1.2\times10^5$, the observed data is over the estimated linear regression line, which render only positive residues. And in the range of $1.2\times10^5$ to $1.4\times10^5$, the observed data is below the linear regression line, which render only negative residuals. In the range of $1.4\times10^5$ to $1.6\times10^5$, the linearity is not violated, which means this range of data might fit the linear regression model better. This suggests that the assumption of equal variance of residuals in the model may be violated where the non-equal variance across the range of x-values will have the potential to seriously mis-estimate the variability of the slope. As such, the model and its results must be used cautiously.
 
 \
 
 ## Simulation
 
-Simulation is a critical technology used to develop planning and explore models to optimize decision making within the world of data science (de Paula Ferreira et al., 2020).
-
-In this section, we performed a basic linear model simulation to determine how well it fits with the presetting conditions, such as adding normally distributed error to the regression line.
+Simulation is a critical technology used to develop planning and explore models to optimize decision making within the world of data science. In this section, a basic linear model simulation is used to determine how well the model fits with the presetting conditions, such as adding normally distributed error to the regression line.
 
 The basic procedure for simulation is to:
 
 1.  Train a linear regression fit model for the observed data.
-2.  Assuming the model is correct. Add a generated error to the linear regression model (we generated normally distributed error for this study).
-3.  Establish the simulated data, and compare values with the observed data (by generating value distribution graphs, scatterplots of the relationships modeled and observed, and y=x plot).
+2.  Assuming the model is correct. Add a generated, or simulated, error to the linear regression model, in this case a normally distributed error.
+3.  Establish the simulated data and compare values against the observed data by generating value distribution graphs, scatter plots of the relationships modeled and observed.
 4.  Analyze and interpret the simulated $R^2$ value.
 5.  Iterate and generate additional simulated data sets.
-6.  Check, interpret, and plot the simulated $R^2$ values for the simulated data sets.
+6.  Check, interpret, and plot the simulated $R^2$ values for the simulated data sets and compared to that of the observed.
 
 **Simulation for a single data set:**
 
@@ -268,10 +266,10 @@ sim_response <- tibble(sim_emissions = noise(master_predict,
 obs_emissions <- master |>
   ggplot(aes(x = `Average Emissions`)) +
   geom_histogram(binwidth = 3000, fill = 'lightsteelblue4') +
-  labs(x = "Observed Emissions/1000 tonnes",
+  labs(x = "Observed Average Emissions/1000 tons",
        y = "",
        subtitle = "Count",
-       title = "Worldwide Yearly Emission Counts") +
+       title = "Worldwide Average Emission Counts") +
   theme_bw()+
   theme(plot.title = element_text(hjust = 0, face = 'bold', size = 8.5),
         plot.subtitle = element_text(hjust = 0, size = 7))
@@ -279,10 +277,10 @@ obs_emissions <- master |>
 sim_emissions_graph <- sim_response |>
   ggplot(aes(x = sim_emissions)) +
   geom_histogram(binwidth = 3500, fill = 'lightsteelblue4') +
-  labs(x = "Simulated Emissions/1000 tonnes",
+  labs(x = "Simulated Average Emissions/1000 tons",
        y = "",
        subtitle = "Count",
-       title = "Simulated Worldwide Yearly Emission Counts") +
+       title = "Simulated Worldwide Average Emission Counts") +
   theme_bw()+
   theme(plot.title = element_text(hjust = 0, face = 'bold', size = 8.5),
         plot.subtitle = element_text(hjust = 0, size = 7))
@@ -291,9 +289,9 @@ obs_emissions + sim_emissions_graph
 
 ```
 
-We can identify the differences between observed and simulated data from the distribution visualization. When we initially view the two graphs, they do not seem to share many similarities. However, when we take a closer look, the concentrated value ranges, in other words, where most of the data resides, are similar.
+We can identify the differences between observed and simulated data from the visualization above looking at the distribution of CO~2~ emission data. When initially viewing the two graphs, they do not seem to share many similarities however, when we take a closer look, the concentrated value ranges, where most of the data resides, are similar.
 
-The left graph displays the distribution of observed average emissions over the years from 29 different countries. We can see that most of the values fall within the intervals of $1.1\times10^5$ tons to $1.2\times10^5$ tons and $1.6\times10^5$ tons to $1.7\times10^5$ tons. The simulated yearly average emissions are also concentrated in a range of $1.1\times10^5$ tons to $1.2\times10^5$ tons and $1.5\times10^5$ tons to $1.7\times10^5$ tons.
+The left graph displays the distribution of observed average emissions over the years from 29 different countries. We can see that most of the values fall within the intervals of $1.1\times10^5$ tons to $1.2\times10^5$ tons and $1.6\times10^5$ tons to $1.7\times10^5$ tons. The simulated yearly average emissions are also concentrated in the same ranges of $1.1\times10^5$ tons to $1.2\times10^5$ tons and $1.5\times10^5$ tons to $1.7\times10^5$ tons.
 
 ```{r}
 #| fig-align: center
@@ -312,10 +310,10 @@ ggplot(aes(x = `Average Percent Renewable`,
   geom_point(color = 'lightsalmon3') + 
 
   theme(legend.position = "none") +
-  labs(x = " Avg Renewable energy consumption %", 
+  labs(x = " Avg Renewable Energy Consumption (%)", 
        y = "", 
        title = "Observed Relationships between Avg Renewable\nEnergy Consumption and Avg CO2 Emissions", 
-       subtitle = "Avg CO2 Emissions/1000 tonnes") +
+       subtitle = "Avg CO2 Emissions (1000 tons)") +
   theme(plot.title.position = "plot",
         plot.title = element_text(face = 'bold', size = 8.5),
         plot.subtitle = element_text(hjust = 0, size = 7))
@@ -326,10 +324,10 @@ ggplot(aes(x = `Average Percent Renewable`,
        ) +
   geom_point(color = 'lightsalmon3') + 
   theme(legend.position = "none") +
-  labs(x = " Avg Renewable energy consumption %", 
+  labs(x = " Avg Renewable Energy Consumption (%)", 
        y = "", 
        title = "Simulated Relationships between Avg Renewable\nEnergy Consumption and Avg CO2 Emissions", 
-       subtitle = "Simulated Avg CO2 Emissions/1000 tonnes") +
+       subtitle = "Simulated Avg CO2 Emissions (1000 tons)") +
     theme(plot.title.position = "plot",
         plot.title = element_text(face = 'bold', size = 8.5),
         plot.subtitle = element_text(hjust = 0, size = 7))
@@ -338,7 +336,7 @@ ggplot(aes(x = `Average Percent Renewable`,
 raw_graph + sim_master_graph
 ```
 
-In these two graphs, we plotted the relationships between the simulated and observed, average renewable energy consumption and average CO~2~ emissions among different countries. We can recognize that the simulated data in the right graph is more closely related to a straight line, which is the modeled linear regression line.
+In these two graphs the relationships between the simulated and observed average renewable energy consumption and average CO~2~ emissions was plotted. The simulated data on the right graph is more closely related to a straight, modeled linear regression line.
 
 ```{r}
 #| fig-align: center
@@ -348,10 +346,10 @@ sim_data |>
              y = `Average Emissions`)
          ) + 
   geom_point(color = 'darkolivegreen') + 
-   labs(x = "Simulated Avg CO2 Emissions/1000 tonnes", 
+   labs(x = "Simulated Avg CO2 Emissions (1000 tons)", 
         y = "",
-        title = "The Similarity between Observed Data and Simulated Data",
-        subtitle = "Avg CO2 Emissions/1000 tonnes" ) + 
+        title = "The Similarity between Observed and Simulated Data",
+        subtitle = "Observed Avg CO2 Emissions (1000 tons)" ) + 
   geom_abline(slope = 1,
               intercept = 0, 
               color = "steelblue",
@@ -361,7 +359,7 @@ sim_data |>
   theme(plot.title = element_text(hjust = 0.5, face = 'bold'))
 ```
 
-In this graph, we can examine the similarity between the observed data set and the simulated data set. Ideally, the data should fall on the blue dashed line, which represents the y=x line. The points above the blue line represent an overestimated simulation, while the points below the line indicate an underestimated simulation. Following an analysis of this study, we can determine that the observed data is typically underestimated. Generally speaking, the simulated values are distributed close to the y=x line, meaning that there is a strong relationship between the observed values and simulated values.
+In this graph, we can examine the similarity between the observed and the simulated data set. Ideally, the data should fall on the blue dashed line, which represents the y = x line. The points above the blue line represent an overestimated simulation, while the points below the line indicate an underestimated simulation. Following an analysis of this study, we can determine that the observed data is typically underestimated. Generally speaking, the simulated values are distributed close to the y = x line, meaning that there is a strong relationship between the observed values and simulated values.
 
 ```{r}
 # get the R squared for the simulated data fit for observed data.
@@ -389,15 +387,15 @@ simulated_stats |>
   kable_styling(bootstrap_options = c('striped', 'bordered'))
 ```
 
-The p value is `r p_value`, and it is extremely small (p\<0.05), which indicates the data is statistically significant.
+The simulated p value is `r p_value`, and it is extremely small (p\<0.05), which indicates the data is statistically significant.
 
-$R^2$ is `r sim_r2`, which means the simulated data can explain around `r sim_r2` of the variation in observed data. In this case, we suppose that the one time simulation till now did a moderately good job.
+The simulated $R^2$ is `r sim_r2`, which means the simulated data can explain around `r sim_r2` of the variation in observed data. In this case, the one time simulation till now did a moderately good job.
 
-**Simulation for a 1000 data sets:**
+**Simulation for 1000 data sets:**
 
-Since the normally distributed error is randomly added to the linear regression model line, if we iterate the simulation many times, the result will be far more stable. With this method, we can get the entire group of interest, rather than a single sample of that group.
+Since the normally distributed error is randomly added to the linear regression model line, if the simulation is iterated many times, the result will be far more stable. With this method, the entire group of interest will be obtained, rather than a single sample of that group.
 
-In the following steps, we created 1000 simulated data sets and combined the observed data set into a full new data set. Next, we also determined the $R^2$ of the 1000 simulated data sets and plotted their distribution.
+In the following steps, 1000 simulated data sets are created and combined with the observed data set into a full new data set. Next, the $R^2$ of the 1000 simulated data sets is determined and the distribution is plotted.
 
 ```{r}
 #| fig-align: center
@@ -449,11 +447,11 @@ We can see from the distribution of the 1000 simulated $R^2$ graph that the $R^2
 
 ![](https://earthobservatory.nasa.gov/ContentWOC/images/globaltemp/global_gis_2022_chart.png)\
 
-While the Earth may seem prosperous to us today, there is only a finite amount of resources, and life, on the planet and the human population just hit 8 billion. Global temperatures continue to increase threatening life and habit for many living organisms. Protecting humanity's environment should be society's number one priority and thought of with every decision made. Energy use, as well as CO2 emissions, is also on the rise while the amount of renewable energy the world is using is decreasing.
+While the Earth may seem prosperous to us today, there is only a finite amount of resources, and life, on the planet and the human population just hit 8 billion. Global temperatures continue to increase, threatening life and habitat for many living organisms. Protecting humanity's environment should be society's number one priority and thought of with every decision made. Energy use, as well as CO2 emissions is also on the rise while the amount of renewable energy the world is using is decreasing.
 
-Through analyzing this data set it is clear there is strong, statistically significant effect of using renewable energy on the decreasing the amount of CO~2~ emitted into the atmosphere yet humanity is using less, moving in the wrong direction.
+Through analyzing this data set it is clear there is a strong, statistically significant effect of using renewable energy tp decrease the amount of CO~2~ emitted into the atmosphere yet humanity is using less renewables, moving in the wrong direction.
 
-We urge every country to prioritize and help solve this global crisis putting the Earth at risk.
+We urge every country to prioritize and help solve this global crisis putting the Earth at risk and use invest more heavily in renewable energy in an attempt to be sustainable.
 
 # References
 
@@ -465,5 +463,4 @@ We urge every country to prioritize and help solve this global crisis putting th
 
 4.  Schork, J. (n.d.). *How to Use ggplotly in R (2 Examples) \| Static to Interactive Plot*. Statistics Globe. Retrieved March 17, 2023, from https://statisticsglobe.com/ggplotly-function-r#:\~:text=In%20this%20one%2C%20you%E2%80%99ll%20learn%20how%20to%20use
 
-5.  *Subtitles with ggplotly*. (2019, May 16). https://datascott.com/blog/subtitles-with-ggplotly/
-test
+5.  *Subtitles with ggplotly*. (2019, May 16). https://datascott.com/blog/subtitles-with-ggplotly/ test
