@@ -449,7 +449,7 @@ We can see from the distribution of the 1000 simulated $R^2$ graph that the $R^2
 
 ![](https://earthobservatory.nasa.gov/ContentWOC/images/globaltemp/global_gis_2022_chart.png)\
 
-While the Earth may seem prosperous to us today, there is only a finite amount of resources, and life, on the planet and the human population just hit 8 billion. Global temperatures continue to increase threatening life and habit for many living organisms. Protecting humanity's environment should be society's number one priority and thought of with every decision made. Energy use, as well CO~2~ emissions, is also on the rise while the amount of renewable energy the world is using is decreasing.
+While the Earth may seem prosperous to us today, there is only a finite amount of resources, and life, on the planet and the human population just hit 8 billion. Global temperatures continue to increase threatening life and habit for many living organisms. Protecting humanity's environment should be society's number one priority and thought of with every decision made. Energy use, as well as CO2 emissions, is also on the rise while the amount of renewable energy the world is using is decreasing.
 
 Through analyzing this data set it is clear there is strong, statistically significant effect of using renewable energy on the decreasing the amount of CO~2~ emitted into the atmosphere yet humanity is using less, moving in the wrong direction.
 
@@ -466,3 +466,4 @@ We urge every country to prioritize and help solve this global crisis putting th
 4.  Schork, J. (n.d.). *How to Use ggplotly in R (2 Examples) \| Static to Interactive Plot*. Statistics Globe. Retrieved March 17, 2023, from https://statisticsglobe.com/ggplotly-function-r#:\~:text=In%20this%20one%2C%20you%E2%80%99ll%20learn%20how%20to%20use
 
 5.  *Subtitles with ggplotly*. (2019, May 16). https://datascott.com/blog/subtitles-with-ggplotly/
+test
